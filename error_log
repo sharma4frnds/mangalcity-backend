@@ -1,0 +1,16 @@
+[22-Mar-2018 09:42:56 UTC] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class config does not exist' in /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php:729
+Stack trace:
+#0 /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php(729): ReflectionClass->__construct('config')
+#1 /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php(608): Illuminate\Container\Container->build('config')
+#2 /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php(575): Illuminate\Container\Container->resolve('config')
+#3 /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(728): Illuminate\Container\Container->make('config')
+#4 /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(106): Illuminate\Foundation\Application->make('config')
+#5 /home/worldopportuniti/public_html/vendor/ in /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 729
+[22-Mar-2018 09:43:14 UTC] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class config does not exist' in /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php:729
+Stack trace:
+#0 /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php(729): ReflectionClass->__construct('config')
+#1 /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php(608): Illuminate\Container\Container->build('config')
+#2 /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php(575): Illuminate\Container\Container->resolve('config')
+#3 /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(728): Illuminate\Container\Container->make('config')
+#4 /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php(106): Illuminate\Foundation\Application->make('config')
+#5 /home/worldopportuniti/public_html/vendor/ in /home/worldopportuniti/public_html/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 729
