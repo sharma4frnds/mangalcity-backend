@@ -242,10 +242,10 @@
             <div id="currentMessage"></div>
             @foreach($city_posts as $city_post)
             <?php 
-                 // echo '<pre>';
-                 // print_r($city_post);
-                 // echo $city_post->like->id;
-                 // exit;
+                // echo '<pre>';
+                 //print_r($city_post);
+                
+            
             ?>
 
             <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20" id="postdiv{{$city_post->id}}">
@@ -257,9 +257,6 @@
                 <span class="post-time">
                   {!! Helper::dateFormate($city_post->created_at); !!}
 
-
-
-                   
 
                 </span> 
                 </div>

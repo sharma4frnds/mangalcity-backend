@@ -24,6 +24,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::get('getdistict', 'Api\CommonController@getDistict');
 	Route::get('getcity', 'Api\CommonController@getCity');
 	Route::POST('userprofile','Api\UserController@userprofile');
+	Route::POST('getuser', 'Api\UserController@getAuthUser');
 	Route::POST('/post','Api\PostController@posts');	
 });
 

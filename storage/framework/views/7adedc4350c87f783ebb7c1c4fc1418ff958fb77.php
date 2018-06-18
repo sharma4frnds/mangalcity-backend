@@ -8,33 +8,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
    <title>
-        @section('title') Mangalcity  @show
+        <?php $__env->startSection('title'); ?> Mangalcity  <?php echo $__env->yieldSection(); ?>
     </title>
     <!-- Bootstrap -->
-    {{ Html::style('public/admin/bootstrap/dist/css/bootstrap.min.css') }}
+    <?php echo e(Html::style('public/admin/bootstrap/dist/css/bootstrap.min.css')); ?>
+
     
     <!-- Font Awesome -->
-    {{ Html::style('public/admin/font-awesome/css/font-awesome.min.css') }}
+    <?php echo e(Html::style('public/admin/font-awesome/css/font-awesome.min.css')); ?>
+
     
     <!-- NProgress -->
-     {{ Html::style('public/admin/nprogress/nprogress.css') }}
+     <?php echo e(Html::style('public/admin/nprogress/nprogress.css')); ?>
+
     
     <!-- iCheck -->
-     {{ Html::style('public/admin/iCheck/skins/flat/green.css') }}
+     <?php echo e(Html::style('public/admin/iCheck/skins/flat/green.css')); ?>
+
     
     <!-- bootstrap-progressbar -->
-     {{ Html::style('public/admin/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}
+     <?php echo e(Html::style('public/admin/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css')); ?>
+
     
   
     <!-- Custom Theme Style1 -->
-     {{ Html::style('public/admin/build/css/custom.min.css') }}
-     {{ Html::style('public/admin/build/css/custom.css') }}
+     <?php echo e(Html::style('public/admin/build/css/custom.min.css')); ?>
+
+     <?php echo e(Html::style('public/admin/build/css/custom.css')); ?>
+
 
     <!--page level css-->
-    @yield('header_styles')
+    <?php echo $__env->yieldContent('header_styles'); ?>
     <!--end of page level css-->
 
-     <meta id="token" name="token" content="{{ csrf_token() }}">
+     <meta id="token" name="token" content="<?php echo e(csrf_token()); ?>">
      </head>
 
   <body class="nav-md">
@@ -43,7 +50,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-              <a href="{{url('admin/dashboard')}}" class="site_title"><i class="fa fa-paw"></i> <span>Mangalcity </span></a>
+              <a href="<?php echo e(url('admin/dashboard')); ?>" class="site_title"><i class="fa fa-paw"></i> <span>Mangalcity </span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -55,31 +62,31 @@
               <div class="menu_section">
                 <h3></h3>
                 <ul class="nav side-menu">
-                  <li><a href="{{ URL::to('admin/dashboard') }}"><i class="fa fa-home"></i> Home </a>  </li>
+                  <li><a href="<?php echo e(URL::to('admin/dashboard')); ?>"><i class="fa fa-home"></i> Home </a>  </li>
                   <li><a><i class="fa fa-edit"></i> Setting <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{ url('admin/tags') }}">Tags</a></li>
+                      <li><a href="<?php echo e(url('admin/tags')); ?>">Tags</a></li>
                    
                     </ul>
                   </li>
 
                   <li><a><i class="fa fa-user"></i>User Management <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="{{ url('admin/users') }}">User List </a></li>
+                      <li><a href="<?php echo e(url('admin/users')); ?>">User List </a></li>
                     </ul>
                   </li>
 
 
                     <li><a><i class="fa fa-building"></i> Feedback <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu">
-                      <li><a href="{{ url('admin/feedback ') }}">Feedback</a></li>
+                      <li><a href="<?php echo e(url('admin/feedback ')); ?>">Feedback</a></li>
 
                       </ul>
                     </li>
 
                     <li><a><i class="fa fa-file"></i> Add City <span class="fa fa-chevron-down"></span></a>
                       <ul class="nav child_menu">
-                      <li><a href="{{ url('admin/city') }}">City</a></li>
+                      <li><a href="<?php echo e(url('admin/city')); ?>">City</a></li>
 
                       </ul>
                     </li>
@@ -122,20 +129,22 @@
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
            
-                      {{Html::image('public/images/avatar.jpg','Image') }}
+                      <?php echo e(Html::image('public/images/avatar.jpg','Image')); ?>
+
                     Admin
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">
                     <li>
-                         <a href="{{ route('logout') }}"
+                         <a href="<?php echo e(route('logout')); ?>"
                               onclick="event.preventDefault();
                                        document.getElementById('logout-form').submit();">
                               <i class="fa fa-sign-out pull-right"></i>Logout
                           </a>
 
-                          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                              {{ csrf_field() }}
+                          <form id="logout-form" action="<?php echo e(route('logout')); ?>" method="POST" style="display: none;">
+                              <?php echo e(csrf_field()); ?>
+
                           </form>
 
                     </li>
@@ -150,7 +159,7 @@
 
   <!-- page content -->
 
-@yield('content')
+<?php echo $__env->yieldContent('content'); ?>
     <!-- /page content -->
 
 
@@ -169,28 +178,36 @@
     </div>
 
     <!-- jQuery -->
-     {{ Html::script('public/admin/jquery/dist/jquery.min.js') }}
+     <?php echo e(Html::script('public/admin/jquery/dist/jquery.min.js')); ?>
+
         <!-- Bootstrap -->
-     {{ Html::script('public/admin/bootstrap/dist/js/bootstrap.min.js') }}
+     <?php echo e(Html::script('public/admin/bootstrap/dist/js/bootstrap.min.js')); ?>
+
     
    
         <!-- NProgress -->
-    {{ Html::script('public/admin/nprogress/nprogress.js') }}
+    <?php echo e(Html::script('public/admin/nprogress/nprogress.js')); ?>
+
 
     
     <!-- bootstrap-progressbar -->
-    {{ Html::script('public/admin/bootstrap-progressbar/bootstrap-progressbar.min.js') }}
+    <?php echo e(Html::script('public/admin/bootstrap-progressbar/bootstrap-progressbar.min.js')); ?>
+
    
     <!-- iCheck -->
-    {{ Html::style('public/admin/iCheck/icheck.min.js') }}
+    <?php echo e(Html::style('public/admin/iCheck/icheck.min.js')); ?>
+
         <!-- JQVMap -->
 
         <!-- bootstrap-daterangepicker -->
-    {{ Html::script('public/admin/js/datepicker/daterangepicker.js') }}
-    {{ Html::script('public/admin/js/moment/moment.min.js') }}
+    <?php echo e(Html::script('public/admin/js/datepicker/daterangepicker.js')); ?>
+
+    <?php echo e(Html::script('public/admin/js/moment/moment.min.js')); ?>
+
    
     <!-- Custom Theme Scripts -->
-    {{ Html::script('public/admin/build/js/custom.min.js') }}
+    <?php echo e(Html::script('public/admin/build/js/custom.min.js')); ?>
+
 
 
     <!-- Flot -->
@@ -221,11 +238,12 @@
 
     <div id="loader" style="display:none;">
         <div class="loader_innner">
-             {{Html::image('public/images/ajax-loader.gif')}}
+             <?php echo e(Html::image('public/images/ajax-loader.gif')); ?>
+
         </div>
     </div>
 <!--End LOADER HTML -->
-     @yield('footerscript')
+     <?php echo $__env->yieldContent('footerscript'); ?>
   </body>
 </html>
    <!-- /top navigation -->

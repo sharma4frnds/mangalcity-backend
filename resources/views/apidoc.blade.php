@@ -26,6 +26,12 @@ URL:http://emergingncr.com/mangalcity/api/auth/verifyUser
 otp,mobile
 </p>
 
+<hr>
+<h4>Get User</h4>
+URL:http://emergingncr.com/mangalcity/api/getuser
+<p>parameter:token</p>
+<p>method:post</p>
+
 
 <hr>
 <h4>Logout</h4>

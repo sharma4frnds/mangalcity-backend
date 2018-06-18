@@ -246,9 +246,28 @@ function deleteNotification(num)
 
 
 //spamReport
-function reportFeedback(post_id)
+function reportFeedback()
 {
-    alert('test');
+    var spam_tags=$("#spam_tags").val();
+    var post_id=$("#post_id").val();
+    $("#errer_div").hide();
+    
+    $.ajax({
+    url: siteUrl+'/reportFeedback',
+    type: 'POST',
+    beforeSend: function(xhr){
+    xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+    cache: false,
+    async:false,
+    data:{'post_id':post_id,'spam_tags':spam_tags},
+    success:function(data){
+         $('#myModal').modal('hide');
+        toastr.success('Successfully submit feedback');
+    },
+    error: function(data) {
+        $("#errer_div").show().html('Invalid parameter value');
+        }
+    });
 }
 
 //postDelete

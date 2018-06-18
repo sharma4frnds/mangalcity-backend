@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::POST('/postComment','PostController@postComment');
 		Route::POST('/deleteComment','PostController@deleteComment');
 		Route::GET('/reportFeedback/{post_id}','PostController@reportPopup');
+		Route::POST('/reportFeedback','PostController@reportFeedback');
 		Route::POST('/delete_post_popup','PostController@delete_post_popup');
 		Route::POST('/delete_post','PostController@delete_post');
 		Route::POST('/share_post_popup','PostController@share_post_popup');
@@ -72,14 +73,9 @@ Route::group(['middleware' => 'admin'], function()
 	Route::get('admin','Admin\DashboardController@index');
 	Route::get('admin/dashboard','Admin\DashboardController@index');
 	Route::resource('admin/users','Admin\UserController');
-	
-	Route::resource('admin/category','Admin\CategoryController');
-	Route::resource('admin/property','Admin\PropertyController');
-	Route::get('admin/detelpropertyImage/{id}/{img}','Admin\PropertyController@deleteImage');
-	
-	Route::resource('admin/pages','Admin\PageController');
-	Route::get('admin/logo','Admin\SettingController@getLogo');
-	Route::post('admin/logo','Admin\SettingController@postLogo');
+	Route::resource('admin/tags','Admin\SpamtagController');
+	Route::resource('admin/feedback','Admin\FeedbackController');
+
 	
 });
 

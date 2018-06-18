@@ -5,49 +5,24 @@
   </div>
   <div class="modal-body">
     <form class="form-horizontal">
+
+    <div class="alert alert-danger" role="alert" id="errer_div" style="display: none"></div>
+
        {{ csrf_field() }}
         <h4>We use your feedback to help us learn when something's not right.</h4>
-        post Number: {{$id}}
+       
+        @foreach($spam_tags as $tag)
        <div class="radio">
-          <label>
-            <input type="radio" name="spam_tags"  value="option1" checked>Nudity
+          <label><input type="radio" name="spam_tags" id="spam_tags"  value="{{$tag->id}}" checked>{{$tag->name}}
           </label>
+       </div>
+       @endforeach
+       <input type="hidden" name="post_id" id="post_id" value="{{$id}}">
+
+       <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="reportFeedback()">Send</button>  
        </div>
 
-        <div class="radio">
-          <label>
-            <input type="radio" name="spam_tags" id="optionsRadios1" value="option1" >Violence
-            
-          </label>
-       </div>
-
-        <div class="radio">
-          <label>
-            <input type="radio" name="spam_tags" id="optionsRadios1" value="option1" >Harassment
-           
-          </label>
-       </div>
-
-        <div class="radio">
-          <label>
-            <input type="radio" name="spam_tags" id="optionsRadios1" value="option1" >Suicide or Self-Injury
-          </label>
-       </div>
-
-        <div class="radio">
-          <label>
-            <input type="radio" name="spam_tags" id="optionsRadios1" value="option1" >False News
-          </label>
-       </div>
-
-        <div class="radio">
-          <label>
-            <input type="radio" name="spam_tags" id="optionsRadios1" value="option1" >Spam
-          </label>
-       </div>
-    
-       <input type="hidden" name="post_id" value="{{$id}}">
-        <button type="button" class="btn btn-primary">Send</button>
   </form>
 
   </div>

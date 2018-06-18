@@ -12,6 +12,9 @@ use Auth;
 use URL;
 use Image;
 use Carbon\Carbon;
+use App\Model\Spam_tag;
+use App\Model\Feedbacks;
+
 class PostController extends Controller
 {
    public function feeds()
@@ -292,9 +295,30 @@ class PostController extends Controller
     function reportPopup(Request $request)
     {
       $id=$request->post_id;
-      return view('reportPopup',compact('id'));
+      $spam_tags=Spam_tag::where('status','active')->get();
+      return view('reportPopup',compact('id','spam_tags'));
     }
 
+    function reportFeedback(Request $request)
+    {
+      $validator = Validator::make($request->all(), ['post_id'=>'required','spam_tags'=>'required']);
+
+      if($validator->fails())
+        {
+          return Response::json(array(
+          'success' => false,
+          'errors' => $validator->getMessageBag()->toArray()
+        ), 400);
+        }
+
+        if(Post::where('id',$request->post_id)->count() > 0)
+        {
+          Feedbacks::insert(['user_id'=>Auth::user()->id,'post_id'=>$request->post_id,'spam_tag'=>$request->spam_tags]);
+        }
+
+        return response()->json(['success'=>true,'message'=>'Successfully'], 200);
+    }
+   
     //delete_post_popup
     function delete_post_popup(Request $request)
     {

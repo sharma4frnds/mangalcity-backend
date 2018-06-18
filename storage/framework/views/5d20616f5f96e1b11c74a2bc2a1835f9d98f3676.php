@@ -243,10 +243,10 @@
             <div id="currentMessage"></div>
             <?php $__currentLoopData = $city_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $city_post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <?php 
-                 // echo '<pre>';
-                 // print_r($city_post);
-                 // echo $city_post->like->id;
-                 // exit;
+                // echo '<pre>';
+                 //print_r($city_post);
+                
+            
             ?>
 
             <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20" id="postdiv<?php echo e($city_post->id); ?>">
@@ -260,9 +260,6 @@
                   <?php echo Helper::dateFormate($city_post->created_at);; ?>
 
 
-
-
-                   
 
                 </span> 
                 </div>
