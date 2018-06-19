@@ -81,3 +81,11 @@ http://emergingncr.com/mangalcity/api/post
 token,message,video,image
 </p>
 <p>Responce:{"success":true,"pdata":{"id":37,"user_id":55,"message":"api post","type":"","value":"","likes":"0","dislikes":"0","tag":1,"created_at":{"date":"2018-06-09 06:02:28.000000","timezone_type":3,"timezone":"UTC"},"name":"pooja kumari","image":"http:\/\/localhost:81\/mangalcity\/public\/images\/user\/default.png"}}</p>
+
+
+<hr>
+<h2>feeds</h2>
+http://emergingncr.com/mangalcity/api/feeds
+<p>method:post </p>
+<p>parameter:token</p>
+

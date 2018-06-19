@@ -20,12 +20,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => 'jwt.auth'], function () {
 
-	Route::get('getstate', 'Api\CommonController@getState');
-	Route::get('getdistict', 'Api\CommonController@getDistict');
-	Route::get('getcity', 'Api\CommonController@getCity');
+	Route::POST('getstate', 'Api\CommonController@getState');
+	Route::POST('getdistict', 'Api\CommonController@getDistict');
+	Route::POST('getcity', 'Api\CommonController@getCity');
 	Route::POST('userprofile','Api\UserController@userprofile');
 	Route::POST('getuser', 'Api\UserController@getAuthUser');
-	Route::POST('/post','Api\PostController@posts');	
+	Route::POST('/post','Api\PostController@posts');
+	Route::POST('/feeds','Api\PostController@feeds');
+		
 });
 
 
