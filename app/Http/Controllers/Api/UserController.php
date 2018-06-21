@@ -9,6 +9,7 @@ use JWTAuthException;
 use Validator;
 use App\Model\VerifyUser;
 use App\Otp\SmsOtp;
+use Hash;
 class UserController extends Controller
 {   
     private $user;
@@ -130,8 +131,6 @@ public function verifyUser(Request $request)
 
 //Login
  public function logout(Request $request) {
-        $this->validate($request, ['token' => 'required']);
-        
         try {
             JWTAuth::invalidate($request->input('token'));
             return response()->json(['success' => true, 'message'=> "You have successfully logged out."]);
@@ -151,7 +150,7 @@ public function userprofile(Request $request)
 
      if($validator->fails())
       {
-          return Response::json(array('success' => false,'errors' => $validator->getMessageBag()->toArray()), 400); 
+          return response()->json(['success'=> false, 'errors'=>$validator->getMessageBag()->toArray()], 405);
           // 400 being the HTTP code for an invalid request.
       }
       
@@ -162,6 +161,119 @@ public function userprofile(Request $request)
 
         echo json_encode(array('success'=>true,'message'=>'Profile Update  successfully'),200);
 }
+
+//user forgot
+
+public function forgot_password_otp(Request $request)
+{
+    $validator = Validator::make($request->all(), ['mobile' => 'required|digits:10']);
+
+     if($validator->fails())
+      {
+          return response()->json(['success'=> false, 'errors'=>$validator->getMessageBag()->toArray()], 405);
+      }
+
+       $user=User::where('mobile',$request->mobile)->first();
+       if($user)
+       {
+          $otp=rand(10000,99999);
+          $sms=new SmsOtp();
+          $sms->verifyOtp($request->mobile,$otp);
+
+          VerifyUser::where('id',$user->id)->delete();
+
+          VerifyUser::create([
+            'user_id' => $user->id,
+            'mobile' => $request->mobile,
+            'otp' =>$otp
+          ]);
+
+          echo json_encode(array('success'=>true,'message'=>'successfully send otp'),200);
+       }else{
+          echo json_encode(array('success'=>false,'message'=>'Invalid mobile'),405);
+     }
+}
+
+//change_password
+  public function forgot_change_password(Request $request)
+  {
+         $validator = Validator::make($request->all(), ['otp'=>'required','password' => 'required|string|min:6|confirmed']);
+
+       if($validator->fails())
+        {
+            return response()->json(['success'=> false, 'errors'=>$validator->getMessageBag()->toArray()], 405);
+        }
+
+         $vuser=User::where('mobile',$request->mobile)->first();
+        if($vuser)
+        {
+        $verifyUser = VerifyUser::where('otp', $request->otp)->where('mobile', $request->mobile)->first();
+        if(isset($verifyUser) ){
+
+            VerifyUser::where('otp', $request->otp)->where('mobile', $request->mobile)->delete();
+              $newpassword = bcrypt($request->password);
+                  User::where('id', $vuser->id)->update(['password' => $newpassword]);
+
+          return response()->json(['success'=> true, 'message'=>'successfully update password,please login'], 200);
+        }else{
+         return response()->json(['success'=> false, 'message'=> 'Invalid otp'], 405);
+        }
+      }else{
+        return response()->json(['success'=> false, 'message'=> 'Invalid Mobile Number'], 405);
+      }
+
+       
+  }
+
+  //change_password
+  function change_password(Request $request)
+  {
+      $validator = Validator::make($request->all(), ['old_password'=>'required','password' => 'required|string|min:6|confirmed']);
+
+        if ($validator->fails()) {
+          return response()->json(['success'=> false, 'errors'=>$validator->getMessageBag()->toArray()], 405);
+        }
+
+        $userdata = JWTAuth::toUser($request->token);
+        $pass = Hash::check($request->old_password, $userdata->password);
+
+        if($pass==false){
+          return response()->json(['success'=> false, 'errors'=>['password'=>'Old Password Not Match']], 405);
+          exit();
+        }
+
+        $newpassword = bcrypt($request->password);
+        $user=User::find($userdata->id);
+        $user->password=$newpassword;
+        $user->save();
+
+        return response()->json(['success'=> true, 'message'=>'Password update successfully'], 200);
+
+  }
+
+  public function resend_otp(Request $request)
+  {
+ 
+      $validator = Validator::make($request->all(), ['mobile' => 'required|digits:10']);
+     if($validator->fails())
+      {
+          return response()->json(['success'=> false, 'errors'=>$validator->getMessageBag()->toArray()], 405);
+      }
+
+        $otp=rand(10000,99999);
+         $vuser=VerifyUser::where('mobile',$request->mobile)->first();
+         if($vuser)
+         {
+            $sms=new SmsOtp();
+            $sms->verifyOtp($request->mobile,$otp);
+            VerifyUser::where('mobile',$request->mobile)->update(['otp'=>$otp]);
+            return response()->json(['success'=> true, 'message'=>'successfully send'], 200);
+         }else
+         {
+            return response()->json(['success'=> false, 'message'=> 'Invalid mobile'], 405);
+         }
+  }
+
 
 
 }  

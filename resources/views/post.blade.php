@@ -57,7 +57,7 @@
 
                 </div>
 
-                 <div class="alert alert-danger" id="error_div" style="display: none"></div>
+                 <div class="alert alert-info fade in" id="error_div" style="display: none"></div>
 
             </form>
 

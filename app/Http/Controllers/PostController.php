@@ -39,7 +39,7 @@ class PostController extends Controller
    public function posts(Request $request)
    {
   	
-    	$validator = Validator::make($request->all(), ['message'=>'required|max:500','image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048','video' => 'mimes:flv,mp4,mpeg,mov,avi,wmv|max:2048']);
+    	$validator = Validator::make($request->all(), ['message'=>'max:500','image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048','video' => 'mimes:flv,mp4,mpeg,mov,avi,wmv|max:20480']);
 
   	 if ($validator->fails())
         {
@@ -50,11 +50,15 @@ class PostController extends Controller
     		), 400); // 400 being the HTTP code for an invalid request.
         }
 
+    if(empty($request->message) && empty($request->file('image')) && empty($request->file('video')))
+    {
+        return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image or video')), 400);
+    }
 
        try{
             $post=Post::create([
             'user_id' => Auth::user()->id,
-            'message'=> $request->message,
+            'message'=> '',
             'tag' => '1',
             'type' => '',
             'value' => '',
@@ -69,7 +73,7 @@ class PostController extends Controller
           }
           catch(\Exception $e){
              // do task when error
-            // echo $e->getMessage();   // insert query
+             //echo $e->getMessage();   // insert query
               echo json_encode(array('success'=>false,'errors'=>array('error'=>'Oops! there was an unexpected error. please try again later'))); exit;
           }
 

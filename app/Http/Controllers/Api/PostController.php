@@ -96,17 +96,13 @@ class PostController extends Controller
    {
      $user = JWTAuth::toUser($request->token);
 
-    $city_posts=Post::with(['user','like' => function ($query,$user) {
-    $query->where('user_id', $user->id);},'comment'=>function($query) 
-    {
-      $query->leftJoin('users', 'users.id', '=', 'comments.user_id');
-      $query->select('comments.*', 'users.first_name','users.last_name','users.image');
-    }
+    $city_posts=Post::with(['user','like' => function ($query)use ($user) {
+    $query->where('user_id', $user->id);}
    ])->where('status',1)->where('tag',1)->where('city',$user->city)->orderBy('id', 'DESC')->get();
 
-  $country_posts=Post::where('status',1)->where('tag',4)->limit(10)->get();
-  $state_posts=Post::where('status',1)->where('tag',3)->limit(10)->get();
-  $district_posts=Post::where('status',1)->where('tag',2)->limit(10)->get();
+    $country_posts=Post::with('user')->where('status',1)->where('tag',4)->limit(10)->get();
+    $state_posts=Post::with('user')->where('status',1)->where('tag',3)->limit(10)->get();
+    $district_posts=Post::with('user')->where('status',1)->where('tag',2)->limit(10)->get();
 
 
   echo json_encode(array('success'=>true,'city_posts'=>$city_posts,'district_posts'=>$district_posts,'state_posts'=>$state_posts,'country_posts'=>$country_posts),200);

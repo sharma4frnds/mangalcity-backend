@@ -24,6 +24,9 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::POST('getdistict', 'Api\CommonController@getDistict');
 	Route::POST('getcity', 'Api\CommonController@getCity');
 	Route::POST('userprofile','Api\UserController@userprofile');
+	Route::POST('change_password','Api\UserController@change_password');
+	
+	Route::post('auth/logout', 'Api\UserController@logout');
 	Route::POST('getuser', 'Api\UserController@getAuthUser');
 	Route::POST('/post','Api\PostController@posts');
 	Route::POST('/feeds','Api\PostController@feeds');
@@ -34,8 +37,11 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 //login
 Route::post('auth/login', 'Api\UserController@login');
 Route::post('auth/register', 'Api\UserController@register');
+Route::post('auth/resend_otp', 'Api\UserController@resend_otp');
 Route::post('auth/verifyUser', 'Api\UserController@verifyUser');
-Route::post('auth/logout', 'Api\UserController@logout');
+Route::POST('forgot_password_otp','Api\UserController@forgot_password_otp');
+Route::POST('forgot_change_password','Api\UserController@forgot_change_password');
+
 
 Route::get('/test', function () {
     echo 'test';

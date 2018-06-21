@@ -22,9 +22,35 @@ password_confirmation</p>
 <hr>
 <h4>verify User</h4>
 URL:http://emergingncr.com/mangalcity/api/auth/verifyUser
-<p>parameter:
-otp,mobile
-</p>
+<p>parameter:otp,mobile</p>
+
+
+<hr>
+<h4>Resend otp</h4>
+URL:http://emergingncr.com/mangalcity/api/auth/resend_otp
+<p>parameter:mobile</p>
+<p>method:POST</p>
+
+
+<hr>
+<h4>forgot password otp</h4>
+URL:http://emergingncr.com/mangalcity/api/forgot_password_otp
+<p>Method:POST</p>
+<p>parameter:mobile</p>
+<p>Responce:{ "success": true, "message": "successfully send otp" }</p>
+
+<hr>
+<h4>forgot change password</h4>
+URL:http://emergingncr.com/mangalcity/api/forgot_change_password
+<p>Method:POST</p>
+<p>parameter:otp,mobile,password,confirmed_password</p>
+<p>Responce:{"success":true,"message":"successfully update password,please login"}</p>
+
+<hr>
+<h4>Change password</h4>
+	URL:http://emergingncr.com/mangalcity/api/change_password
+<p>parameter:token,old_password,password,password_confirmation</p>
+<p>method:post</p>
 
 <hr>
 <h4>Get User</h4>

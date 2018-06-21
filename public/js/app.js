@@ -6,29 +6,37 @@ var siteUrl=$('meta[name=base-url]').attr("content");
         post Text
         post Images & vedies
     */
-
+try {
 $('#feedForm').ajaxForm({ 
         // dataType identifies the expected content type of the server response 
         dataType:  'json', 
         success: processJson,
     });
+}
+catch(err) {
+
+}
 
     function processJson(data) 
     { 
         $("#error_div").html('');
         if(data.success==false){
-            $("#error_div").show();
+            //$("#error_div").show();
             if(data.errors.message){
-                $("#error_div").html(data.errors.message);
+               // $("#error_div").html(data.errors.message+'<button type="button" class="close" data-dismiss="alert">x</button>');
+             toastr.error(data.errors.message);
             }
             if(data.errors.image){
-                $("#error_div").html(data.errors.image);
+                toastr.error(data.errors.image);
+                //$("#error_div").html(data.errors.image+'<button type="button" class="close" data-dismiss="alert">x</button>');
             }
             if(data.errors.video){
-                $("#error_div").html(data.errors.video);
+                toastr.error(data.errors.video);
+                //$("#error_div").html(data.errors.video+'<button type="button" class="close" data-dismiss="alert">x</button>');
             }
             if(data.errors.error){
-                $("#error_div").html(data.errors.error);
+                toastr.error(data.errors.error);
+               // $("#error_div").html(data.errors.error+'<button type="button" class="close" data-dismiss="alert">x</button>');
             }
          
         }
@@ -43,7 +51,7 @@ $('#feedForm').ajaxForm({
                 hdiv +='<div class="col-md-6">';
                  hdiv +='<div class="pro1"><img src="'+data.pdata.image+'" class="img-responsive"></div>';  
                  hdiv +='<span class="pro-name">'+data.pdata.name+'</span></br>';
-                hdiv +='<span class="post-time">'+data.pdata.created_at+'</span>'; 
+                hdiv +='<span class="post-time">just now</span>'; 
                 hdiv +='</div>';
                 hdiv +='<div class="col-md-6">';
                   hdiv +='<i class="fa fa-ellipsis-v"></i>';  
