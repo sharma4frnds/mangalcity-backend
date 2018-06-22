@@ -12,16 +12,22 @@
         <h4>We use your feedback to help us learn when something's not right.</h4>
        
         @foreach($spam_tags as $tag)
-       <div class="radio">
-          <label><input type="radio" name="spam_tags" id="spam_tags"  value="{{$tag->id}}" checked>{{$tag->name}}
-          </label>
+         <div class="form-group col-sm-offset col-sm-10">
+           <div class="radio">
+              <label><input type="radio" name="spam_tags" id="spam_tags"  value="{{$tag->id}}" checked>{{$tag->name}}
+              </label>
+           </div>
        </div>
        @endforeach
        <input type="hidden" name="post_id" id="post_id" value="{{$id}}">
 
+
        <div class="form-group">
+          <div class="col-sm-offset col-sm-10">
             <button type="button" class="btn btn-primary" onclick="reportFeedback()">Send</button>  
-       </div>
+          </div>
+      </div>
+
 
   </form>
 

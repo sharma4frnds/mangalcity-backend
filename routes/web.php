@@ -71,6 +71,10 @@ Route::group(['middleware' => 'auth'], function()
 Route::group(['middleware' => 'admin'], function()
 {
 	Route::get('admin','Admin\DashboardController@index');
+	Route::get('admin/city','Admin\DashboardController@city');
+	Route::get('admin/addcity','Admin\DashboardController@getcity');
+	Route::POST('admin/addcity','Admin\DashboardController@addcity');
+	Route::POST('admin/daleteCity','Admin\DashboardController@daleteCity');
 	Route::get('admin/dashboard','Admin\DashboardController@index');
 	Route::resource('admin/users','Admin\UserController');
 	Route::resource('admin/tags','Admin\SpamtagController');

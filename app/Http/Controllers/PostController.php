@@ -54,11 +54,12 @@ class PostController extends Controller
     {
         return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image or video')), 400);
     }
-
+    
+    $message = isset($request->message) ? $request->message : '';
        try{
             $post=Post::create([
             'user_id' => Auth::user()->id,
-            'message'=> '',
+            'message'=> $message ,
             'tag' => '1',
             'type' => '',
             'value' => '',
@@ -358,14 +359,35 @@ class PostController extends Controller
 
         if(Post::where('id',$request->post_id)->where('user_id',Auth::user()->id)->count() > 0)
         {
+          $post=Post::where('id',$request->post_id)->first();
+
            Post::where('id',$request->post_id)->delete();
            Comment::where('post_id',$request->post_id)->where('user_id',Auth::user()->id)->delete();
            Like::where('post_id',$request->post_id)->delete();
-   
+
+            if($post->type=='image')
+            {
+              $file='public/images/post/post_image/'.$post->value;
+              if(file_exists($file))
+              {
+                 @unlink($file);
+              }
+            }
+
+            if($post->type=='video')
+            {
+                $file='public/images/post/post_video/'.$post->value;
+                if(file_exists($file))
+                {
+                   @unlink($file);
+                }
+            }
+
            return response()->json(['success'=>true,'message'=>'Successfully Removed'], 200);
         }else{
             return response()->json(['success'=>false,'message'=>'invalid post'], 405);
         }
+
 
     }
 
@@ -410,7 +432,34 @@ class PostController extends Controller
         if(Post::where('id',$request->post_id)->count() > 0)
         {
             $post=post::where('id',$request->post_id)->first();
-            post::insert(['user_id'=>Auth::user()->id,'message'=>$post->message,'type'=>$post->type,'value'=>$post->value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1, 'state'=>Auth::user()->state,'district'=>Auth::user()->district,'city'=>Auth::user()->city]);
+       $type='';
+       $value='';
+      if($post->type=='image')
+      {
+        $file=base_path('public/images/post/post_image/'.$post->value);
+        $ext =explode('.', $post->value);
+        $extension=end($ext);
+        $renameFile=round(microtime(true) * 1000).'.'.$extension;
+        $newFile=base_path('public/images/post/post_image/'.$renameFile);
+        copy($file,$newFile);
+        $type='image';
+        $value=$renameFile;
+      }
+
+      if($post->type=='video')
+      {
+
+        $file=base_path('public/images/post/post_video/'.$post->value);
+        $ext =explode('.', $post->value);
+        $extension=end($ext);
+        $renameFile=round(microtime(true) * 1000).'.'.$extension;
+        $newFile=base_path('public/images/post/post_video/'.$renameFile);
+        copy($file,$newFile);
+        $type='video';
+        $value=$renameFile;
+      }
+
+      post::insert(['user_id'=>Auth::user()->id,'message'=>$post->message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1, 'state'=>Auth::user()->state,'district'=>Auth::user()->district,'city'=>Auth::user()->city]);
 
             return response()->json(['success'=>true,'message'=>'Successfully share'], 200);
          

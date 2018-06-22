@@ -30,7 +30,12 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::POST('getuser', 'Api\UserController@getAuthUser');
 	Route::POST('/post','Api\PostController@posts');
 	Route::POST('/feeds','Api\PostController@feeds');
-		
+	Route::POST('/dolike','Api\PostController@dolikes');
+	Route::POST('/dodislikes','Api\PostController@dodislikes');	
+	Route::POST('/share_post','Api\PostController@share_post');	
+	Route::POST('/delete_post','Api\PostController@delete_post');
+	Route::POST('/spam_tags','Api\CommonController@spam_tags');		
+	
 });
 
 

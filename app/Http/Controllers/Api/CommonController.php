@@ -10,7 +10,7 @@ use App\Model\City ;
 use App\Model\State;
 use App\Model\District;
 use App\User;
-
+use App\Model\Spam_tag;
 class CommonController extends Controller
 {
    public function getState(Request $request)
@@ -49,5 +49,16 @@ class CommonController extends Controller
             }
         }  
         return response()->json(['success' => true, 'data'=>$result]);
-   } 
+   }
+
+ public function spam_tags(Request $request)
+ {
+    $result = [];
+    $citys=Spam_tag::get();
+    $result = $citys;
+    return response()->json(['success' => true, 'data'=>$result]);
+ }
+
+
+
 }

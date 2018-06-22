@@ -3,12 +3,14 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>feedbacks List</h3>
+                <h3>City List</h3>
               </div>
 
               <div class="title_right">
                 <div class="col-md-2 col-sm-5 col-xs-12 form-group pull-right top_search">
                   <div class="input-group">
+                     <a href=<?php echo e(url('admin/addcity')); ?>> <button class="btn btn-primary" type="submit">Add City</button></a>
+                    
                   </div>
                 </div>
               </div>
@@ -35,42 +37,28 @@
         <table id="example" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
-              <th></th>
-                <th>Name</th>
-                <th>Tag Name</th>
-                <th>Post Status</th>
-                <th>created_at</th>
-                <th>Action</th>
                 <th></th>
+                <th>Name</th>
+                <td>District</td>
+                <th>Created at</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            <?php $__currentLoopData = $feedbacks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
+            <?php $__currentLoopData = $citys; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <tr>
                 <td><?php echo e($row->id); ?></td>
-                <td><?php echo e($row->user->first_name); ?> <?php echo e($row->user->last_name); ?></td>
-                <td><?php echo e($row->tag->name); ?> </td>
-                <td><?php echo e($row->status); ?> </td>
+                <td><?php echo e($row->name); ?> </td>
+                <td><?php echo e($row->district->name); ?> </td>
                 <td><?php echo e($row->created_at); ?></td>
-                <td><a class="btn btn-info btn-xs" href="<?php echo e(url("admin/feedback/$row->post_id")); ?>">View</a> |
-                  <?php if($row->status=='inactive'): ?>
-                    <a class="btn btn-primary btn-xs" href="<?php echo e(url("admin/feedback/$row->id/edit")); ?>">Removed Spam</a>
-                  <?php else: ?>
-                    <a class="btn btn-primary btn-xs" href="<?php echo e(url("admin/feedback/$row->id/edit")); ?>">Mark Spam</a>
-                  <?php endif; ?>
-                </td>
-               <td><?php echo Form::open(array('url' => "admin/feedback/".$row->id,'method' => 'delete')); ?>
-
-                      <?php echo Form::submit('delete!' , array(' class'  => 'btn btn-danger btn-xs','name'=>'delete' ));; ?>  
-                    <?php echo Form::close(); ?>
-
-                </td>
-
+                <td>
+                
+                  <button class="btn btn-danger btn-xs" onclick="deleteItam(<?php echo e($row->id); ?>)">Delete</button>
+              </td>
             </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </tbody>
-    </table>
+       </table>
               <?php $__env->startSection('footerscript'); ?>
                                 <!-- js -->
               <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -119,6 +107,25 @@
                 oTable.fnSort( [ [0,'desc'] ] );
 
                 });
+                </script>
+                <script type="text/javascript">
+                   function deleteItam(id){
+              if(confirm("Are you sure?"))
+              {
+                $.ajax({
+                url:'daleteCity',
+                type:'POST',
+                beforeSend: function(xhr){
+                xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+                cache: false,
+                async:false,
+                data:{'id':id},
+                success:function(data){
+                 location.reload();
+                }
+                })
+              }
+            }
                 </script>
                   <?php $__env->stopSection(); ?>
                   </div>

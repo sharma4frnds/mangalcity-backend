@@ -17,7 +17,13 @@ class UserMiddleware
     public function handle($request, Closure $next)
     {
         if(Auth::check()) 
-        {
+        {  
+            
+            if(Auth::user()->is_admin==1){
+                return Redirect::to('/admin');
+            }
+
+
             if(Auth::user()->profile==0)
             {
                 return Redirect::to('/user/profile')->with('message','Please update your profile');

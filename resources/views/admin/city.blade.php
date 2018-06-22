@@ -1,14 +1,17 @@
-<?php $__env->startSection('content'); ?>
+@extends('admin.master')
+@section('content')
  <div class="right_col" role="main">
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>feedbacks List</h3>
+                <h3>City List</h3>
               </div>
 
               <div class="title_right">
                 <div class="col-md-2 col-sm-5 col-xs-12 form-group pull-right top_search">
                   <div class="input-group">
+                     <a href={{url('admin/addcity')}}> <button class="btn btn-primary" type="submit">Add City</button></a>
+                    
                   </div>
                 </div>
               </div>
@@ -21,57 +24,43 @@
                   
                   <div class="x_content">
                     <br />
-                     <?php if(count($errors) > 0): ?>
+                     @if (count($errors) > 0)
                        <div class="alert alert-danger">
                               <ul class='text'>
-                                  <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <li><?php echo e($error); ?></li>
-                                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                  @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                  @endforeach
                               </ul>
                           </div>
-                      <?php endif; ?>
+                      @endif
 
         
         <table id="example" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
-              <th></th>
-                <th>Name</th>
-                <th>Tag Name</th>
-                <th>Post Status</th>
-                <th>created_at</th>
-                <th>Action</th>
                 <th></th>
+                <th>Name</th>
+                <td>District</td>
+                <th>Created at</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            <?php $__currentLoopData = $feedbacks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-
+            @foreach($citys as $row)
             <tr>
-                <td><?php echo e($row->id); ?></td>
-                <td><?php echo e($row->user->first_name); ?> <?php echo e($row->user->last_name); ?></td>
-                <td><?php echo e($row->tag->name); ?> </td>
-                <td><?php echo e($row->status); ?> </td>
-                <td><?php echo e($row->created_at); ?></td>
-                <td><a class="btn btn-info btn-xs" href="<?php echo e(url("admin/feedback/$row->post_id")); ?>">View</a> |
-                  <?php if($row->status=='inactive'): ?>
-                    <a class="btn btn-primary btn-xs" href="<?php echo e(url("admin/feedback/$row->id/edit")); ?>">Removed Spam</a>
-                  <?php else: ?>
-                    <a class="btn btn-primary btn-xs" href="<?php echo e(url("admin/feedback/$row->id/edit")); ?>">Mark Spam</a>
-                  <?php endif; ?>
-                </td>
-               <td><?php echo Form::open(array('url' => "admin/feedback/".$row->id,'method' => 'delete')); ?>
-
-                      <?php echo Form::submit('delete!' , array(' class'  => 'btn btn-danger btn-xs','name'=>'delete' ));; ?>  
-                    <?php echo Form::close(); ?>
-
-                </td>
-
+                <td>{{$row->id}}</td>
+                <td>{{$row->name}} </td>
+                <td>{{$row->district->name}} </td>
+                <td>{{$row->created_at}}</td>
+                <td>
+                
+                  <button class="btn btn-danger btn-xs" onclick="deleteItam({{$row->id}})">Delete</button>
+              </td>
             </tr>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            @endforeach
         </tbody>
-    </table>
-              <?php $__env->startSection('footerscript'); ?>
+       </table>
+              @section('footerscript')
                                 <!-- js -->
               <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
               <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
@@ -120,7 +109,26 @@
 
                 });
                 </script>
-                  <?php $__env->stopSection(); ?>
+                <script type="text/javascript">
+                   function deleteItam(id){
+              if(confirm("Are you sure?"))
+              {
+                $.ajax({
+                url:'daleteCity',
+                type:'POST',
+                beforeSend: function(xhr){
+                xhr.setRequestHeader('X-CSRF-TOKEN', $("#token").attr('content'));},
+                cache: false,
+                async:false,
+                data:{'id':id},
+                success:function(data){
+                 location.reload();
+                }
+                })
+              }
+            }
+                </script>
+                  @endsection
                   </div>
                 </div>
               </div>
@@ -128,6 +136,4 @@
 
           </div>
          </div>
-<?php $__env->stopSection(); ?>
-
-<?php echo $__env->make('admin.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+@endsection

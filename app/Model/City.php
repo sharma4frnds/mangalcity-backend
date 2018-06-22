@@ -10,4 +10,10 @@ class City extends Model
      protected $fillable = [
        'id','name' ,'district_id',
     ];
+
+
+    public function district()
+    {
+        return $this->hasOne('App\Model\District','id','district_id');
+    }
 }

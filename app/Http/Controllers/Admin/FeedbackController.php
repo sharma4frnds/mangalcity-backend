@@ -7,12 +7,18 @@ use App\Http\Controllers\Controller;
 use App\Model\Spam_tag;
 use App\Model\Feedbacks;
 use App\Model\Post;
+use App\Model\City ;
+use App\Model\State;
+use App\Model\District;
+
+
 class FeedbackController extends Controller
 {
 
     function index()
     {
     	$feedbacks=Feedbacks::with('user','tag')->orderBy('updated_at', 'desc')->get();
+
     	return view('admin/feedback',compact('feedbacks'));
     }
 
@@ -20,9 +26,13 @@ class FeedbackController extends Controller
     {
     	 $post=Post::where('id',$id)->first();
 
+         $state=State::where('id',$post->state)->first();
+         $district=District::where('id',$post->district)->first();
+         $city=City::where('id',$post->city)->first();
+
     	 $feedback=Feedbacks::with('user','tag')->where('post_id',$post->id)->get();
 
-         return view('admin.feedback_create',compact('post','feedback'));
+         return view('admin.feedback_create',compact('post','feedback','state','district','city'));
     }
 
     public function edit($id)

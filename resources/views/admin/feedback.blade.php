@@ -41,7 +41,6 @@
               <th></th>
                 <th>Name</th>
                 <th>Tag Name</th>
-                <th>Total spam</th>
                 <th>Post Status</th>
                 <th>created_at</th>
                 <th>Action</th>
@@ -55,7 +54,6 @@
                 <td>{{$row->id}}</td>
                 <td>{{$row->user->first_name}} {{$row->user->last_name}}</td>
                 <td>{{$row->tag->name}} </td>
-                <td>{{$row->total_spam}}</td>
                 <td>{{$row->status}} </td>
                 <td>{{$row->created_at}}</td>
                 <td><a class="btn btn-info btn-xs" href="{{ url("admin/feedback/$row->post_id") }}">View</a> |

@@ -42,12 +42,13 @@
                         <?php endif; ?>
 
                          </div>
+
                       </div>
 
               <div class="col-md-12">
               <div class="x_panel">
                 <div class="x_title">
-                  <h2>feedback users </h2>
+                  <h2>feedback users(<?php echo e($state->name); ?>, <?php echo e($district->name); ?>, <?php echo e($city->name); ?>) </h2>
                   <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>

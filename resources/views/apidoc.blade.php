@@ -115,3 +115,38 @@ http://emergingncr.com/mangalcity/api/feeds
 <p>method:post </p>
 <p>parameter:token</p>
 
+
+
+<hr>
+<h2>like</h2>
+http://emergingncr.com/mangalcity/api/dolike
+<p>method:post </p>
+<p>parameter:token,post_id</p>
+<p>Responce:{"success":true,"lcount":1,"dcount":0,"type":1}</p>
+<p>press again:{"success":true,"lcount":0,"dcount":0,"type":0}</p>
+
+<hr>
+<h2>dislike</h2>
+http://emergingncr.com/mangalcity/api/dodislikes
+<p>method:post </p>
+<p>parameter:token,post_id</p>
+<p>Responce:{"success":true,"lcount":0,"dcount":1,"type":1}</p>
+
+<hr>
+<h2>share post</h2>
+http://emergingncr.com/mangalcity/api/share_post
+<p>method:post </p>
+<p>parameter:token,post_id</p>
+
+<hr>
+<h2>Delete Post</h2>
+http://emergingncr.com/mangalcity/api/delete_post
+<p>method:post </p>
+<p>parameter:token,post_id</p>
+
+<hr>
+<h2>spam tags</h2>
+	http://emergingncr.com/mangalcity/api/spam_tags
+<p>method:post </p>
+<p>parameter:token</p>
+

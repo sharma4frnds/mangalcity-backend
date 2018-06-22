@@ -13,17 +13,23 @@
         <h4>We use your feedback to help us learn when something's not right.</h4>
        
         <?php $__currentLoopData = $spam_tags; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tag): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-       <div class="radio">
-          <label><input type="radio" name="spam_tags" id="spam_tags"  value="<?php echo e($tag->id); ?>" checked><?php echo e($tag->name); ?>
+         <div class="form-group col-sm-offset col-sm-10">
+           <div class="radio">
+              <label><input type="radio" name="spam_tags" id="spam_tags"  value="<?php echo e($tag->id); ?>" checked><?php echo e($tag->name); ?>
 
-          </label>
+              </label>
+           </div>
        </div>
        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
        <input type="hidden" name="post_id" id="post_id" value="<?php echo e($id); ?>">
 
+
        <div class="form-group">
+          <div class="col-sm-offset col-sm-10">
             <button type="button" class="btn btn-primary" onclick="reportFeedback()">Send</button>  
-       </div>
+          </div>
+      </div>
+
 
   </form>
 

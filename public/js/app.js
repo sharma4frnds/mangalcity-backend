@@ -256,10 +256,10 @@ function deleteNotification(num)
 //spamReport
 function reportFeedback()
 {
-    var spam_tags=$("#spam_tags").val();
+    var spam_tags =$("input[name='spam_tags']:checked").val();
     var post_id=$("#post_id").val();
     $("#errer_div").hide();
-    
+
     $.ajax({
     url: siteUrl+'/reportFeedback',
     type: 'POST',
