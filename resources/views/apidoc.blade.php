@@ -69,11 +69,30 @@ token
 <hr>
 <h2>Profile </h2>
 
-
+<hr>
 <h4>update profile</h4>
-	http://emergingncr.com/mangalcity/api/userprofile
+URL:http://emergingncr.com/mangalcity/api/userprofile
 <p>method:post</p>
-<p>parameter:token,first_name,last_name,email,country,state,district,city</p>
+<p>parameter:token,first_name,last_name,email,country,state,district,city,image,cover_image,gender,marital_status,current_location,home_city,home_country,home_district,home_state
+</p>
+
+<hr>
+<h4>update profile</h4>
+URL:http://emergingncr.com/mangalcity/api/getprofile
+<p>parameter:token </p>
+<p>method:post</p>
+
+<hr>
+<h4>upload profile image</h4>
+URL:http://emergingncr.com/mangalcity/api/change_profile_image
+<p>parameter:token,image </p>
+<p>method:post</p>
+
+<hr>
+<h4>update cover image</h4>
+URL:http://emergingncr.com/mangalcity/api/change_cover_image
+<p>parameter:token,cover_image </p>
+<p>method:post</p>
 
 
 <h4>State</h4>
@@ -113,7 +132,7 @@ token,message,video,image
 <h2>feeds</h2>
 http://emergingncr.com/mangalcity/api/feeds
 <p>method:post </p>
-<p>parameter:token</p>
+<p>parameter:token,home_location=1,page=2</p>
 
 
 
@@ -150,3 +169,16 @@ http://emergingncr.com/mangalcity/api/delete_post
 <p>method:post </p>
 <p>parameter:token</p>
 
+
+
+<hr>
+<h2>download image</h2>
+	http://emergingncr.com/mangalcity/api/download_image/Image.png
+<p>method:Get </p>
+<p>parameter:token</p>
+
+<hr>
+<h2>Report Feedback</h2>
+	http://emergingncr.com/mangalcity/api/report_feedback
+<p>Method:POST </p>
+<p>parameter:token,post_id,spam_tags</p>

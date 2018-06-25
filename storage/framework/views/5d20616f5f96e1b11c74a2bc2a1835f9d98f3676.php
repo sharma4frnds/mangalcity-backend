@@ -1,6 +1,87 @@
 <?php $__env->startSection('title','Mangalcity'); ?>
 
 <?php $__env->startSection('content'); ?>
+<!-- pro-pnl -->
+<section class="pro-pnl">
+ <div class="container">
+ <div class="row">
+  <div class="col-md-9 cv-relt">
+    <div class="cover">
+<div class="over-ic1"><a data-toggle="modal" href="<?php echo e(url('/coverpopup/')); ?>" data-target="#myModal"><i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
+</div>
+  
+   <?php echo e(Html::image('public/images/user/cover/'.Auth::user()->cover_image,'img',array('class'=>'img-responsive'))); ?>  
+    </div>
+<div class="cover-pro">
+
+<div class="over-ic">
+<a data-toggle="modal" href="<?php echo e(url('/imagepopup/')); ?>" data-target="#myModal">
+ <i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
+</div>
+<?php echo e(Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))); ?>
+
+
+ <div class="c-cover-pnl">
+<span class="cover-user-name"><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?></span><br>
+</div>
+</div>
+  </div>
+  <div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
+<div class="roted">
+  <h2>Country Highlights</h2>
+</div>
+<div class="slide-three">
+  <div id="myCarousel2" class="carousel slide" data-ride="carousel">
+    
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1" class=""></li>
+      <li data-target="#myCarousel" data-slide-to="2" class=""></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        <?php $i=0; ?>
+       <?php $__currentLoopData = $country_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      <div class="item <?php if($i==0): ?>active <?php endif; ?>">
+          <?php if($cposts->type=='image'): ?>
+              <?php echo e(Html::image('public/images/post/post_image/'.$cposts->value,'img',array('class'=>'img-responsive'))); ?>  
+
+         <?php elseif($cposts->type=='video'): ?>
+            <video width="100%" height="150" controls><source src="public/images/post/post_video/<?php echo e($cposts->value); ?>" type="video/mp4"></video>  
+         <?php else: ?>
+            <p><?php echo e(str_limit($cposts->message, 25)); ?></p>
+         <?php endif; ?>
+      </div>
+      <?php  $i=$i+1; ?>
+
+       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel2" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel2" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+
+
+  </div>
+
+</div>
+</div>
+</section>
+
+<!-- pro-pnl -->
+
       <section class="think-pnl post-pnl">
         <div class="container">
           <div class="row">
@@ -23,12 +104,18 @@
                     </form>
 
                 </div>
-                <button type="button" class="btn hme btn-warning">switch to home location</button>
+                 <?php $home_location=Session::get('home_location'); ?>
+                 <?php if($home_location): ?>
+                  <a href="<?php echo e(url('change_location')); ?>"> <button type="button" class="btn hme btn-warning">switch to Current location</button></a>
+                  <?php else: ?>
+                   <a href="<?php echo e(url('change_location')); ?>"> <button type="button" class="btn hme btn-warning">switch to home location</button></a>
+                  <?php endif; ?>
+              
 
                 
 
             </div>
-            <div class="col-md-9 col-sm-4 col-xs-12">
+            <div class="col-md-6 col-sm-6 col-xs-12">
 
                 <form method="POST" enctype="multipart/form-data" id="feedForm" action="post">
                     <input name="_token" type="hidden" value="<?php echo e(csrf_token()); ?>"/>
@@ -48,8 +135,9 @@
                         <ul>
                          <li><i class="fa fa-file-image-o" aria-hidden="true"></i></li>   
                          <li><i class="fa fa-video-camera" aria-hidden="true"></i></li> 
+                         <li><img id="imagePreview" class="prv"  /> </li>
+
                          <li style="float: right;">
-                            
                             <input type="submit" value="Post" class="post-bt"  /> 
                             </li> 
                         </ul>
@@ -61,338 +149,142 @@
 
             </form>
 
-            <div class="col-md-12 col-sm-4 col-xs-12 box-shd">
-            <div class="row org">
-                <div class="col-md-9">
-                    <h3>country</h3>
-                </div>
-                <div class="col-md-3">
-                    <!-- Controls -->
-                    <div class="controls pull-right hidden-xs">
-                        <a class="left fa fa-chevron-left btn btn-success" href="#carousel-example" data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-success" href="#carousel-example" data-slide="next"></a>
-                    </div>
-                </div>
-            </div>
-
-            <div id="carousel-example" class="carousel slide hidden-xs" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="item active">
-                        <div class="row">
-                        <?php $__currentLoopData = $country_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="col-sm-3 ped-crsl">
-                            <div class="col-item">
-                                <div class="photo">
-                                   
-                              <?php if($cposts->type=='image'): ?>
-                                <div class="post-img">
-                                     <?php echo e(Html::image('public/images/post/post_image/'.$cposts->value,'img',array('class'=>'img-responsive'))); ?>  
-                                </div>
-                             <?php elseif($cposts->type=='video'): ?>
-                              <div class="post-video">
-                                   <video width="100%" height="150" controls><source src="public/images/post/post_video/<?php echo e($cposts->value); ?>" type="video/mp4"></video>   
-                                </div>  
-                             <?php else: ?>
-                                <p class="post-txt"><?php echo e(str_limit($cposts->message, 25)); ?></p>
-                             <?php endif; ?>
-
-                                </div>
-                                <div class="info">
-                                    <div class="row">
-                                        <div class="price col-md-12">
-                                            <h5><?php echo e($cposts->user->first_name); ?> <?php echo e($cposts->user->last_name); ?> <br>
-                                              <?php echo Helper::dateFormate($cposts->created_at);; ?>
-
-
-                                               </h5>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix"> </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </div>
-                    </div>
-                 
-                </div>
-            </div>
-            </div>
-
-	<div class="col-md-12 col-sm-4 col-xs-12 box-shd">
-        <div class="row org">
-            <div class="col-md-9">
-                <h3>state</h3>
-            </div>
-            <div class="col-md-3">
-                <!-- Controls -->
-                <div class="controls pull-right hidden-xs">
-                    <a class="left fa fa-chevron-left btn btn-success" href="#carousel-example1" data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-success" href="#carousel-example1" data-slide="next"></a>
-                </div>
-            </div>
-        </div>
-        <div id="carousel-example1" class="carousel slide hidden-xs" data-ride="carousel">
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-                <div class="item active">
-                    <div class="row">
-
-                     <?php $__currentLoopData = $state_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="col-sm-3 ped-crsl">
-                            <div class="col-item">
-                                <div class="photo">
-                                   
-                              <?php if($sposts->type=='image'): ?>
-                                <div class="post-img">
-                                     <?php echo e(Html::image('public/images/post/post_image/'.$sposts->value,'img',array('class'=>'img-responsive'))); ?>  
-                                </div>
-                             <?php elseif($sposts->type=='video'): ?>
-                              <div class="post-video">
-                                   <video width="100%" height="150" controls><source src="public/images/post/post_video/<?php echo e($sposts->value); ?>" type="video/mp4"></video>   
-                                </div>  
-                             <?php else: ?>
-                                <p class="post-txt"><?php echo e(str_limit($sposts->message, 25)); ?></p>
-                             <?php endif; ?>
-
-                                </div>
-                                <div class="info">
-                                    <div class="row">
-                                        <div class="price col-md-12">
-                                            <h5><?php echo e($sposts->user->first_name); ?> <?php echo e($sposts->user->last_name); ?> <br><?php echo Helper::dateFormate($sposts->created_at);; ?> </h5>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                      
- 
-                    </div>
-                </div>
-               
-            </div>
-        </div>
-    </div>
-
-
-	<div class="col-md-12 col-sm-4 col-xs-12 box-shd">
-
-        <div class="row org">
-            <div class="col-md-9">
-                <h3>district</h3>
-            </div>
-            <div class="col-md-3">
-                <!-- Controls -->
-                <div class="controls pull-right hidden-xs">
-                    <a class="left fa fa-chevron-left btn btn-success" href="#carousel-example2" data-slide="prev"></a><a class="right fa fa-chevron-right btn btn-success" href="#carousel-example2" data-slide="next"></a>
-                </div>
-            </div>
-        </div>
-        <div id="carousel-example2" class="carousel slide hidden-xs" data-ride="carousel">
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner">
-                <div class="item active">
-                    <div class="row">
-                        <?php $__currentLoopData = $district_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="col-sm-3 ped-crsl">
-                            <div class="col-item">
-                                <div class="photo">
-                                   
-                              <?php if($dposts->type=='image'): ?>
-                                <div class="post-img">
-                                     <?php echo e(Html::image('public/images/post/post_image/'.$dposts->value,'img',array('class'=>'img-responsive'))); ?>  
-                                </div>
-                             <?php elseif($dposts->type=='video'): ?>
-                              <div class="post-video">
-                                   <video width="100%" height="150" controls><source src="public/images/post/post_video/<?php echo e($dposts->value); ?>" type="video/mp4"></video>   
-                                </div>  
-                             <?php else: ?>
-                                <p class="post-txt"><?php echo e(str_limit($dposts->message, 100)); ?></p>
-                             <?php endif; ?>
-
-                                </div>
-                                <div class="info">
-                                    <div class="row">
-                                        <div class="price col-md-12">
-                                            <h5><?php echo e($dposts->user->first_name); ?> <?php echo e($dposts->user->last_name); ?> <br><?php echo Helper::dateFormate($dposts->created_at);; ?> </h5>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-               
-                      
-                
-                    </div>
-                </div>
-   
-            </div>
-        </div>
-    </div>
-
-        <!-- Button trigger modal -->
-
 
 
             
             <!--City  post -->
             <div id="currentMessage"></div>
-            <?php $__currentLoopData = $city_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $city_post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <?php 
-                // echo '<pre>';
-                 //print_r($city_post);
-                
-            
-            ?>
-
-            <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20" id="postdiv<?php echo e($city_post->id); ?>">
-                <div class="col-md-6">
-                 <div class="pro1">
-                   <?php echo e(Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))); ?>
-
-                    </div>  
-                 <span class="pro-name"><?php echo e($city_post->user->first_name); ?> <?php echo e($city_post->user->last_name); ?></span></br>
-                <span class="post-time">
-                  <?php echo Helper::dateFormate($city_post->created_at);; ?>
-
-
-
-                </span> 
-                </div>
-                <div class="col-md-6">
-                    <div class="dropdown">
-                     <i data-toggle="dropdown" class="fa dropdown-toggle fa fa-ellipsis-v"></i>
-                     <ul class="dropdown-menu side-fix">
-                        <?php if($city_post->user_id==Auth::user()->id): ?>
-                        <li><a onclick="delete_post_popup(<?php echo e($city_post->id); ?>)">Delete</a></li>
-                       <?php endif; ?>
-                       <li>
-                        <a data-toggle="modal" href="<?php echo e(url('/reportFeedback/'.$city_post->id)); ?>" data-target="#myModal">
-                            Give Feedback on This Post</a>
-                        </li>
-                     </ul>
-                   </div>
-                </div>
-
-                  <p class="post-txt"><?php echo e($city_post->message); ?></p>
-
-                  <?php if($city_post->type=='image'): ?>
-                    <div class="post-img">
-                         <?php echo e(Html::image('public/images/post/post_image/'.$city_post->value,'img',array('class'=>'img-responsive'))); ?>  
-                    </div>
-                 <?php endif; ?>
-
-                   <?php if($city_post->type=='video'): ?>
-                    <div class="post-video">
-                       <video width="100%" height="315" controls><source src="public/images/post/post_video/<?php echo e($city_post->value); ?>" type="video/mp4"></video>   
-                    </div>  
-                 <?php endif; ?>
-                <div class="share-area">
-
-                    <ul>
-
-                     <li><a onclick="doLike(<?php echo e($city_post->id); ?>,0)" id="dolike<?php echo e($city_post->id); ?>" > 
-                      <?php if(isset($city_post->like)): ?>
-                            <?php if($city_post->like->type==0): ?>
-                                 <i class="fa fa-thumbs-up"></i> <?php echo e($city_post->likes); ?> 
-                                <?php else: ?>
-                                 <i class="fa fa-thumbs-o-up"></i> <?php echo e($city_post->likes); ?>
-
-                                <?php endif; ?>
-                           
-                            <?php else: ?>
-                            <i class="fa fa-thumbs-o-up"></i> <?php echo e($city_post->likes); ?>
-
-                            <?php endif; ?>
-                         </a> 
-                     </li>
-
-                     <li>
-                        <a onclick="dodislikes(<?php echo e($city_post->id); ?>,1)" id="dodislikes<?php echo e($city_post->id); ?>" > 
-                           <?php if(isset($city_post->like)): ?>
-                                <?php if($city_post->like->type==1): ?>
-                                <i class="fa fa-thumbs-down"></i> <?php echo e($city_post->dislikes); ?>
-
-                                <?php else: ?>
-                                <i class="fa fa-thumbs-o-down"></i> <?php echo e($city_post->dislikes); ?>
-
-                                <?php endif; ?>
-                            <?php else: ?>
-                            <i class="fa fa-thumbs-o-down"></i> <?php echo e($city_post->dislikes); ?>
-
-                            <?php endif; ?>
-                          </a>
-                     </li>
-                      <li ><a onclick="focus_form(<?php echo e($city_post->id); ?>)"><i class="fa fa-comment" aria-hidden="true"></i> Comment</i> </a></li>   
-                   
-                      <li><a onclick="share_post_popup(<?php echo e($city_post->id); ?>)"> <i class="fa fa-share-alt" aria-hidden="true"></i> Share</i></a></li>
-                 
-
-
-                    </ul>
-                </div>
-
-                <div class="hr"></div>
-
-                <div id="comment_section<?php echo e($city_post->id); ?>">
-                <?php if(isset($city_post->comment[0])): ?>
-                <?php $__currentLoopData = $city_post->comment; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cmnt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                
-                <div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl" id="commentDiv<?php echo e($cmnt->id); ?>">
-                <div class="col-md-11 cmnt-pnl-ped">
-                 
-                <div class="pro1">
-                   <?php echo e(Html::image('public/images/user/'.$cmnt->image,'img',array('class'=>'img-responsive'))); ?>
-
-                </div>   
-                 <div class="cmnt-box">
-                 <span class="pro-name"><b><?php echo e($cmnt->first_name.' '.$cmnt->last_name); ?>:</b> <?php echo e($cmnt->message); ?></span><br>
-                <span class="post-time">
-                   <i class="fa fa-clock-o" aria-hidden="true"></i> 
-                    <?php echo Helper::dateFormate($city_post->created_at);; ?>
-
-                </span> 
-                </div>
-                </div>
-                <?php if($cmnt->user_id==Auth::user()->id): ?>
-                <div class="dropdown">
-                 <i data-toggle="dropdown" class="fa dropdown-toggle fa-angle-down"></i>
-                 <ul class="dropdown-menu side-fix">
-                   <li><a onclick="deleteComment(<?php echo e($city_post->id); ?>,<?php echo e($cmnt->id); ?>)">Delete</a></li>
-                 </ul>
-               </div>
-               <?php endif; ?>
-              
-            </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-            <?php endif; ?>
-         </div>
-        
-           
-            <div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl">
-                <div class="col-md-12 cmnt-pnl-ped">
-                 <div class="pro1"><?php echo e(Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))); ?></div>  
-                 <div class="cmnt-box">
-                    <textarea rows="2" cols="100" name="comment" id="comment-form<?php echo e($city_post->id); ?>" placeholder="Leave a comment..."></textarea>
-                    <button class="post-bt" onclick="postComment(<?php echo e($city_post->id); ?>)">Post</button>
-                </div>
-                </div>
-            </div>
-
-            </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
             <!-- post -->
-        
-          </div>
+            <div  id="post-data">
+              <?php echo $__env->make('feed', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+              </div>
+            <!-- post -->
+          <br/>
+        <div class="ajax-load text-center" style="display:none">
+           <p><?php echo e(Html::image('public/img/loader.gif')); ?> Loading More post</p>
+        </div>
+
+        </div>
+
+  <!-- side-3 -->
+<div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
+<div class="roted">
+  <h2>State Highlights</h2>
+</div>
+<div class="slide-three">
+  <div id="myCarousel3" class="carousel slide" data-ride="carousel">
+    
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+      <?php $i=0; ?>
+       <?php $__currentLoopData = $state_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      <div class="item <?php if($i==0): ?>active <?php endif; ?>">
+          <?php if($cposts->type=='image'): ?>
+              <?php echo e(Html::image('public/images/post/post_image/'.$sposts->value,'img',array('class'=>'img-responsive'))); ?>  
+
+         <?php elseif($sposts->type=='video'): ?>
+            <video width="100%" height="150" controls><source src="public/images/post/post_video/<?php echo e($sposts->value); ?>" type="video/mp4"></video>  
+         <?php else: ?>
+            <p><?php echo e(str_limit($sposts->message, 25)); ?></p>
+         <?php endif; ?>
+      </div>
+      <?php  $i=$i+1; ?>
+
+       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel3" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel3" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+
+
+  </div>
+
+</br>
+
+  </br>
+  <div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
+<div class="roted">
+  <h2>District Highlights</h2>
+</div>
+<div class="slide-three">
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+    
+      <?php $i=0; ?>
+       <?php $__currentLoopData = $district_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+      <div class="item <?php if($i==0): ?>active <?php endif; ?>">
+          <?php if($dposts->type=='image'): ?>
+              <?php echo e(Html::image('public/images/post/post_image/'.$dposts->value,'img',array('class'=>'img-responsive'))); ?>  
+
+         <?php elseif($dposts->type=='video'): ?>
+            <video width="100%" height="150" controls><source src="public/images/post/post_video/<?php echo e($dposts->value); ?>" type="video/mp4"></video>  
+         <?php else: ?>
+            <p><?php echo e(str_limit($dposts->message, 25)); ?></p>
+         <?php endif; ?>
+      </div>
+      <?php  $i=$i+1; ?>
+
+       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    
+  
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+</div>
+
+
+  </div>
+                
+<!-- side-3 -->
+
+
+
+
+
+
+
+
         </div>
         
       </section>
-
+<style type="text/css">
+ 
+    </style>
 <!-- Remote popup -->
 <div id="myModal" class="modal fade">
 <div class="modal-dialog">
@@ -411,6 +303,50 @@
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('footer_script'); ?>
 <?php echo e(Html::script('public/js/jquery.form.js')); ?>
+
+
+
+<script type="text/javascript">
+  var page = 1;
+
+$(window).on("scroll", function() {
+  var scrollHeight = $(document).height();
+  var scrollPosition = $(window).height() + $(window).scrollTop();
+  if((scrollHeight - scrollPosition) / scrollHeight === 0) {
+        page++;
+        loadMoreData(page);
+  }
+});
+
+
+
+  function loadMoreData(page){
+    $.ajax(
+          {
+              url: '?page=' + page,
+              type: "get",
+              cache: false,
+              async:false,
+              beforeSend: function()
+              {
+                  $('.ajax-load').show();
+              }
+          })
+          .done(function(data)
+          {
+              if(data.html == ""){
+                  $('.ajax-load').html("No more records found");
+                  return;
+              }
+              //$('.ajax-load').hide();
+              $("#post-data").append(data.html);
+          })
+          .fail(function(jqXHR, ajaxOptions, thrownError)
+          {
+            alert('server not responding...');
+          });
+  }
+</script>
 
 
 <?php $__env->stopSection(); ?>

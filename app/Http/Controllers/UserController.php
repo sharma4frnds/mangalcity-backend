@@ -42,19 +42,22 @@ class UserController extends Controller
     public function update_profile(Request $request)
     {
         
-    	$this->validate($request, ['first_name' =>'required|max:20','last_name' =>'required|max:20','email' =>'email','country' =>'required|numeric','state' =>'required|numeric','district' =>'required|numeric','city' =>'required|numeric']);
+    	$this->validate($request, ['first_name' =>'required|max:20','last_name' =>'required|max:20','email' =>'email','country' =>'required|numeric','state' =>'required|numeric','district' =>'required|numeric','city' =>'required|numeric','city' =>'required|numeric','address' =>'max:50','gender' =>'required','marital_status' =>'required']);
 
-    		User::where('id',Auth::user()->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'email'=>$request->email,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'profile'=>1]);
+    		User::where('id',Auth::user()->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'email'=>$request->email,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'address'=>$request->address,'gender'=>$request->gender,'marital_status'=>$request->marital_status,'profile'=>1]);
 
             if($request->current_location =='active')
             {
-                if(Home_location::where('user_id',Auth::user()->id)->count() =='0')
-                {
-                    Home_location::create(['user_id'=>Auth::user()->id,'home_country'=>$request->country,'home_state'=>$request->state,'home_district'=>$request->district,'home_city'=>$request->city]);
-                }
-                else{
-                Home_location::where('user_id',Auth::user()->id)->update(['home_country'=>$request->country,'home_state'=>$request->state,'home_district'=>$request->district,'home_city'=>$request->city]);
-                }
+                
+                Home_location::where('user_id',Auth::user()->id)->delete();
+
+                // if(Home_location::where('user_id',Auth::user()->id)->count() =='0')
+                // {
+                //     Home_location::create(['user_id'=>Auth::user()->id,'home_country'=>$request->country,'home_state'=>$request->state,'home_district'=>$request->district,'home_city'=>$request->city]);
+                // }
+                // else{
+                // Home_location::where('user_id',Auth::user()->id)->update(['home_country'=>$request->country,'home_state'=>$request->state,'home_district'=>$request->district,'home_city'=>$request->city]);
+                // }
 
             }else{
 
@@ -104,8 +107,10 @@ class UserController extends Controller
         
         if($validator->fails()) 
         {
-            return redirect()->back()->withErrors($validator, 'imageErrors'); 
+            return response()->json(['success'=>true, 'errors'=>$validator->getMessageBag()->toArray()],422);
         }
+
+
 
        $imageName = time(). '.' .$request->file('image')->getClientOriginalExtension();
         Image::make($request->file('image')->getRealPath())->fit(50, 50)->save('public/images/user/'.$imageName);
@@ -116,15 +121,15 @@ class UserController extends Controller
             $file='public/images/user/'.$user->image;
             if(file_exists($file))
             {
-               @unlink($file);
+                  
+                   @unlink($file);
             }
          }
 
          $user->image=$imageName;
          $user->save();
      
-
-    return redirect('user/profile')->with('imagesMessages','successfully change images');
+        return response()->json(['success'=>false, 'message'=>'successfully change images'],200);
 
     }
 
@@ -135,7 +140,7 @@ class UserController extends Controller
         
         if($validator->fails())
         {
-            return redirect()->back()->withErrors($validator, 'cover_imageErrors'); 
+             return response()->json(['success'=>true, 'errors'=>$validator->getMessageBag()->toArray()],422);
         }
 
        $imageName = time(). '.' .$request->file('cover_image')->getClientOriginalExtension();
@@ -153,8 +158,18 @@ class UserController extends Controller
          $user->cover_image=$imageName;
          $user->save();
 
-        return redirect('user/profile')->with('cover_imageMessages','successfully change images Cover pic');
+        return response()->json(['success'=>false, 'message'=>'successfully update'],200);
+        
     }
 
+    public function imagepopup()
+    {
+        return view('image_popup');
+    }
+
+    public function coverpopup()
+    {
+        return view('cover_popup');
+    }
 
 }

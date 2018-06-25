@@ -23,8 +23,13 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::POST('getstate', 'Api\CommonController@getState');
 	Route::POST('getdistict', 'Api\CommonController@getDistict');
 	Route::POST('getcity', 'Api\CommonController@getCity');
+	
+	Route::POST('getprofile','Api\UserController@getprofile');
 	Route::POST('userprofile','Api\UserController@userprofile');
+	Route::POST('change_profile_image','Api\UserController@upload_image_changes');
+	Route::POST('change_cover_image','Api\UserController@change_cover_image');
 	Route::POST('change_password','Api\UserController@change_password');
+
 	
 	Route::post('auth/logout', 'Api\UserController@logout');
 	Route::POST('getuser', 'Api\UserController@getAuthUser');
@@ -34,7 +39,10 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::POST('/dodislikes','Api\PostController@dodislikes');	
 	Route::POST('/share_post','Api\PostController@share_post');	
 	Route::POST('/delete_post','Api\PostController@delete_post');
-	Route::POST('/spam_tags','Api\CommonController@spam_tags');		
+	Route::POST('/spam_tags','Api\CommonController@spam_tags');
+	Route::GET('/download_image/{url}','Api\CommonController@download_image');
+	Route::POST('/report_feedback','Api\CommonController@reportFeedback');
+
 	
 });
 

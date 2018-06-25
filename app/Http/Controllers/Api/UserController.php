@@ -8,6 +8,7 @@ use App\User;
 use JWTAuthException;
 use Validator;
 use App\Model\VerifyUser;
+use App\Model\Home_location;
 use App\Otp\SmsOtp;
 use Hash;
 class UserController extends Controller
@@ -22,10 +23,7 @@ class UserController extends Controller
   {
         $credentials = $request->only('mobile', 'password');
         
-        $rules = [
-            'email' => 'numeric|digits:10',
-            'password' => 'required|min:6',
-        ];
+        $rules=['mobile'=>'required|numeric|digits:10','password' => 'required|min:6'];
 
         $validator = Validator::make($credentials, $rules);
         if($validator->fails()) {
@@ -37,11 +35,11 @@ class UserController extends Controller
         try {
             // attempt to verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['success' => false, 'error' => 'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your mobile Number.'], 401);
+                return response()->json(['success' => false, 'error' => 'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your mobile Number.']);
             }
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return response()->json(['success' => false, 'error' => 'Failed to login, please try again.'], 500);
+            return response()->json(['success' => false, 'error' => 'Failed to login, please try again.']);
         }
         // all good so return the token
            $user = JWTAuth::toUser($token);
@@ -76,7 +74,7 @@ class UserController extends Controller
     
        $validator = Validator::make($credentials, $rules);
         if($validator->fails()) {
-            return response()->json(['success'=> false, 'error'=> $validator->messages()],422);
+            return response()->json(['success'=> false, 'error'=> $validator->messages()]);
         }
 
         $user = $this->user->create([
@@ -123,7 +121,7 @@ public function verifyUser(Request $request)
         return response()->json(['success'=> true, 'message'=>'Your mobile number is verified. You can now login'], 200);
            //Your e-mail is verified. You can now login.
       }else{
-       return response()->json(['success'=> false, 'message'=> 'Invalid otp'], 405);
+       return response()->json(['success'=> false, 'message'=> 'Invalid otp']);
       }
 
 }
@@ -136,7 +134,7 @@ public function verifyUser(Request $request)
             return response()->json(['success' => true, 'message'=> "You have successfully logged out."]);
         } catch (JWTException $e) {
             // something went wrong whilst attempting to encode the token
-            return response()->json(['success' => false, 'error' => 'Failed to logout, please try again.'], 500);
+            return response()->json(['success' => false, 'error' => 'Failed to logout, please try again.']);
         }
   }
 
@@ -145,21 +143,61 @@ public function verifyUser(Request $request)
 public function userprofile(Request $request)
 {
 
-  $validator = Validator::make($request->all(), ['first_name' =>'required|max:20','last_name' =>'required|max:20','email' =>'email','country' =>'required|numeric','state' =>'required|numeric','district' =>'required|numeric','city' =>'required|numeric']);
+  if(!$user = JWTAuth::toUser($request->token)) {
+             return  json_encode(array('success'=>false,'errors'=>array('error'=>'User Not Found')));
+        }
+
+    $validator = Validator::make($request->all(), ['first_name' =>'required|max:20','last_name' =>'required|max:20','email' =>'email','country' =>'required|numeric','state' =>'required|numeric','district' =>'required|numeric','city' =>'required|numeric','city' =>'required|numeric','address' =>'max:50','gender' =>'required','marital_status' =>'required']);
 
 
      if($validator->fails())
       {
-          return response()->json(['success'=> false, 'errors'=>$validator->getMessageBag()->toArray()], 405);
+          return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()]);
           // 400 being the HTTP code for an invalid request.
       }
-      
-      if(!$user = JWTAuth::toUser($request->token)) {
-             return  json_encode(array('success'=>false,'errors'=>array('error'=>'User Not Found')),404);
-        }
-      User::where('id',$user->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'email'=>$request->email,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'profile'=>1]);
 
-        echo json_encode(array('success'=>true,'message'=>'Profile Update  successfully'),200);
+
+      User::where('id',$user->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'email'=>$request->email,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'address'=>$request->address,'gender'=>$request->gender,'marital_status'=>$request->marital_status,'profile'=>1]);
+
+          if($request->current_location =='active')
+          {
+              Home_location::where('user_id',$user->id)->delete();
+          }else{
+
+            $validator = Validator::make($request->all(), ['home_country'=>'required|numeric','home_state' =>'required|numeric','home_district' =>'required|numeric','home_city' =>'required|numeric']);
+
+             if($validator->fails())
+              {
+                  return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()]);
+              }
+
+               if(Home_location::where('user_id',$user->id)->count() =='0')
+                  {
+                      Home_location::create(['user_id'=>$user->id,'home_country'=>$request->home_country,'home_state'=>$request->home_state,'home_district'=>$request->home_district,'home_city'=>$request->home_city]);
+                  }
+                  else{
+                  Home_location::where('user_id',$user->id)->update(['home_state'=>$request->home_state,'home_district'=>$request->home_district,'home_city'=>$request->home_city]);
+                  }
+          }
+
+       echo json_encode(array('success'=>true,'message'=>'Profile Update  successfully'));
+
+}
+
+//get profile
+public function getprofile(Request $request)
+{
+  $user = JWTAuth::toUser($request->token);
+
+  $userdata=user::where('id',$user->id)->first();
+  $home_location=Home_location::where('user_id',$user->id)->first();
+  if($home_location){
+     echo json_encode(array('success'=>true,'user'=>$user,'current_location'=>'active',
+      'home_location'=>array('home_country'=>$home_location->home_country,'home_state'=>$home_location->home_state,'home_district'=>$home_location->home_district,'home_city'=>$home_location->home_city) ));
+  }else{
+     echo json_encode(array('success'=>true,'user'=>$user,'current_location'=>'inactive','home_location'=>array() ));
+  }
+ 
 }
 
 //user forgot
@@ -170,7 +208,7 @@ public function forgot_password_otp(Request $request)
 
      if($validator->fails())
       {
-          return response()->json(['success'=> false, 'errors'=>$validator->getMessageBag()->toArray()], 405);
+          return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()]);
       }
 
        $user=User::where('mobile',$request->mobile)->first();
@@ -190,7 +228,7 @@ public function forgot_password_otp(Request $request)
 
           echo json_encode(array('success'=>true,'message'=>'successfully send otp'),200);
        }else{
-          echo json_encode(array('success'=>false,'message'=>'Invalid mobile'),405);
+          echo json_encode(array('success'=>false,'message'=>'Invalid mobile'));
      }
 }
 
@@ -201,7 +239,7 @@ public function forgot_password_otp(Request $request)
 
        if($validator->fails())
         {
-            return response()->json(['success'=> false, 'errors'=>$validator->getMessageBag()->toArray()], 405);
+            return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()]);
         }
 
          $vuser=User::where('mobile',$request->mobile)->first();
@@ -214,12 +252,12 @@ public function forgot_password_otp(Request $request)
               $newpassword = bcrypt($request->password);
                   User::where('id', $vuser->id)->update(['password' => $newpassword]);
 
-          return response()->json(['success'=> true, 'message'=>'successfully update password,please login'], 200);
+          return response()->json(['success'=>true, 'message'=>'successfully update password,please login'], 200);
         }else{
-         return response()->json(['success'=> false, 'message'=> 'Invalid otp'], 405);
+         return response()->json(['success'=>false, 'message'=> 'Invalid otp']);
         }
       }else{
-        return response()->json(['success'=> false, 'message'=> 'Invalid Mobile Number'], 405);
+        return response()->json(['success'=>false, 'message'=> 'Invalid Mobile Number']);
       }
 
        
@@ -231,15 +269,15 @@ public function forgot_password_otp(Request $request)
       $validator = Validator::make($request->all(), ['old_password'=>'required','password' => 'required|string|min:6|confirmed']);
 
         if ($validator->fails()) {
-          return response()->json(['success'=> false, 'errors'=>$validator->getMessageBag()->toArray()], 405);
+      
+           return response()->json(['success' => false, 'error' => $validator->getMessageBag()->toArray()]);
         }
 
         $userdata = JWTAuth::toUser($request->token);
         $pass = Hash::check($request->old_password, $userdata->password);
 
         if($pass==false){
-          return response()->json(['success'=> false, 'errors'=>['password'=>'Old Password Not Match']], 405);
-          exit();
+          return response()->json(['success'=>false, 'errors'=>['password'=>'Old Password Not Match']]);
         }
 
         $newpassword = bcrypt($request->password);
@@ -247,7 +285,7 @@ public function forgot_password_otp(Request $request)
         $user->password=$newpassword;
         $user->save();
 
-        return response()->json(['success'=> true, 'message'=>'Password update successfully'], 200);
+        return response()->json(['success'=>true, 'message'=>'Password update successfully']);
 
   }
 
@@ -257,22 +295,85 @@ public function forgot_password_otp(Request $request)
       $validator = Validator::make($request->all(), ['mobile' => 'required|digits:10']);
      if($validator->fails())
       {
-          return response()->json(['success'=> false, 'errors'=>$validator->getMessageBag()->toArray()], 405);
+          return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()]);
       }
 
         $otp=rand(10000,99999);
+
          $vuser=VerifyUser::where('mobile',$request->mobile)->first();
          if($vuser)
          {
             $sms=new SmsOtp();
             $sms->verifyOtp($request->mobile,$otp);
             VerifyUser::where('mobile',$request->mobile)->update(['otp'=>$otp]);
-            return response()->json(['success'=> true, 'message'=>'successfully send'], 200);
+            return response()->json(['success'=>true, 'message'=>'successfully send'], 200);
          }else
          {
-            return response()->json(['success'=> false, 'message'=> 'Invalid mobile'], 405);
+            return response()->json(['success'=>false, 'message'=> 'Invalid mobile'], 405);
          }
   }
+
+
+
+
+    public function upload_image_changes(Request $request)
+    {
+        $validator = Validator::make($request->all(), ['image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1048']);
+        
+        if($validator->fails()) 
+        {
+            return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()]);
+        }
+
+      $user = JWTAuth::toUser($request->token);
+
+       $imageName = time(). '.' .$request->file('image')->getClientOriginalExtension();
+        Image::make($request->file('image')->getRealPath())->fit(50, 50)->save('public/images/user/'.$imageName);
+
+        $user=User::find($user->id);
+     
+        if($user->image !='default.default'){
+            $file='public/images/user/'.$user->image;
+            if(file_exists($file))
+            {
+                   @unlink($file);
+            }
+         }
+
+         $user->image=$imageName;
+         $user->save();
+     
+        return response()->json(['success'=>true, 'message'=>'successfully change images'],200);
+
+    }
+
+    public function change_cover_image(Request $request)
+    {
+        $validator = Validator::make($request->all(), ['cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1048']);
+        
+        if($validator->fails())
+        {
+             return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()]);
+        }
+
+       $imageName = time(). '.' .$request->file('cover_image')->getClientOriginalExtension();
+
+        Image::make($request->file('cover_image')->getRealPath())->fit(300, 400)->save('public/images/user/cover/'.$imageName);
+        $user1 = JWTAuth::toUser($request->token);
+        $user=User::find($user1->id);
+
+        $file='public/images/user/cover/'.$user->cover_image;
+        if(file_exists($file))
+        {
+           @unlink($file);
+        }
+
+         $user->cover_image=$imageName;
+         $user->save();
+
+        return response()->json(['success'=>false, 'message'=>'successfully update'],200);
+        
+    }
 
 
 

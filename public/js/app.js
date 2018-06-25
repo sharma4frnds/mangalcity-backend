@@ -368,6 +368,16 @@ function displayImage(elem)
       var image = document.getElementById("npimage");
         //image= elem.name;
        $("#queued-files").html('1 image selected').show();
+
+        var reader = new FileReader();
+        reader.onload = function()
+        {
+        var output = document.getElementById('imagePreview');
+        output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+        
+
 }
 
 function displayVideo(elem)
@@ -377,3 +387,88 @@ function displayVideo(elem)
         $("#queued-files").html('1 video selected').show();
 }
 
+
+
+
+$(document).on('submit', 'form#imageUpload', function (event) {
+    event.preventDefault();
+        $('.image_ajax_load').show();
+      var form = $(this);
+        var data = new FormData($(this)[0]);
+        $.ajax({
+        url: siteUrl+'/user/change_image',
+        beforeSend: function(xhr){
+        xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));
+         $('.image_ajax_load').show();
+        },
+        type: 'POST',              
+        data: data,
+        processData: false,
+        contentType: false, 
+        async:false,
+        success: function(result)
+        {
+            $('.image_ajax_load').hide();
+            location.reload();
+        },
+        error: function(request)
+        {
+             if (request.status == 422) {
+            // Parser the json response expected
+            var $errors = $.parseJSON(request.responseText);
+            // Bootstrap alert scafolding for error 
+            var errorsHtml = '<div class="alert alert-danger alert-dismissible"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button><h4><i class="icon fa fa-times"></i>Opps! Seems like you didn\'t fill the form properly...</h4><ul>';
+            // The root nodes are field names, with an array of error messages
+            $.each( $errors, function( key, value ) {
+              // We loop through the error to see if there are multiple error associated with the field 
+              $.each( value, function( key2, error ) {
+                errorsHtml += '<li>' + error + '</li>';
+              });
+            });
+            errorsHtml += '</ul></div>';
+            $( '#form-errors' ).html( errorsHtml );
+          }
+        }
+    });
+ return false; 
+});
+
+
+$(document).on('submit', 'form#change_cover_Upload', function (event) {
+    event.preventDefault();
+      var form = $(this);
+        var data = new FormData($(this)[0]);
+        $.ajax({
+        url: siteUrl+'/user/change_cover_image',
+        beforeSend: function(xhr){
+        xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+        type: 'POST',              
+        data: data,
+        processData: false,
+        contentType: false,
+        async:false,
+        success: function(result)
+        {
+            location.reload();
+        },
+        error: function(request)
+        {
+             if (request.status == 422) {
+            // Parser the json response expected
+            var $errors = $.parseJSON(request.responseText);
+            // Bootstrap alert scafolding for error 
+            var errorsHtml = '<div class="alert alert-danger alert-dismissible"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button><h4><i class="icon fa fa-times"></i>Opps! Seems like you didn\'t fill the form properly...</h4><ul>';
+            // The root nodes are field names, with an array of error messages
+            $.each( $errors, function( key, value ) {
+              // We loop through the error to see if there are multiple error associated with the field 
+              $.each( value, function( key2, error ) {
+                errorsHtml += '<li>' + error + '</li>';
+              });
+            });
+            errorsHtml += '</ul></div>';
+            $( '#form-errors' ).html( errorsHtml );
+          }
+        }
+    });
+ return false; 
+});

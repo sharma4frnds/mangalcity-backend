@@ -14,11 +14,15 @@ use Image;
 use Carbon\Carbon;
 use App\Model\Spam_tag;
 use App\Model\Feedbacks;
-
+use Session;
 class PostController extends Controller
 {
-   public function feeds()
+   public function feeds(Request $request)
    {
+    $home_location=Session::get('home_location');
+      $city=''; $district=''; $state='';
+      if($home_location){ $city=$home_location['home_city']; $district=$home_location['home_district']; $state=$home_location['home_state']; }else{ $city=Auth::user()->city; $district=Auth::user()->district; $state=Auth::user()->state;
+      }
 
     $city_posts=Post::with(['user','like' => function ($query) {
     $query->where('user_id', Auth::user()->id);},'comment'=>function($query) 
@@ -26,7 +30,14 @@ class PostController extends Controller
       $query->leftJoin('users', 'users.id', '=', 'comments.user_id');
       $query->select('comments.*', 'users.first_name','users.last_name','users.image');
     }
-  ])->where('status',1)->where('tag',1)->where('city',Auth::user()->city)->orderBy('id', 'DESC')->get();
+  ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->paginate(10);
+
+  if($request->ajax())
+  {
+    $view = view('feed',compact('city_posts'))->render();
+    return response()->json(['html'=>$view]);
+  }
+
 
   $country_posts=Post::where('status',1)->where('tag',4)->limit(10)->get();
   $state_posts=Post::where('status',1)->where('tag',3)->limit(10)->get();
@@ -431,7 +442,8 @@ class PostController extends Controller
         
         if(Post::where('id',$request->post_id)->count() > 0)
         {
-            $post=post::where('id',$request->post_id)->first();
+          Post::where('id',$request->post_id)->increment('share');
+          $post=post::where('id',$request->post_id)->first();
        $type='';
        $value='';
       if($post->type=='image')

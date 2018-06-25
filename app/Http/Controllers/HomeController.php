@@ -7,6 +7,10 @@ use App\Model\Page;
 use App\Model\City;
 use Validator;
 use Mail;
+use Session;
+use App\Model\Home_location;
+use Auth;
+
 class HomeController extends FrontController
 {
     /**
@@ -42,104 +46,46 @@ class HomeController extends FrontController
         return view('page',compact('page'));
     }
 
-    /* Get area */
-    function getareas(Request $request)
+
+    function download_image($url)
     {
-        $quaryDatas=City::where('city', 'like', '%' .$request->city.'%')->get();
-        $data=array();
-        if(!empty($quaryDatas)){
-            echo '<option value="all">All Area</option>';
-            foreach($quaryDatas as $quaryData) 
-            {
-                echo '<option value="'.$quaryData->area.'">'.$quaryData->area.'</option>';
+         $filepath='public/images/post/post_image/'.$url;
+        //Process download
+        if(file_exists($filepath)) {
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.basename($filepath).'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($filepath));
+            flush(); // Flush system output buffer
+            readfile($filepath);
+            exit;
             }
-        }
-
     }
 
-    /* Send mail */
-    public function schedule_tour(Request $request)
-    { 
-        $validator = Validator::make($request->all(), ['name'=>'required|max:100',
-            'email' => 'required|email', 'message' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator, 'scheduleErrors'); }
-
-        $data=array();
-        $data['name']=$request->name;
-        $data['email']=$request->email;
-        $data['phone']=$request->phone;
-        $data['message1']=$request->message;
-        $data['property_name']=$request->property_name;
-        $data['date']=$request->date;
-        $data['time']=$request->time;
-        $from=config('mail.from');
-        $from['email_to']=$request->email;
-        Mail::send('emails.schedule_tour_mail', $data, function ($message) use ($from) {
-        $message->from($from['address'], $from['name']);
-        $message->to($from['email_to']);
-        $message->subject('World Opportuniti:Schedule Tour');
-        });
-
-        return redirect()->back()->with('scheduleMessage', 'Thank you for your enquiry');
-    
-    }
-
-    public function inquiry(Request $request)
+    //change_location
+    function change_location(Request $request)
     {
-        $validator = Validator::make($request->all(), ['name'=>'required|max:100',
-            'email' => 'required|email', 'message' => 'required',
-        ]);
-
-        if ($validator->fails())
+        $home_location=Session::get('home_location');
+        $location=Home_location::where('user_id',Auth::user()->id)->first();
+        if($home_location)
         {
-            return redirect()->back()->withErrors($validator, 'inquiryErrors');
+        Session::forget('home_location');
+        return redirect('/home');
         }
 
-        $data=array();
-        $data['name']=$request->name;
-        $data['email']=$request->email;
-        $data['phone']=$request->phone;
-        $data['message1']=$request->message;
-        $data['property_name']=$request->property_name;
-        $data['date']='';
-        $data['time']='';
-        $from=config('mail.from');
-        $from['email_to']=$request->email;
-        Mail::send('emails.schedule_tour_mail', $data, function ($message) use ($from) {
-        $message->from($from['address'], $from['name']);
-        $message->to($from['email_to']);
-        $message->subject('World Opportuniti:Inquiry');
-        });
+        if($location)
+        {
+            Session::put('home_location',array('home_city'=>$location->home_city,'home_district'=>$location->home_district,'home_state'=>$location->home_state));
+            Session::save();
+        }
 
-        return redirect()->back()->with('inquiryMessages', 'Thank you for your enquiry');
+      return redirect('/home');
     }
 
 
 
-    public function test(){
-        $data=array();
-
-            Mail::send('emails.welcome', $data, function($message)
-            {
-            $message
-            ->to('yuvrajlodhi1234@gmail.com')
-            ->from('yuvrajlodhi1234@gmail.com')
-            ->subject('TEST');
-            });
-
-
-            if( count(Mail::failures()) > 0 ) {
-            echo "There was one or more failures. They were: <br />";
-            foreach(Mail::failures as $email_address) {
-            echo " - $email_address <br />";
-            }
-            } else {
-            echo "No errors, all sent successfully!";
-            }
-       // return view('emails.welcome');
-    }
 
 }

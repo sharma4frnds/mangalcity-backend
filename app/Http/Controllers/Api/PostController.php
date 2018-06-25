@@ -26,18 +26,18 @@ class PostController extends Controller
 
   	 if ($validator->fails())
         {
-            return Response::json(array('success' => false,'errors' => $validator->getMessageBag()->toArray()), 400); 
+            return Response::json(array('success' => false,'errors' => $validator->getMessageBag()->toArray())); 
             // 400 being the HTTP code for an invalid request.
         }
 
         if(empty($request->message) && empty($request->file('image')) && empty($request->file('video')))
         {
-            return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image or video')), 400);
+            return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image or video')));
         }
 
           try{
       		if(!$user = JWTAuth::toUser($request->token)) {
-      			 return  json_encode(array('success'=>false,'errors'=>array('error'=>'User Not Found')),404);
+      			 return  json_encode(array('success'=>false,'errors'=>array('error'=>'User Not Found')));
      		}
           $message = isset($request->message) ? $request->message : '';
         	$userId = $user->id;
@@ -98,11 +98,17 @@ class PostController extends Controller
 
   public function feeds(Request $request)
    {
-     $user = JWTAuth::toUser($request->token);
+     $user=JWTAuth::toUser($request->token);
+     $city=$user->city; $district=$user->district; $state=$user->state;
+    if($request->home_location==1){
+       $location=Home_location::where('user_id',Auth::user()->id)->first();
+       if($location){$city=$location->home_city; $district=$location->home_district; $state=$location->home_state; }
+      }
 
     $city_posts=Post::with(['user','like' => function ($query)use ($user) {
     $query->where('user_id', $user->id);}
-   ])->where('status',1)->where('tag',1)->where('city',$user->city)->orderBy('id', 'DESC')->get();
+
+   ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->paginate(10);
 
     $country_posts=Post::with('user')->where('status',1)->where('tag',4)->limit(10)->get();
     $state_posts=Post::with('user')->where('status',1)->where('tag',3)->limit(10)->get();
@@ -120,7 +126,7 @@ class PostController extends Controller
     $validator = Validator::make($request->all(), ['post_id'=>'required']);
      if($validator->fails())
       {
-          return response()->json(['success'=>false,'errors'=>$validator->getMessageBag()->toArray()], 400);
+          return response()->json(['success'=>false,'errors'=>$validator->getMessageBag()->toArray()]);
       }
 
 
@@ -159,7 +165,7 @@ class PostController extends Controller
            return response()->json(['success'=>true,'lcount'=>$post1->likes,'dcount'=>$post1->dislikes,'type'=>$type], 200);
 
         }else{
-        return response()->json(['success'=>false,'errors'=>'invalid parameter'], 400);
+        return response()->json(['success'=>false,'errors'=>'invalid parameter']);
         }
    }
 
@@ -175,7 +181,7 @@ class PostController extends Controller
           'success' => false,
           'errors' => $validator->getMessageBag()->toArray()
 
-        ), 400); // 400 being the HTTP code for an invalid request.
+        )); // 400 being the HTTP code for an invalid request.
         }
 
 
@@ -212,7 +218,7 @@ class PostController extends Controller
            return response()->json(['success'=>true,'lcount'=>$post1->likes,'dcount'=>$post1->dislikes,'type'=>$type], 200);
 
         }else{
-        return response()->json(['success'=>false,'errors'=>'invalid parameter'], 400);
+        return response()->json(['success'=>false,'errors'=>'invalid parameter']);
         }
           
       }
@@ -253,12 +259,12 @@ class PostController extends Controller
         'success' => false,
         'errors' => $validator->getMessageBag()->toArray()
 
-      ), 400); // 400 being the HTTP code for an invalid request.
+      )); // 400 being the HTTP code for an invalid request.
       }
         
       if(Post::where('id',$request->post_id)->count() > 0)
       {
-      
+      Post::where('id',$request->post_id)->increment('share');
       $post=post::where('id',$request->post_id)->first();
        $type='';
        $value='';
@@ -293,7 +299,7 @@ class PostController extends Controller
          
         }else
         {
-            return response()->json(['success'=>false,'message'=>'invalid post'], 405);
+            return response()->json(['success'=>false,'message'=>'invalid post']);
         }
      
     }
@@ -337,13 +343,30 @@ class PostController extends Controller
 
            return response()->json(['success'=>true,'message'=>'Successfully Removed'], 200);
         }else{
-            return response()->json(['success'=>false,'message'=>'invalid post'], 405);
+            return response()->json(['success'=>false,'message'=>'invalid post']);
         }
 
 
     }
 
+    //spam report
+    function reportFeedback(Request $request)
+    {
+      $validator = Validator::make($request->all(), ['post_id'=>'required','spam_tags'=>'required']);
+      $user = JWTAuth::toUser($request->token);
 
+      if($validator->fails())
+        {
+          return response()->json(array('success' =>false,'errors' => $validator->getMessageBag()->toArray()));
+        }
+
+        if(Post::where('id',$request->post_id)->count() > 0)
+        {
+          Feedbacks::insert(['user_id'=>$user->id,'post_id'=>$request->post_id,'spam_tag'=>$request->spam_tags]);
+        }
+
+        return response()->json(['success'=>true,'message'=>'Successfully'], 200);
+    }
 
 
 

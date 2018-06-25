@@ -53,12 +53,28 @@ class CommonController extends Controller
 
  public function spam_tags(Request $request)
  {
-    $result = [];
-    $citys=Spam_tag::get();
-    $result = $citys;
-    return response()->json(['success' => true, 'data'=>$result]);
+      $spam_tags=Spam_tag::where('status','active')->get();
+    return response()->json(['success' => true, 'data'=>$spam_tags]);
  }
 
+//download_image
+ function download_image($url)
+  {
+       $filepath='public/images/post/post_image/'.$url;
+      //Process download
+      if(file_exists($filepath)) {
+          header('Content-Description: File Transfer');
+          header('Content-Type: application/octet-stream');
+          header('Content-Disposition: attachment; filename="'.basename($filepath).'"');
+          header('Expires: 0');
+          header('Cache-Control: must-revalidate');
+          header('Pragma: public');
+          header('Content-Length: ' . filesize($filepath));
+          flush(); // Flush system output buffer
+          readfile($filepath);
+          exit;
+          }
+  }
 
 
 }

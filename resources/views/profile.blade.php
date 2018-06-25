@@ -12,6 +12,7 @@
                       {{Html::image('public/images/user/'.Auth::user()->image)}}
                     </div> 
                     <h4>{{Auth::user()->first_name}} {{Auth::user()->last_name}}</h4>
+                     <p><a href="{{url('home')}}">Home</a></p>
                     <p><a href="#">Activity Log</a></p>
                     <p><a href="{{url('user/profile')}}">Update Profile</a></p>
                     <p><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" > Logout </a>
@@ -21,7 +22,14 @@
                         {{ csrf_field() }}
                     </form>
                 </div>
-               <button type="button" class="btn hme btn-warning">switch to home location</button>
+                  <?php $home_location=Session::get('home_location'); ?>
+                 @if($home_location)
+                  <a href="{{url('change_location')}}"> <button type="button" class="btn hme btn-warning">switch to Current location</button></a>
+                  @else
+                   <a href="{{url('change_location')}}"> <button type="button" class="btn hme btn-warning">switch to home location</button></a>
+                  @endif
+
+              
             </div>
 
             <div class="col-md-9 col-sm-4 col-xs-12">
@@ -71,7 +79,46 @@
                           <input type="text" class="form-control"  placeholder="last name" name="last_name" required="" value="{{Auth::user()->last_name}}">
                         </div>
                       </div>
+
+                        <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control"  placeholder="Email" name="email" value="{{Auth::user()->email}}">
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Gender</label>
+                        <div class="col-sm-10">
+                          <div class="col-sm-10">
+                           <select class="form-control" name="gender">
+                            <option value="male" @if(Auth::user()->gender=='male') selected @endif >Male </option>
+                            <option value="female" @if(Auth::user()->gender=='female') selected @endif>Female </option>
+                          </select>
+                        </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Marital status</label>
+                        <div class="col-sm-10">
+                          <div class="col-sm-10">
+                           <select class="form-control" name="marital_status">
+                            <option value="no" @if(Auth::user()->gender=='no') selected @endif>No</option>
+                            <option value="yes" @if(Auth::user()->gender=='yes') selected @endif>Yes</option>
+                          </select>
+                        </div>
+                        </div>
+                      </div>
+
                         <h4 class="upd-h4">Current Location</h4>
+                        <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">address</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control"  placeholder="address" name="address"  value="{{Auth::user()->address}}">
+                        </div>
+                      </div>
+
                         <div class="form-group">
                         <label  class="col-sm-2 control-label">Country</label>
                         <div class="col-sm-10">

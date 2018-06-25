@@ -18,7 +18,7 @@
         <div class="container">
           <div class="row">
             <div class="col-md-2 col-sm-2 col-xs-12">
-              {{Html::image('public/img/logo.png','logo')}}
+              <a href="{{url('/')}}">{{Html::image('public/img/logo.png','logo')}}</a>
             </div>
             <div class="col-md-10 col-sm-10 col-xs-12">
               <div class="tagline">

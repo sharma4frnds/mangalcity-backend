@@ -11,7 +11,7 @@ class Post extends Model
 {
      public $timestamps = true;
      protected $fillable = [
-       'id','user_id' ,'message','tag','type','value','value','status','likes','dislikes','spam','state','district','city'
+       'id','user_id' ,'message','tag','type','value','value','status','likes','dislikes','spam','share','state','district','city'
    ];
 
 
