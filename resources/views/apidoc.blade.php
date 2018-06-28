@@ -9,6 +9,15 @@ mobile,
 password</p>
 
 <hr>
+<h4>Social login/Ragister</h4>
+URL:http://emergingncr.com/mangalcity/api/auth/social_login
+<p>parameter:first_name,last_name,email,provider,provider_id</p>
+<p>Responce:{"success":true,"data":{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjU2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxL21hbmdhbGNpdHkvYXBpL2F1dGgvc29jaWFsX2xvZ2luIiwiaWF0IjoxNTMwMTk0MTE4LCJleHAiOjE1MzE0MDM3MTgsIm5iZiI6MTUzMDE5NDExOCwianRpIjoidDdUY1lnWFVtTEFaT1FKYiJ9.GdAmYprNtc97LF985BYecewrlOLG1iy-HQlagvAcDfw","user":{"id":56,"first_name":"kundan","last_name":"kumar","mobile":"12345678912345","email":"kundan@gmail.com","image":"default.png","cover_image":"default.png","country":"","state":"","district":"","city":"","address":"","gender":"male","marital_status":"no","verified":0,"profile":0,"status":"active","created_at":"2018-06-28 13:48:34","updated_at":"2018-06-28 13:48:34"}}}</p>
+<hr>
+
+
+
+
 <h4>Register</h4>
 URL:http://emergingncr.com/mangalcity/api/auth/register
 <p>parameter:

@@ -53,9 +53,18 @@ catch(err) {
                  hdiv +='<span class="pro-name">'+data.pdata.name+'</span></br>';
                 hdiv +='<span class="post-time">just now</span>'; 
                 hdiv +='</div>';
+            
                 hdiv +='<div class="col-md-6">';
-                  hdiv +='<i class="fa fa-ellipsis-v"></i>';  
+                    hdiv +='<div class="dropdown">';
+                     hdiv +='<i data-toggle="dropdown" class="fa dropdown-toggle fa fa-ellipsis-v"></i>';
+                     hdiv +='<ul class="dropdown-menu side-fix">';
+                        hdiv +='<li><a onclick="delete_post_popup('+data.pdata.id+')">Delete</a></li>';
+              
+                       hdiv +='<li><a data-toggle="modal" href="'+siteUrl+'/reportFeedback/'+data.pdata.id+'" data-target="#myModal"> Give Feedback on This Post</a></li>';
+                     hdiv +='</ul>';
+                   hdiv +='</div>';
                 hdiv +='</div>';
+
                 hdiv +='<p class="post-txt">'+data.pdata.message+'</p>';
                 if(data.pdata.type=='image'){
                     hdiv +='<div class="post-img"> <img src="'+data.pdata.value+'" class="img-responsive"></div>'
@@ -66,13 +75,29 @@ catch(err) {
                 }
                 hdiv +='<div class="share-area">';
                     hdiv +='<ul>';
-                     hdiv +='<li><a onclick="doLike('+data.pdata.id+',0)" id="dolike'+data.pdata.id+'" ><i class="fa fa-thumbs-up"></i></a> 0</li>';   
-                     hdiv +='<li><a onclick="doLike('+data.pdata.id+',1)" id="dolike'+data.pdata.id+'" ><i class="fa fa-thumbs-down"></i></a>  0</i></li>';   
+                     hdiv +='<li ><a onclick="doLike('+data.pdata.id+',0)" id="dolike'+data.pdata.id+'" ><i class="fa fa-thumbs-o-up"></i> 0</a> </li>';   
+                     hdiv +='<li ><a onclick="dodislikes('+data.pdata.id+',1)" id="dodislikes'+data.pdata.id+'" ><i class="fa fa-thumbs-o-down"></i> 0</a>  </i></li>';   
                      hdiv +='<li><a onclick="focus_form('+data.pdata.id+')"><i class="fa fa-comment" aria-hidden="true"></i> Comment</i></a> </li>';  
-                     hdiv +='<li><a onclick="share_post_popup('+data.pdata.id+'}})"><i class="fa fa-share-alt" aria-hidden="true"></i> Share</a> </li>';   
+                     hdiv +='<li><a onclick="share_post_popup('+data.pdata.id+')"><i class="fa fa-share-alt" aria-hidden="true"></i> Share</a> </li>';   
                     hdiv +='</ul>';
                 hdiv +='</div>';
-            hdiv +='</div>';
+           
+
+                  hdiv +='<div class="hr"></div>';
+                  hdiv +='<div id="comment_section'+data.pdata.id+'"></div>';
+
+                    hdiv +='<div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl">';
+                    hdiv +='<div class="col-md-12 cmnt-pnl-ped">';
+                     hdiv +='<div class="pro1"><img src="'+data.pdata.image+'" class="img-responsive"></div>';  
+                     hdiv +='<div class="cmnt-box">';
+                        hdiv +='<textarea rows="2" cols="100" name="comment" id="comment-form'+data.pdata.id+'" placeholder="Leave a comment..."></textarea>';
+                        hdiv +='<button class="post-bt" onclick="postComment('+data.pdata.id+',0)">Post</button>';
+                    hdiv +='</div>';
+                    hdiv +='</div>';
+                hdiv +='</div>';
+                hdiv +='</div>';
+
+             hdiv +='</div>';
 
 
          $("#currentMessage").prepend(hdiv);
@@ -169,9 +194,19 @@ function focus_form(id){
 }
 
 //postComment
-function postComment(post_id)
+function postComment(post_id,comment_id)
 {
+    var prefix='';
+     prefix_id=post_id;
+    if(comment_id !=0){
+        prefix='_reply';
+         prefix_id=comment_id;
+        var comment=$("#comment-form"+prefix+prefix_id).val();
+    }else{
     var comment=$("#comment-form"+post_id).val();
+    }
+
+
     $.ajax({
     url: siteUrl+'/postComment',
     type: 'POST',
@@ -179,7 +214,7 @@ function postComment(post_id)
     xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
     cache: false,
     async:false,
-    data:{'post_id':post_id,'comment':comment},
+    data:{'post_id':post_id,'comment_id':comment_id,'comment':comment},
     success:function(data){
 
             var hdiv='';
@@ -202,8 +237,8 @@ function postComment(post_id)
 
              hdiv+='</div>';
 
-             $("#comment_section"+data.post_id).append(hdiv);
-             $("#comment-form"+post_id).val('');
+             $("#comment_section"+prefix+prefix_id).append(hdiv);
+             $("#comment-form"+prefix+prefix_id).val('');
               toastr.success('Successfully posted');
     },
     error: function(data) {
@@ -216,7 +251,7 @@ function postComment(post_id)
                  hdiv +='</div>';
                  hdiv +='</div>';
                  
-              $("#comment_section"+post_id).append(hdiv);
+              $("#comment_section"+prefix+prefix_id).append(hdiv);
         }
   
     });
@@ -472,3 +507,15 @@ $(document).on('submit', 'form#change_cover_Upload', function (event) {
     });
  return false; 
 });
+
+
+function showReplydiv(comment_id)
+{
+    $("#rply"+comment_id).show();
+    $("#comment-form_reply"+comment_id).focus();
+}
+
+function hideReplydiv(comment_id)
+{
+    $("#rply"+comment_id).show();
+}

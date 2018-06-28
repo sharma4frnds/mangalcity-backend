@@ -19,18 +19,39 @@ class PostController extends Controller
 {
    public function feeds(Request $request)
    {
+
+ // $post=Post::where('user_id', Auth::user()->id)->with('user')->first();
+
+ //    //$comments=Comment::where(['post_id'=>$post->id,'parent_id'=>0])->orderBy('created_at','asc')->with('user','replies')->get();
+   
+
+
+    $city_posts=Post::with(['user','like' => function ($query) {
+    $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',1)->where('city',Auth::user()->city)->orderBy('id', 'DESC')->paginate(10);
+
+ //return response()->json($city_posts);
+
     $home_location=Session::get('home_location');
       $city=''; $district=''; $state='';
       if($home_location){ $city=$home_location['home_city']; $district=$home_location['home_district']; $state=$home_location['home_state']; }else{ $city=Auth::user()->city; $district=Auth::user()->district; $state=Auth::user()->state;
       }
 
-    $city_posts=Post::with(['user','like' => function ($query) {
-    $query->where('user_id', Auth::user()->id);},'comment'=>function($query) 
-    {
-      $query->leftJoin('users', 'users.id', '=', 'comments.user_id');
-      $query->select('comments.*', 'users.first_name','users.last_name','users.image');
-    }
-  ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->paginate(10);
+  //   $city_posts=Post::with(['user','like' => function ($query) {
+  //   $query->where('user_id', Auth::user()->id);},'comments'=>function($query) 
+  //   {
+  //     $query->leftJoin('users', 'users.id', '=', 'comments.user_id');
+  //     $query->select('comments.*', 'users.first_name','users.last_name','users.image');
+  //   }
+  // ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->paginate(10);
+
+
+
+
+    //$city_posts=Post::with(['comments'])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->get();
+// echo '<pre>';
+// print_r($city_posts);
+// exit;
+
 
   if($request->ajax())
   {
@@ -275,7 +296,7 @@ class PostController extends Controller
 
         if(Post::where('id',$request->post_id)->count() > 0)
         {
-           $comment=Comment::create(['post_id' => $request->post_id,'user_id'=>Auth::user()->id,'message'=>$request->comment,'like'=>0]);
+           $comment=Comment::create(['post_id' => $request->post_id,'parent_id' => $request->comment_id,'user_id'=>Auth::user()->id,'message'=>$request->comment,'like'=>0]);
 
             $image=URL::to('public/images/user/'.Auth::user()->image);
          

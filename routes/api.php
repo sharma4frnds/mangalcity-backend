@@ -49,6 +49,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 
 //login
 Route::post('auth/login', 'Api\UserController@login');
+Route::post('auth/social_login', 'Api\UserController@social_login');
 Route::post('auth/register', 'Api\UserController@register');
 Route::post('auth/resend_otp', 'Api\UserController@resend_otp');
 Route::post('auth/verifyUser', 'Api\UserController@verifyUser');

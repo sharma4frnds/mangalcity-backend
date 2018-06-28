@@ -12,7 +12,6 @@
 */
 
 
-
 Auth::routes();
 
 
@@ -50,6 +49,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('/user','UserController@index');
 		Route::get('/imagepopup','UserController@imagepopup');
 		Route::get('/coverpopup','UserController@coverpopup');
+		Route::GET('/user/change_password','UserController@get_change_password');
 		Route::POST('/user/change_password','UserController@change_password');
 		Route::POST('/user/change_image','UserController@uploadImagechanges');
 		Route::POST('/user/change_cover_image','UserController@change_cover_image');
@@ -67,9 +67,10 @@ Route::group(['middleware' => 'auth'], function()
 		Route::POST('/share_post','PostController@share_post');
 		Route::GET('/download_image/{url}','HomeController@download_image');
 		Route::GET('/change_location','HomeController@change_location');
+		Route::GET('/image_popup/{url}','HomeController@image_popup');
+		Route::GET('/activity','ActivityController@allactivity');
 
-		
-		
+
 	});
 });
 

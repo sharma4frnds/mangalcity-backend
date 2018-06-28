@@ -42,9 +42,16 @@ class UserController extends Controller
     public function update_profile(Request $request)
     {
         
-    	$this->validate($request, ['first_name' =>'required|max:20','last_name' =>'required|max:20','email' =>'email','country' =>'required|numeric','state' =>'required|numeric','district' =>'required|numeric','city' =>'required|numeric','city' =>'required|numeric','address' =>'max:50','gender' =>'required','marital_status' =>'required']);
+    	$this->validate($request, ['first_name' =>'required|max:20','last_name' =>'required|max:20','email' =>'nullable|email','country' =>'required|numeric','state' =>'required|numeric','district' =>'required|numeric','city' =>'required|numeric','city' =>'required|numeric','address' =>'max:50','gender' =>'required','marital_status' =>'required']);
 
-    		User::where('id',Auth::user()->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'email'=>$request->email,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'address'=>$request->address,'gender'=>$request->gender,'marital_status'=>$request->marital_status,'profile'=>1]);
+          
+
+    		User::where('id',Auth::user()->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'address'=>$request->address,'gender'=>$request->gender,'marital_status'=>$request->marital_status,'profile'=>1]);
+
+            if($request->email && empty(Auth::user()->provider))
+            {
+                User::where('id',Auth::user()->id)->update(['email'=>$request->email]);
+            }
 
             if($request->current_location =='active')
             {
@@ -76,6 +83,12 @@ class UserController extends Controller
     }
 
 
+
+public function get_change_password(){
+    return view('change_password');
+}
+
+
     public function change_password(Request $request)
     {
         $validator = Validator::make($request->all(), ['old_password'=>'required','password' => 'required|string|min:6|confirmed']);
@@ -87,7 +100,7 @@ class UserController extends Controller
         $pass = Hash::check($request->old_password, Auth::user()->password);
 
         if($pass==false){
-          return redirect('user/profile')->with('passwordMessages','Old Password Not Match');
+          return redirect('user/change_password')->with('passwordMessages','Old Password Not Match');
           
           exit();
         }
@@ -97,7 +110,7 @@ class UserController extends Controller
     
         $user->save();
 
-        return redirect('user/profile')->with('passwordMessages','Password update successfully');
+        return redirect('user/change_password')->with('passwordMessages','Password update successfully');
     }
 
 

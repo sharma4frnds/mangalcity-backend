@@ -108,8 +108,8 @@ class PostController extends Controller
     $city_posts=Post::with(['user','like' => function ($query)use ($user) {
     $query->where('user_id', $user->id);}
 
-   ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->paginate(10);
-
+   ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->get();
+    //->paginate(10);
     $country_posts=Post::with('user')->where('status',1)->where('tag',4)->limit(10)->get();
     $state_posts=Post::with('user')->where('status',1)->where('tag',3)->limit(10)->get();
     $district_posts=Post::with('user')->where('status',1)->where('tag',2)->limit(10)->get();

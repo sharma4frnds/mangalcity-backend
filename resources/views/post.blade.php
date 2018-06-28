@@ -42,7 +42,7 @@
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
-        <?php $i=0; ?>
+      <?php $i=0; ?>
        @foreach($country_posts as $cposts)
       <div class="item @if($i==0)active @endif">
           @if($cposts->type=='image')
@@ -95,6 +95,7 @@
                    
                     <p><a href="#">Activity Log</a></p>
                     <p><a href="{{url('user/profile')}}">Update Profile</a></p>
+                    <p><a href="{{url('user/change_password')}}">Change Password</a></p>
                     <p><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" > Logout </a>
                     </p>
 

@@ -72,13 +72,23 @@
                               </div>
                              
                             </div>
-                             <button type="submit" class="login-button">submit</button>
-                            <div class="etc-login-form">
-                            <p> <a href="<?php echo e(url('/forgot')); ?>">forgot password?</a></p>
-                          </div>
+                        <?php if(Session::has('message')): ?>
+                        <p class="alert alert-info"><?php echo e(Session::get('message')); ?></p>
+                        <?php endif; ?>
+                  <div class="fb"><a href="<?php echo e(url('login/facebook')); ?>"><lable><span> <i class="fa fa-facebook" aria-hidden="true"></i></span>Sign in with Facebook</lable>
+                    <div class="clear"></div></a>
+                </div>
+
+                <div class="google"><a href="<?php echo e(url('login/google')); ?>"><lable><span> <i class="fa fa-google-plus" aria-hidden="true"></i></span>Sign in with Google+</lable>
+                    <div class="clear"></div></a>
+                </div>
+
+                         <button type="submit" class="login-button">submit</button>
+                        <div class="etc-login-form">
+                        <p> <a href="<?php echo e(url('/forgot')); ?>">forgot password?</a></p>
+                      </div>
 
                          
-
                           </div>  
                         </form>
                     </div>

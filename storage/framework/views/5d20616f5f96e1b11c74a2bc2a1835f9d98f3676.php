@@ -42,7 +42,7 @@
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
-        <?php $i=0; ?>
+      <?php $i=0; ?>
        <?php $__currentLoopData = $country_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <div class="item <?php if($i==0): ?>active <?php endif; ?>">
           <?php if($cposts->type=='image'): ?>
@@ -95,6 +95,7 @@
                    
                     <p><a href="#">Activity Log</a></p>
                     <p><a href="<?php echo e(url('user/profile')); ?>">Update Profile</a></p>
+                    <p><a href="<?php echo e(url('user/change_password')); ?>">Change Password</a></p>
                     <p><a href="<?php echo e(route('logout')); ?>" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" > Logout </a>
                     </p>
 

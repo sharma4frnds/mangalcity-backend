@@ -136,10 +136,10 @@ class SocialController extends Controller
                         $user_info = [
                         'first_name'   =>$map_user['first_name'],
                         'last_name'=>'',
-                        'phone'=>'',
+                        'mobile'=>$user_data->getId(),
                         'password'=>'',
                         'email'        =>$user_data->getEmail(),
-                         'provider'     =>$provider,
+                        'provider'     =>$provider,
                         'provider_id'  =>$user_data->getId(), 
                         'created_at'   =>date('Y-m-d H:i:s'),
                          ];
@@ -148,7 +148,7 @@ class SocialController extends Controller
                     }
                     catch(\Exception $e){
                            // do task when error
-                           // $e->getMessage(); exit;  // insert query
+                           echo $e->getMessage(); exit;  // insert query
                         }
                                  
 

@@ -86,6 +86,11 @@ class HomeController extends FrontController
     }
 
 
+function image_popup($image)
+{
+    return view('show_image_popup',compact('image'));
+}
+
 
 
 }

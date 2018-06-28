@@ -11,6 +11,7 @@ use App\Model\VerifyUser;
 use App\Model\Home_location;
 use App\Otp\SmsOtp;
 use Hash;
+use Socialite;
 class UserController extends Controller
 {   
     private $user;
@@ -104,6 +105,80 @@ class UserController extends Controller
     }
     
 
+//social login 
+  public function social_login(Request $request)
+  {
+   $userInfo = Socialite::driver('facebook')->stateless()->user('EAACztjaRBKwBAGfhvimom5IABvaMVIr7t8fouGZAoJd8p8OvLSBjqUIaks3bdNVBpIEWQFRAdwhZB5pbfZCJTY3k4p4yfMh9bBlG4KW0bfYQJw1tDr5v1gyXFW3A6ZBbBteOjDdiPA8U0Kr8ZCZBYZB5gozr9SrYRnq06uJFfGKBwZDZD','2046069955610433');
+dd($userInfo);
+
+    $credentials = $request->only('first_name', 'last_name','email','provider', 'provider_id');
+        $rules =[
+            'first_name' =>'required|string|min:3|max:255',
+            'last_name' =>'required|string|max:255',
+            'email' =>'required|string|email|max:255',
+            'provider' =>'required|string|min:6|max:8',
+            'provider_id' =>'required|string|min:6|max:20',
+        ];
+    
+       $validator = Validator::make($credentials, $rules);
+        if($validator->fails()) {
+            return response()->json(['success'=>false, 'error'=> $validator->messages()]);
+        }
+
+            // GET LOCAL USER
+            $user = User::where('provider', $request->provider)->where('provider_id', $request->provider_id)->first();
+
+            // CREATE LOCAL USER IF DON'T EXISTS
+            if (empty($user)) {
+                // Before... Check if user has not signup with an email
+                $user = User::where('email', $request->email)->first();
+            
+                if (empty($user)) {
+                   try{
+                        $user_info = [
+                        'first_name'   =>$request->first_name,
+                        'last_name'=>$request->last_name,
+                        'mobile'=>$request->provider_id,
+                        'password'=>'',
+                        'email'=>$request->email,
+                        'provider'=>$request->provider,
+                        'provider_id'=>$request->provider_id, 
+                        'created_at'=>date('Y-m-d H:i:s'),
+                         ];
+                        $user = new User($user_info);
+                        $user->save();
+                    }
+                    catch(\Exception $e){
+                           // do task when error
+                          // echo $e->getMessage(); exit;  // insert query
+                        }
+                                 
+                } else {
+                 
+                    // Update 'created_at' if empty (for time ago module)
+                    if (empty($user->created_at)) {
+                        $user->created_at = date('Y-m-d H:i:s');
+                        $user->save();
+                    }
+                }
+            }
+
+         //find the user using his details.
+      
+          try {
+            // attempt to verify the credentials and create a token for the user
+            if (! $token = $token=JWTAuth::fromUser($user)) {
+                return response()->json(['success' => false, 'error' => 'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your mobile Number.']);
+            }
+        } catch (JWTException $e) {
+            // something went wrong whilst attempting to encode the token
+            return response()->json(['success' => false, 'error' => 'Failed to login, please try again.']);
+        }
+    
+        return response()->json(['success' => true, 'data'=>['token' => $token,'user'=>$user]]);
+
+
+  }
 
 
 //verify User 

@@ -39,7 +39,9 @@
 
                   <?php if($city_post->type=='image'): ?>
                     <div class="post-img">
+                        <a  data-toggle="modal" href="<?php echo e(url('image_popup/'.$city_post->value)); ?>" data-target="#myModal">
                          <?php echo e(Html::image('public/images/post/post_image/'.$city_post->value,'img',array('class'=>'img-responsive'))); ?>  
+                     </a>
                     </div>
                  <?php endif; ?>
 
@@ -100,21 +102,22 @@
                 <div id="comment_section<?php echo e($city_post->id); ?>">
                 <?php if(isset($city_post->comment[0])): ?>
                 <?php $__currentLoopData = $city_post->comment; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cmnt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                
+                <?php if($cmnt->parent_id==0): ?>
                 <div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl" id="commentDiv<?php echo e($cmnt->id); ?>">
                 <div class="col-md-11 cmnt-pnl-ped">
                  
-                <div class="pro1">
-                   <?php echo e(Html::image('public/images/user/'.$cmnt->image,'img',array('class'=>'img-responsive'))); ?>
+                <div class="pro1"><?php echo e(Html::image('public/images/user/'.$cmnt->user->image,'img',array('class'=>'img-responsive'))); ?>
 
-                </div>   
+                </div> 
+
                  <div class="cmnt-box">
-                 <span class="pro-name"><b><?php echo e($cmnt->first_name.' '.$cmnt->last_name); ?>:</b> <?php echo e($cmnt->message); ?></span><br>
+                 <span class="pro-name"><b><?php echo e($cmnt->user->first_name.' '.$cmnt->user->last_name); ?>:</b> <?php echo e($cmnt->message); ?></span><br>
+                    
                 <span class="post-time">
                    <i class="fa fa-clock-o" aria-hidden="true"></i> 
-                    <?php echo Helper::dateFormate($city_post->created_at);; ?>
-
+                    <?php echo Helper::dateFormate($cmnt->created_at);; ?> <span class="rpl<?php echo e($cmnt->id); ?>"><a onclick="showReplydiv(<?php echo e($cmnt->id); ?>)">Reply</a></span>
                 </span> 
+
                 </div>
                 </div>
                 <?php if($cmnt->user_id==Auth::user()->id): ?>
@@ -125,8 +128,65 @@
                  </ul>
                </div>
                <?php endif; ?>
-              
+              <!-- reply -->
+              <?php $replies=count($cmnt->replies); ?>
+                <?php if($replies>0): ?>
+                <div class="rply">
+                <div id="comment_section_reply<?php echo e($cmnt->id); ?>">    
+                <?php $__currentLoopData = $cmnt->replies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $replie): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl" id="commentDiv<?php echo e($replie->id); ?>">
+                <div class="col-md-11 cmnt-pnl-ped" >
+                <div class="pro1"><?php echo e(Html::image('public/images/user/'.$replie->user->image,'img',array('class'=>'img-responsive'))); ?>
+
+                </div>
+                 <div class="cmnt-box">
+                 <span class="pro-name"><b><?php echo e($replie->user->first_name.' '.$replie->user->last_name); ?>:</b>  : <?php echo e($replie->message); ?></span><br>
+                 <span class="post-time">
+                   <i class="fa fa-clock-o" aria-hidden="true"></i> 
+                    <?php echo Helper::dateFormate($replie->created_at);; ?>
+
+                </span> 
+                </div>
+                </div>
+               
+                 <?php if($replie->user->id==Auth::user()->id): ?>
+                    <div class="dropdown">
+                     <i data-toggle="dropdown" class="fa dropdown-toggle fa-angle-down"></i>
+                     <ul class="dropdown-menu side-fix">
+                       <li><a onclick="deleteComment(<?php echo e($city_post->id); ?>,<?php echo e($replie->id); ?>)">Delete</a></li>
+                     </ul>
+                    </div>
+                <?php endif; ?>
+               </div>
+
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+                    <div class="col-md-12 cmnt-pnl-ped ped-2" id="rply<?php echo e($cmnt->id); ?>" style="display:none">
+                        <div class="pro1"><?php echo e(Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))); ?> </div>  
+                     <div class="cmnt-box">
+                        <textarea rows="2" cols="90" name="comment" form="usrform" id="comment-form_reply<?php echo e($cmnt->id); ?>" placeholder="write a reply..."> </textarea>
+                        <button class="post-bt" onclick="postComment(<?php echo e($city_post->id); ?>,<?php echo e($cmnt->id); ?>)">Reply</button>
+                    </div>
+                    </div>
+                 </div>
+                <?php else: ?>
+                <!-- if no reply -->
+                 <div class="rply" id="rply<?php echo e($cmnt->id); ?>" style="display:none">
+                    <div id="comment_section_reply<?php echo e($cmnt->id); ?>"> </div>
+                    <div class="col-md-12 cmnt-pnl-ped ped-2">
+                        <div class="pro1"><?php echo e(Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))); ?> </div>  
+                     <div class="cmnt-box">
+                        <textarea rows="2" cols="90" name="comment" form="usrform" id="comment-form_reply<?php echo e($cmnt->id); ?>" placeholder="write a reply..."> </textarea>
+                        <button class="post-bt" onclick="postComment(<?php echo e($city_post->id); ?>,<?php echo e($cmnt->id); ?>)">Reply</button>
+                    </div>
+                    </div>
+                 </div>
+                <!-- end no reply -->
+
+                <?php endif; ?>
+                <!-- End Reply -->
             </div>
+            <?php endif; ?>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             <?php endif; ?>
          </div>
@@ -134,10 +194,10 @@
            
             <div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl">
                 <div class="col-md-12 cmnt-pnl-ped">
-                 <div class="pro1"><?php echo e(Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))); ?></div>  
+                 <div class="pro1"><?php echo e(Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))); ?> </div>  
                  <div class="cmnt-box">
                     <textarea rows="2" cols="100" name="comment" id="comment-form<?php echo e($city_post->id); ?>" placeholder="Leave a comment..."></textarea>
-                    <button class="post-bt" onclick="postComment(<?php echo e($city_post->id); ?>)">Post</button>
+                    <button class="post-bt" onclick="postComment(<?php echo e($city_post->id); ?>,0)">Post</button>
                 </div>
                 </div>
             </div>

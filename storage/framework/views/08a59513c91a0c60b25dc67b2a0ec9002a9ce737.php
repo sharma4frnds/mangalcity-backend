@@ -15,6 +15,7 @@
                      <p><a href="<?php echo e(url('home')); ?>">Home</a></p>
                     <p><a href="#">Activity Log</a></p>
                     <p><a href="<?php echo e(url('user/profile')); ?>">Update Profile</a></p>
+                    <p><a href="<?php echo e(url('user/change_password')); ?>">Change Password</a></p>
                     <p><a href="<?php echo e(route('logout')); ?>" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" > Logout </a>
                     </p>
 
@@ -38,19 +39,9 @@
 
 
                    <!-- tab -->
-            <div class="tab_container">
-            <input id="tab1" type="radio" name="tabs" checked>
-            <label class="tb" for="tab1">Update Profile</label>
 
-            <input id="tab2" type="radio" name="tabs">
-            <label class="tb" for="tab2">Change Password</label>
-
-            <input id="tab3" type="radio" name="tabs">
-            <label class="tb" for="tab3">Change Profile</label>
-
-            
-
-            <section id="content1" class="tab-content">
+            <h1>Update Profile</h1>
+            <section>
                   <?php if(session()->has('message')): ?>
                       <div class="alert alert-success">
                           <?php echo e(session()->get('message')); ?>
@@ -93,24 +84,24 @@
                       <div class="form-group">
                         <label for="inputPassword3" class="col-sm-2 control-label">Gender</label>
                         <div class="col-sm-10">
-                          <div class="col-sm-10">
+                         
                            <select class="form-control" name="gender">
                             <option value="male" <?php if(Auth::user()->gender=='male'): ?> selected <?php endif; ?> >Male </option>
                             <option value="female" <?php if(Auth::user()->gender=='female'): ?> selected <?php endif; ?>>Female </option>
                           </select>
-                        </div>
+                 
                         </div>
                       </div>
 
                       <div class="form-group">
                         <label for="inputPassword3" class="col-sm-2 control-label">Marital status</label>
-                        <div class="col-sm-10">
+                     
                           <div class="col-sm-10">
                            <select class="form-control" name="marital_status">
                             <option value="no" <?php if(Auth::user()->gender=='no'): ?> selected <?php endif; ?>>No</option>
                             <option value="yes" <?php if(Auth::user()->gender=='yes'): ?> selected <?php endif; ?>>Yes</option>
                           </select>
-                        </div>
+                     
                         </div>
                       </div>
 
@@ -239,134 +230,7 @@
                 </form>
             </section>
 
-            <section id="content2" class="tab-content">
-              <?php echo Form::open(array('url' => 'user/change_password','method' => 'POST','class' => '','files' => true)); ?>
 
-
-              <?php if(!$errors->passwordErrors->isEmpty()): ?>
-              <div class="alert alert-danger">
-                    <ul>
-                        <?php $__currentLoopData = $errors->passwordErrors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <li><?php echo e($error); ?></li>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    </ul>
-                </div>
-              <?php endif; ?>
-
-              <?php if(session()->has('passwordMessages')): ?>
-                <div class="alert alert-success">
-                  <?php echo e(session()->get('passwordMessages')); ?>
-
-                </div>
-              <?php endif; ?>
-
-                <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Old Password</label>
-                        <div class="col-sm-9">
-                          <input type="password" class="form-control" placeholder="Old Password" name="old_password" required="">
-                        </div>
-                  </div>
-                <div class="clearfix"></div>
-                 <div class="form-group">
-                      <label for="inputEmail3" class="col-sm-3 control-label">New Password</label>
-                      <div class="col-sm-9">
-                        <input type="password" class="form-control" placeholder="New Password" name="password" required="">
-                      </div>
-                    </div>
-                         
-                      <div class="clearfix"></div>
-                      <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-3 control-label">Confirm Password</label>
-                        <div class="col-sm-9">
-                          <input type="password" class="form-control" placeholder="Confirm Password" name="password_confirmation" required="">
-                        </div>
-                      </div>
-
-                       <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                          <button type="submit" class=" upd btn btn-primary">Update</button>
-                        </div>
-                      </div>
-              </form>
-            </section>
-
-            <section id="content3" class="tab-content">
-                <?php echo Form::open(array('url' => 'user/change_image','method' => 'POST','class' => 'form-horizontal','files' => true )); ?>
-
-
-                 <?php if(!$errors->imageErrors->isEmpty()): ?>
-                  <div class="alert alert-danger">
-                        <ul>
-                            <?php $__currentLoopData = $errors->imageErrors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><?php echo e($error); ?></li>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </ul>
-                    </div>
-                  <?php endif; ?>
-
-
-               <?php if(session()->has('imagesMessages')): ?>
-                <div class="alert alert-success">
-                  <?php echo e(session()->get('imagesMessages')); ?>
-
-                </div>
-              <?php endif; ?>
-
-                <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">Image Upload</label>
-                        <div class="col-sm-10">
-                          <input type="file" class="file form-control" placeholder="" name="image" required="">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                          <button type="submit" class=" upd btn btn-primary">Update</button>
-                        </div>
-                      </div>
-                </form>
-
-                <hr>
-                <?php echo Form::open(array('url' => 'user/change_cover_image','method' => 'POST','class' => 'form-horizontal','files' => true )); ?>
-
-
-                 <?php if(!$errors->cover_imageErrors->isEmpty()): ?>
-                  <div class="alert alert-danger">
-                        <ul>
-                            <?php $__currentLoopData = $errors->cover_imageErrors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><?php echo e($error); ?></li>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </ul>
-                    </div>
-                  <?php endif; ?>
-
-
-               <?php if(session()->has('cover_imageMessages')): ?>
-                <div class="alert alert-success">
-                  <?php echo e(session()->get('cover_imageMessages')); ?>
-
-                </div>
-              <?php endif; ?>
-
-                <div class="form-group">
-                        <label for="inputEmail3" class="col-sm-2 control-label">Cover image</label>
-                        <div class="col-sm-10">
-                          <input type="file" class="file form-control" placeholder="" name="cover_image" required="">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                          <button type="submit" class=" upd btn btn-primary">Update</button>
-                        </div>
-                      </div>
-                </form>
-
-
-            </section>
-
-            
-
-          
-        </div>
                 <!-- tab -->
 
 

@@ -36,14 +36,14 @@ return [
     ],
 
     'facebook' => [
-        'client_id'     =>'364937900661491',
-        'client_secret' =>'a501b732dcb3a8b95936cfc54dabb5c0',
-        'redirect' => 'https://emergingncr.com/talktoastro/login/facebook/callback',
+        'client_id'     =>'197595180893356',
+        'client_secret' =>'802408c735068d8176c2369a24186adb',
+        'redirect' => env('APP_URL').'login/facebook/callback',
     ],
 
      'google' => [
-        'client_id' => '895572091767-2sepfq5e9n1j6koo4fkrlu4vei9fa0rq.apps.googleusercontent.com',
-        'client_secret' =>'aGxonYL5JTDPgh_anmIwP7Dw',
+        'client_id' => '401264671681-ma74emm2ph8eu6hnlhkjuhu9iukjifku.apps.googleusercontent.com',
+        'client_secret' =>'o8V-Ho7oRlU1H9JNA5ZCqlh6',
         'redirect' => env('APP_URL') . 'login/google/callback',
     ],
 
