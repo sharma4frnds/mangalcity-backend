@@ -69,7 +69,8 @@ Route::group(['middleware' => 'auth'], function()
 		Route::GET('/change_location','HomeController@change_location');
 		Route::GET('/image_popup/{url}','HomeController@image_popup');
 		Route::GET('/activity','ActivityController@allactivity');
-
+		Route::GET('/highlights/{slug}','PostController@highlights');
+	
 
 	});
 });

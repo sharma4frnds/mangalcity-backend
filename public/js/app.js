@@ -103,6 +103,8 @@ catch(err) {
          $("#currentMessage").prepend(hdiv);
           toastr.success('successfully posted');
           $("#queued-files").html('').hide();
+          $("#imagePreview").html('').hide();
+   
         }
 
     
@@ -390,6 +392,7 @@ function sharePost(post_id){
     data:{'post_id':post_id},
     success:function(data){
         $('#myModal').modal('hide');
+        toastr.success('successfully share your post');
     },
     error: function(data) {
            
@@ -403,7 +406,8 @@ function displayImage(elem)
       var image = document.getElementById("npimage");
         //image= elem.name;
        $("#queued-files").html('1 image selected').show();
-
+        $("#imagePreview").show();
+       
         var reader = new FileReader();
         reader.onload = function()
         {

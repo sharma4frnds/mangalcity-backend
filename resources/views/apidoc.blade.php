@@ -11,7 +11,7 @@ password</p>
 <hr>
 <h4>Social login/Ragister</h4>
 URL:http://emergingncr.com/mangalcity/api/auth/social_login
-<p>parameter:first_name,last_name,email,provider,provider_id</p>
+<p>parameter:first_name,last_name,email,provider,provider_id,social_token</p>
 <p>Responce:{"success":true,"data":{"token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjU2LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxL21hbmdhbGNpdHkvYXBpL2F1dGgvc29jaWFsX2xvZ2luIiwiaWF0IjoxNTMwMTk0MTE4LCJleHAiOjE1MzE0MDM3MTgsIm5iZiI6MTUzMDE5NDExOCwianRpIjoidDdUY1lnWFVtTEFaT1FKYiJ9.GdAmYprNtc97LF985BYecewrlOLG1iy-HQlagvAcDfw","user":{"id":56,"first_name":"kundan","last_name":"kumar","mobile":"12345678912345","email":"kundan@gmail.com","image":"default.png","cover_image":"default.png","country":"","state":"","district":"","city":"","address":"","gender":"male","marital_status":"no","verified":0,"profile":0,"status":"active","created_at":"2018-06-28 13:48:34","updated_at":"2018-06-28 13:48:34"}}}</p>
 <hr>
 
@@ -52,7 +52,7 @@ URL:http://emergingncr.com/mangalcity/api/forgot_password_otp
 <h4>forgot change password</h4>
 URL:http://emergingncr.com/mangalcity/api/forgot_change_password
 <p>Method:POST</p>
-<p>parameter:otp,mobile,password,confirmed_password</p>
+<p>parameter:otp,mobile,password,password_confirmation</p>
 <p>Responce:{"success":true,"message":"successfully update password,please login"}</p>
 
 <hr>
@@ -191,3 +191,16 @@ http://emergingncr.com/mangalcity/api/delete_post
 	http://emergingncr.com/mangalcity/api/report_feedback
 <p>Method:POST </p>
 <p>parameter:token,post_id,spam_tags</p>
+
+
+<hr>
+<h2>post Comment</h2>
+http://emergingncr.com/mangalcity/api/post_comment
+<p>Method:POST </p>
+<p>parameter:token,post_id,comment</p>
+
+<hr>
+<h2>post Comment</h2>
+http://emergingncr.com/mangalcity/api/delete_comment
+<p>Method:POST </p>
+<p>parameter:token,post_id,comment_id</p>

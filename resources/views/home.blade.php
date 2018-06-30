@@ -74,15 +74,19 @@
                         @if(Session::has('message'))
                         <p class="alert alert-info">{{ Session::get('message') }}</p>
                         @endif
-                  <div class="fb"><a href="{{url('login/facebook')}}"><lable><span> <i class="fa fa-facebook" aria-hidden="true"></i></span>Sign in with Facebook</lable>
-                    <div class="clear"></div></a>
-                </div>
 
-                <div class="google"><a href="{{url('login/google')}}"><lable><span> <i class="fa fa-google-plus" aria-hidden="true"></i></span>Sign in with Google+</lable>
-                    <div class="clear"></div></a>
-                </div>
 
                          <button type="submit" class="login-button">submit</button>
+                         <div class="clearfix"></div>
+                          <br/>
+                        <div class="fb"><a class="btn btn-primary btn-sm" href="{{url('login/facebook')}}"><lable><span> <i class="fa fa-facebook" aria-hidden="true"></i></span>Sign in with Facebook</lable>
+                              <div class="clear"></div></a>
+                          </div>
+                          
+                          <div class="google"><a class="btn btn-primary btn-sm" href="{{url('login/google')}}"><lable><span> <i class="fa fa-google-plus" aria-hidden="true"></i></span>Sign in with Google+</lable>
+                              <div class="clear"></div></a>
+                          </div>
+
                         <div class="etc-login-form">
                         <p> <a href="{{url('/forgot')}}">forgot password?</a></p>
                       </div>
@@ -136,8 +140,18 @@
                             </div>
                             <button type="submit" class="login-button">submit</button>
                           </div>
+
+                        <br/>
+                        <div class="fb"><a class="btn btn-primary btn-sm" href="{{url('login/facebook')}}"><lable><span> <i class="fa fa-facebook" aria-hidden="true"></i></span>Sign in with Facebook</lable>
+                              <div class="clear"></div></a>
+                          </div>
+                          <div class="google"><a class="btn btn-primary btn-sm" href="{{url('login/google')}}"><lable><span> <i class="fa fa-google-plus" aria-hidden="true"></i></span>Sign in with Google+</lable>
+                              <div class="clear"></div></a>
+                          </div>
+                    
+
                           <div class="etc-login-form">
-                            <p>Already have an account ? <a href="#">SignIn</a></p>
+                            <p>Already have an account ? <a href="{{url('/')}}">SignIn</a></p>
                           </div>
                         </form>
 

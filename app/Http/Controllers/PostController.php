@@ -14,27 +14,25 @@ use Image;
 use Carbon\Carbon;
 use App\Model\Spam_tag;
 use App\Model\Feedbacks;
+use App\Model\Activity;
 use Session;
+use Helper;
+
 class PostController extends Controller
 {
    public function feeds(Request $request)
    {
 
- // $post=Post::where('user_id', Auth::user()->id)->with('user')->first();
-
- //    //$comments=Comment::where(['post_id'=>$post->id,'parent_id'=>0])->orderBy('created_at','asc')->with('user','replies')->get();
-   
-
-
-    $city_posts=Post::with(['user','like' => function ($query) {
-    $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',1)->where('city',Auth::user()->city)->orderBy('id', 'DESC')->paginate(10);
-
- //return response()->json($city_posts);
-
+    //set location
     $home_location=Session::get('home_location');
       $city=''; $district=''; $state='';
       if($home_location){ $city=$home_location['home_city']; $district=$home_location['home_district']; $state=$home_location['home_state']; }else{ $city=Auth::user()->city; $district=Auth::user()->district; $state=Auth::user()->state;
       }
+
+      //get city post
+      $city_posts=Post::with(['user','like' => function ($query) {
+      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->paginate(10);
+
 
   //   $city_posts=Post::with(['user','like' => function ($query) {
   //   $query->where('user_id', Auth::user()->id);},'comments'=>function($query) 
@@ -45,20 +43,12 @@ class PostController extends Controller
   // ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->paginate(10);
 
 
-
-
-    //$city_posts=Post::with(['comments'])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->get();
-// echo '<pre>';
-// print_r($city_posts);
-// exit;
-
-
+  
   if($request->ajax())
   {
     $view = view('feed',compact('city_posts'))->render();
     return response()->json(['html'=>$view]);
   }
-
 
   $country_posts=Post::where('status',1)->where('tag',4)->limit(10)->get();
   $state_posts=Post::where('status',1)->where('tag',3)->limit(10)->get();
@@ -66,6 +56,7 @@ class PostController extends Controller
 
    	return view('post',compact('city_posts','district_posts','state_posts','country_posts'));
    }
+
 
    //post data
    public function posts(Request $request)
@@ -135,11 +126,61 @@ class PostController extends Controller
 
         if($type=='image') $value=URL::to('public/images/post/post_image/'.$post->value);
         if($type=='video') $value=URL::to('public/images/post/post_video/'.$post->value);
-      
+
+          Helper::ActivityAdd(Auth::user()->id,$post->id,'post'); 
+
           $pdata=array('id'=>$post->id,'user_id'=>$post->user_id,'message'=>$post->message,'type'=>$post->type,'value'=>$value,'likes'=>$post->likes,'created_at'=>date('d-M-Y', strtotime($post->created_at)) ,'name'=>Auth::user()->first_name.' '.Auth::user()->last_name,'image'=>$user_image);
 
         echo json_encode(array('success'=>true,'pdata'=>$pdata));
 
+
+   }
+
+   /*
+    show country highlights post 
+    post stase change ofter like dislike and share
+
+   */
+
+   public function highlights(Request $request,$slug)
+   {
+
+    //set location
+    $home_location=Session::get('home_location');
+      $city=''; $district=''; $state='';
+      if($home_location){ $city=$home_location['home_city']; $district=$home_location['home_district']; $state=$home_location['home_state']; }else{ $city=Auth::user()->city; $district=Auth::user()->district; $state=Auth::user()->state;
+      }
+
+    if($slug=='country')
+    {
+      $city_posts=Post::with(['user','like' => function ($query) {
+      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',4)->orderBy('id', 'DESC')->paginate(1);
+    }
+
+    if($slug=='state')
+    {
+         $city_posts=Post::with(['user','like' => function ($query) {
+      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',3)->orderBy('id', 'DESC')->paginate(1);
+    }
+
+    if($slug=='district')
+    {
+      $city_posts=Post::with(['user','like' => function ($query) {
+      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',2)->orderBy('id', 'DESC')->paginate(1);
+    }
+  
+
+    if($request->ajax())
+    {
+      $view = view('feed',compact('city_posts'))->render();
+      return response()->json(['html'=>$view]);
+    }
+
+    $country_posts=Post::where('status',1)->where('tag',4)->limit(10)->get();
+    $state_posts=Post::where('status',1)->where('tag',3)->limit(10)->get();
+    $district_posts=Post::where('status',1)->where('tag',2)->limit(10)->get();
+
+    return view('highlights',compact('city_posts','district_posts','state_posts','country_posts'));
 
    }
 
@@ -173,6 +214,7 @@ class PostController extends Controller
           {   $type=1;
               Like::create(['post_id' => $request->post_id,'user_id'=>Auth::user()->id,'type'=>0]);
               Post::where('id',$request->post_id)->increment('likes');
+              Helper::ActivityAdd(Auth::user()->id,$post->id,'like');
           }else
           {
                 if($like->type=='0')
@@ -180,6 +222,7 @@ class PostController extends Controller
                    $type=0;
                    Like::where('post_id',$request->post_id)->where('user_id',Auth::user()->id)->where('type',0)->delete();
                   Post::where('id',$request->post_id)->decrement('likes');
+                  Helper::ActivityDelete(Auth::user()->id,$post->id,'like');
                 }
 
                 if($like->type=='1')
@@ -188,12 +231,16 @@ class PostController extends Controller
                   Like::where('post_id',$request->post_id)->where('user_id',Auth::user()->id)->update(['type'=>0]);
                   Post::where('id',$request->post_id)->decrement('dislikes');
                   Post::where('id',$request->post_id)->increment('likes');
+
+                  Helper::ActivityAdd(Auth::user()->id,$post->id,'like');
+                  Helper::ActivityDelete(Auth::user()->id,$post->id,'dislike');
                 }
           }
 
-          $post1=Post::where('id',$request->post_id)->select('id','dislikes','likes')->first();
+          $post1=Post::where('id',$request->post_id)->select('id','dislikes','likes','share')->first();
          
-          $this->postStageChange($request->post_id,$post1->likes);
+        
+          Helper::postStageChange($request->post_id,$post1->share,$post1->likes,$post1->dislikes); 
 
            return response()->json(['success'=>true,'lcount'=>$post1->likes,'dcount'=>$post1->dislikes,'type'=>$type], 200);
 
@@ -228,13 +275,17 @@ class PostController extends Controller
           {   $type=1;
               Like::create(['post_id' => $request->post_id,'user_id'=>Auth::user()->id,'type'=>1]);
               Post::where('id',$request->post_id)->increment('dislikes');
+               Helper::ActivityAdd(Auth::user()->id,$post->id,'dislike');
           }else
           {
                 if($like->type=='1')
                 {
                    $type=0;
                    Like::where('post_id',$request->post_id)->where('user_id',Auth::user()->id)->where('type',1)->delete();
+                  
                   Post::where('id',$request->post_id)->decrement('dislikes');
+
+                   Helper::ActivityDelete(Auth::user()->id,$post->id,'dislike');
                 }
 
                 if($like->type=='0')
@@ -243,11 +294,14 @@ class PostController extends Controller
                   Like::where('post_id',$request->post_id)->where('user_id',Auth::user()->id)->update(['type'=>1]);
                   Post::where('id',$request->post_id)->decrement('likes');
                   Post::where('id',$request->post_id)->increment('dislikes');
+
+                  Helper::ActivityAdd(Auth::user()->id,$post->id,'dislike');
+                  Helper::ActivityDelete(Auth::user()->id,$post->id,'like');
                 }
           }
 
           $post1=Post::where('id',$request->post_id)->select('id','dislikes','likes')->first();
-         
+          Helper::postStageChange($request->post_id,$post1->share,$post1->likes,$post1->dislikes);
            return response()->json(['success'=>true,'lcount'=>$post1->likes,'dcount'=>$post1->dislikes,'type'=>$type], 200);
 
         }else{
@@ -300,6 +354,9 @@ class PostController extends Controller
 
             $image=URL::to('public/images/user/'.Auth::user()->image);
          
+              Helper::ActivityAdd(Auth::user()->id,$request->post_id,'comment');
+                
+
            return response()->json(['success'=>true,'comment_id'=>$comment->id,'comment'=>$request->comment,'post_id'=>$request->post_id,'user_image'=>$image,'name'=>Auth::user()->first_name.' '.Auth::user()->last_name,'date'=>'just now'], 200);
         }
 
@@ -323,6 +380,7 @@ class PostController extends Controller
         {
            Comment::where('id',$request->comment_id)->delete();
            Comment::where('parent_id',$request->comment_id)->delete();
+           Helper::ActivityDelete(Auth::user()->id,$request->post_id,'comment');
            return response()->json(['success'=>true,'message'=>'Successfully Removed'], 200);
         }
 
@@ -492,9 +550,12 @@ class PostController extends Controller
         $value=$renameFile;
       }
 
-      post::insert(['user_id'=>Auth::user()->id,'message'=>$post->message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1, 'state'=>Auth::user()->state,'district'=>Auth::user()->district,'city'=>Auth::user()->city]);
+     $newpost= post::create(['user_id'=>Auth::user()->id,'message'=>$post->message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1, 'state'=>Auth::user()->state,'district'=>Auth::user()->district,'city'=>Auth::user()->city]);
+ 
+        Helper::ActivityAdd(Auth::user()->id,$newpost->id,'share');
+        Helper::postStageChange($request->post_id,$post->share,$post->likes,$post->dislikes);
 
-            return response()->json(['success'=>true,'message'=>'Successfully share'], 200);
+        return response()->json(['success'=>true,'message'=>'Successfully share'], 200);
          
         }else
         {

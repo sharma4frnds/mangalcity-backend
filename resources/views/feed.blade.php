@@ -79,11 +79,11 @@
                             @endif
                           </a>
                      </li>
-                      <li ><a onclick="focus_form({{$city_post->id}})"><i class="fa fa-comment" aria-hidden="true"></i> Comment</i> </a></li>   
+                      <li><a onclick="focus_form({{$city_post->id}})"> <i class="fa fa-comment" aria-hidden="true"></i> Comment</i> </a></li>   
                    
-                      <li><a onclick="share_post_popup({{$city_post->id}})"> <i class="fa fa-share-alt" aria-hidden="true"></i> Share</i></a></li>
+                      <li><a onclick="share_post_popup({{$city_post->id}})">  <i class="fa fa-share-alt" aria-hidden="true"></i> Share</i></a></li>
                       
-                        @if($city_post->type=='image')
+                     @if($city_post->type=='image')
                        <li><a href="{{url('download_image/'.$city_post->value)}}"><i class="fa fa-cloud-download" aria-hidden="true"></i>Download</a></li>
                        @endif
 

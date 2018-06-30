@@ -12,6 +12,7 @@ use App\Model\Home_location;
 use App\Otp\SmsOtp;
 use Hash;
 use Socialite;
+use Helper;
 class UserController extends Controller
 {   
     private $user;
@@ -108,8 +109,17 @@ class UserController extends Controller
 //social login 
   public function social_login(Request $request)
   {
-   $userInfo = Socialite::driver('facebook')->stateless()->user('EAACztjaRBKwBAGfhvimom5IABvaMVIr7t8fouGZAoJd8p8OvLSBjqUIaks3bdNVBpIEWQFRAdwhZB5pbfZCJTY3k4p4yfMh9bBlG4KW0bfYQJw1tDr5v1gyXFW3A6ZBbBteOjDdiPA8U0Kr8ZCZBYZB5gozr9SrYRnq06uJFfGKBwZDZD','2046069955610433');
-dd($userInfo);
+
+  // $googleAuthCode = $request->social_token;
+    // $accessTokenResponse= Socialite::driver('google')->getAccessTokenResponse($googleAuthCode);
+   
+    // $accessToken=$accessTokenResponse["access_token"];
+    // $expiresIn=$accessTokenResponse["expires_in"];
+    // $idToken=$accessTokenResponse["id_token"];
+    // $refreshToken=isset($accessTokenResponse["refresh_token"])?$accessTokenResponse["refresh_token"]:"";
+    // $tokenType=$accessTokenResponse["token_type"];
+    // $user = Socialite::driver('google')->userFromToken($accessToken);
+    // dd($user);
 
     $credentials = $request->only('first_name', 'last_name','email','provider', 'provider_id');
         $rules =[
@@ -301,7 +311,7 @@ public function forgot_password_otp(Request $request)
             'otp' =>$otp
           ]);
 
-          echo json_encode(array('success'=>true,'message'=>'successfully send otp'),200);
+          echo json_encode(array('success'=>true,'mobile'=>$request->mobile,'message'=>'successfully send otp'),200);
        }else{
           echo json_encode(array('success'=>false,'message'=>'Invalid mobile'));
      }

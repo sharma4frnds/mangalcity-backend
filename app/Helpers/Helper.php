@@ -1,4 +1,6 @@
 <?php namespace App\Helpers;
+use App\Model\Activity;
+use App\Model\Post;
 
 class Helper
 {
@@ -71,5 +73,41 @@ class Helper
   	}
   	//End date convert
 
+	//insert activity
+	public static function ActivityAdd($user_id,$post_id,$type)
+	{
+		Activity::insert(['user_id'=>$user_id,'post_id'=>$post_id,'type'=>$type]);
+		return;
+	}
+
+	//delete activity
+	public static function ActivityDelete($user_id,$post_id,$type)
+	{
+		Activity::where(['user_id'=>$user_id,'type'=>$type])->delete();
+		return;
+	}
+
+	public static function postStageChange($post_id,$share,$like,$dislike)
+	{
+	   $country_like=20;
+       $state_like=15;
+       $district_like=10;
+
+       $clike=($share*2+($like-$dislike));
+       
+       if($clike>=$country_like){
+         Post::where('id',$post_id)->update(['tag'=>'4']);
+        }
+        elseif($clike>=$state_like){
+           Post::where('id',$post_id)->update(['tag'=>'3']);
+        }
+        elseif($clike>=$district_like){
+         Post::where('id',$post_id)->update(['tag'=>'2']);
+        }
+        else{
+           return;
+        }
+        return;
+	}
 
 }

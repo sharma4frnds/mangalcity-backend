@@ -41,8 +41,10 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::POST('/delete_post','Api\PostController@delete_post');
 	Route::POST('/spam_tags','Api\CommonController@spam_tags');
 	Route::GET('/download_image/{url}','Api\CommonController@download_image');
-	Route::POST('/report_feedback','Api\CommonController@reportFeedback');
-
+	Route::POST('/report_feedback','Api\PostController@reportFeedback');
+	Route::POST('/activity','Api\PostController@allactivity');
+	Route::POST('/post_comment','Api\PostController@postComment');
+	Route::POST('/delete_comment','Api\PostController@deleteComment');
 	
 });
 

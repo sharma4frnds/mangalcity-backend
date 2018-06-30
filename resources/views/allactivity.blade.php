@@ -32,44 +32,11 @@
           </div>
           @include('left_bar')
           <div class="col-md-8 col-sm-6 col-xs-12">
-                      <form method="POST" enctype="multipart/form-data" id="feedForm" action="post">
-                    <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
-                 <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20">
-                    <div class="col-md-6 pd0">
-                     <div class="pro1">{{Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))}}  
-                    </div>  
-                     <span class="pro-name">Update Your Status</span><br>
-                    </div>
-
-                  
-                      <textarea name="message" cols="30" rows="1" class="form-control" placeholder="Write what you wish"></textarea>
-                      <div id="queued-files" style="display: none;">1 image selected</div>
-                    <div class="share-area">
-                        <div class="up-img"><input type="file" id="npimage" name="image" accept="image/*" onchange="displayImage(this);"></div>
-                        <div class="up-vid"><input type="file" name="video" id="npvideo" accept="video/*" onchange="displayVideo(this);"></div>
-                        <ul>
-                         <li><i class="fa fa-file-image-o" aria-hidden="true"></i></li>   
-                         <li><i class="fa fa-video-camera" aria-hidden="true"></i></li> 
-                         <li><img id="imagePreview" class="prv"   style="display: none;"/> </li>
-
-                         <li style="float: right;">
-                            <input type="submit" value="Post" class="post-bt"  /> 
-                            </li> 
-                        </ul>
-                    </div>
-
-                </div>
-
-                 <div class="alert alert-info fade in" id="error_div" style="display: none"></div>
-
-            </form>
-            <!--City  post -->
-            <div id="currentMessage"></div>
-            <!-- post -->
-            <div  id="post-data">
-              @include('feed')
-              </div>
-            <!-- post -->
+            <!-- start activity -->
+            <div id="post-data">
+              @include('activity_feed')
+          <!-- end  activity -->
+            </div>
               <br/>
             <div class="ajax-load text-center" style="display:none">
                <p>{{Html::image('public/img/loader.gif')}} Loading More post</p>
@@ -105,7 +72,7 @@
 <!-- End Remote popup -->
 @endsection
 @section('footer_script')
-{{ Html::script('public/js/jquery.form.js') }}
+
 <script type="text/javascript">
 var page = 1;
 

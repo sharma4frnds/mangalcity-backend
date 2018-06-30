@@ -79,7 +79,7 @@ class UserController extends Controller
                     }
             }
 
-    		return redirect()->back()->with('message', 'Profile Update  successfully');
+    		return redirect('/home')->with('message', 'Profile Update  successfully');
     }
 
 
@@ -153,7 +153,7 @@ public function get_change_password(){
         
         if($validator->fails())
         {
-             return response()->json(['success'=>true, 'errors'=>$validator->getMessageBag()->toArray()],422);
+             return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()],422);
         }
 
        $imageName = time(). '.' .$request->file('cover_image')->getClientOriginalExtension();

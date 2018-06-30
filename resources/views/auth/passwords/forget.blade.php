@@ -56,7 +56,8 @@
                                                           
                             </div>
                              <button type="button" class="login-button" id="resendotp">Send</button>
-                            
+                             <br><br>
+                            <a href="{{url('login')}}" class="forget"> Sign in here</a>
                           </div>  
                         </form>
                     </div>

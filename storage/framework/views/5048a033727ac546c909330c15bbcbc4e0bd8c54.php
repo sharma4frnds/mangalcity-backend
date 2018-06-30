@@ -45,26 +45,29 @@
                 <div class="tab-content forgt">
                     <div role="tabpanel" class="tab-pane active" id="Section1">
                       <h1 class="hone"><span class="no-text">Choose a new password</span></h1>
+                      <div id="form-errors"></div>
                         <form id="login-form" class="text-left">
                           <div class="login-form-main-message"></div>
                             <div class="main-login-form">
                             <div class="login-group">
                                <div class="form-group">
-                                <input type="text" class="form-control" id="otp" name="otp" placeholder="otp">
+                                <input type="text" class="form-control" id="otp" name="otp" placeholder="OTP">
                               </div>
 
                               <div class="form-group">
-                                <input type="text" class="form-control" id="password" name="password" placeholder="New Password">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="New Password">
                               </div>
                               <div class="form-group">
-                                <input type="text" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password">
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password">
                               </div>
                                                           
                             </div>
                           
 
                               <button type="button" class="login-button" id="change_password_btn">Submit</button>
-                            
+                             <br/><br/>
+                              Are you registered?
+                            <a href="<?php echo e(url('login')); ?>" class="forget"> Sign in here</a>
                           </div>   
                         </form>
                     </div>

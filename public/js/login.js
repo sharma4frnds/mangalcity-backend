@@ -148,8 +148,9 @@ $("#resendotp").click(function(){
            toastr.success('successfully Resend Otp');
            window.location.replace(siteUrl+"/changepassword");
          },
-        error: function(data) {
-            toastr.warning(' Resend Otp  fail');
+        error: function(request) {
+            toastr.warning('Resend Otp  fail');
+    
         }
     });
   
@@ -159,7 +160,7 @@ $("#resendotp").click(function(){
 //change_password_btn
 
 $("#change_password_btn").click(function(){
-     var otp=$('#otp').val();
+    var otp=$('#otp').val();
     var password=$('#password').val();
     var password_confirmation=$('#password_confirmation').val();
         $.ajax({
@@ -174,8 +175,23 @@ $("#change_password_btn").click(function(){
            toastr.success('successfully change password');
            window.location.replace(siteUrl);
          },
-        error: function(data) {
-            toastr.warning('invalid otp & password');
+        error: function(request) {
+            //toastr.warning('invalid otp & password');
+              if (request.status == 422) {
+            // Parser the json response expected
+            var $errors = $.parseJSON(request.responseText);
+            // Bootstrap alert scafolding for error 
+            var errorsHtml = '<div class="alert alert-danger alert-dismissible"><button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button><h4><i class="icon fa fa-times"></i></h4><ul>';
+            // The root nodes are field names, with an array of error messages
+            $.each( $errors, function( key, value ) {
+              // We loop through the error to see if there are multiple error associated with the field 
+              $.each( value, function( key2, error ) {
+                errorsHtml += '<li>' + error + '</li>';
+              });
+            });
+            errorsHtml += '</ul></div>';
+            $( '#form-errors' ).html( errorsHtml );
+          }
         }
     });
 

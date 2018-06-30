@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Otp\SmsOtp;
 use Session;
 use App\User;
+use Validator;
 class ForgotPasswordController extends FrontController
 {
     /*
@@ -70,9 +71,15 @@ class ForgotPasswordController extends FrontController
     //change password
      public function changepassword(Request $request)
      {
-        $this->validate($request, ['otp'=>'required','password' => 'required|string|min:6|confirmed' ]);
+        $validator = Validator::make($request->all(), ['otp'=>'required','password' => 'required|string|min:6|confirmed' ]);
+        
+        if($validator->fails())
+        {
+            return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()],422);
+        }
 
         $data=Session::get('mobile_otp');
+
         if($data['otp']==$request->otp)
         {
              $vuser=User::where('mobile',$data['mobile'])->first();

@@ -16,6 +16,8 @@ use Auth;
 use URL;
 use Image;
 use Carbon\Carbon;
+use Helper;
+use App\Model\Feedbacks;
 
 class PostController extends Controller
 {
@@ -89,7 +91,8 @@ class PostController extends Controller
         if($type=='video') $value=URL::to('public/images/post/post_video/'.$post->value);
       
           $pdata=array('id'=>$post->id,'user_id'=>$post->user_id,'message'=>$post->message,'type'=>$post->type,'value'=>$value,'likes'=>$post->likes,'dislikes'=>$post->dislikes,'tag'=>1,'created_at'=>$post->created_at ,'name'=>$user->first_name.' '.$user->last_name,'image'=>$user_image);
-
+ 
+        Helper::ActivityAdd($user->id,$post->id,'post'); 
         echo json_encode(array('success'=>true,'pdata'=>$pdata),200);
 
 
@@ -101,7 +104,7 @@ class PostController extends Controller
      $user=JWTAuth::toUser($request->token);
      $city=$user->city; $district=$user->district; $state=$user->state;
     if($request->home_location==1){
-       $location=Home_location::where('user_id',Auth::user()->id)->first();
+       $location=Home_location::where('user_id',$user->id)->first();
        if($location){$city=$location->home_city; $district=$location->home_district; $state=$location->home_state; }
       }
 
@@ -110,9 +113,14 @@ class PostController extends Controller
 
    ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->get();
     //->paginate(10);
-    $country_posts=Post::with('user')->where('status',1)->where('tag',4)->limit(10)->get();
-    $state_posts=Post::with('user')->where('status',1)->where('tag',3)->limit(10)->get();
-    $district_posts=Post::with('user')->where('status',1)->where('tag',2)->limit(10)->get();
+    $country_posts=Post::with(['user','like' => function ($query)use ($user) {
+    $query->where('user_id', $user->id);}])->where('status',1)->where('tag',4)->limit(10)->get();
+
+    $state_posts=Post::with(['user','like' => function ($query)use ($user) {
+    $query->where('user_id', $user->id);}])->where('status',1)->where('tag',3)->limit(10)->get();
+
+    $district_posts=Post::with(['user','like' => function ($query)use ($user) {
+    $query->where('user_id', $user->id);}])->where('status',1)->where('tag',2)->limit(10)->get();
 
 
   echo json_encode(array('success'=>true,'city_posts'=>$city_posts,'district_posts'=>$district_posts,'state_posts'=>$state_posts,'country_posts'=>$country_posts),200);
@@ -140,6 +148,7 @@ class PostController extends Controller
           {   $type=1;
               Like::create(['post_id' => $request->post_id,'user_id'=>$user->id,'type'=>0]);
               Post::where('id',$request->post_id)->increment('likes');
+              Helper::ActivityAdd($user->id,$post->id,'like');
           }else
           {
                 if($like->type=='0')
@@ -147,6 +156,7 @@ class PostController extends Controller
                    $type=0;
                    Like::where('post_id',$request->post_id)->where('user_id',$user->id)->where('type',0)->delete();
                   Post::where('id',$request->post_id)->decrement('likes');
+                  Helper::ActivityDelete($user->id,$post->id,'like');
                 }
 
                 if($like->type=='1')
@@ -155,12 +165,15 @@ class PostController extends Controller
                   Like::where('post_id',$request->post_id)->where('user_id',$user->id)->update(['type'=>0]);
                   Post::where('id',$request->post_id)->decrement('dislikes');
                   Post::where('id',$request->post_id)->increment('likes');
+
+                   Helper::ActivityAdd($user->id,$post->id,'like');
+                  Helper::ActivityDelete($user->id,$post->id,'dislike');
                 }
           }
 
-          $post1=Post::where('id',$request->post_id)->select('id','dislikes','likes')->first();
+          $post1=Post::where('id',$request->post_id)->select('id','share','dislikes','likes')->first();
          
-          $this->postStageChange($request->post_id,$post1->likes);
+            Helper::postStageChange($request->post_id,$post1->share,$post1->likes,$post1->dislikes); 
 
            return response()->json(['success'=>true,'lcount'=>$post1->likes,'dcount'=>$post1->dislikes,'type'=>$type], 200);
 
@@ -195,6 +208,7 @@ class PostController extends Controller
           {   $type=1;
               Like::create(['post_id' => $request->post_id,'user_id'=>$user->id,'type'=>1]);
               Post::where('id',$request->post_id)->increment('dislikes');
+               Helper::ActivityAdd($user->id,$post->id,'dislike');
           }else
           {
                 if($like->type=='1')
@@ -202,6 +216,8 @@ class PostController extends Controller
                    $type=0;
                    Like::where('post_id',$request->post_id)->where('user_id',$user->id)->where('type',1)->delete();
                   Post::where('id',$request->post_id)->decrement('dislikes');
+
+                   Helper::ActivityDelete($user->id,$post->id,'dislike');
                 }
 
                 if($like->type=='0')
@@ -210,11 +226,16 @@ class PostController extends Controller
                   Like::where('post_id',$request->post_id)->where('user_id',$user->id)->update(['type'=>1]);
                   Post::where('id',$request->post_id)->decrement('likes');
                   Post::where('id',$request->post_id)->increment('dislikes');
+
+                   Helper::ActivityAdd($user->id,$post->id,'dislike');
+                  Helper::ActivityDelete($user->id,$post->id,'like');
                 }
           }
 
-          $post1=Post::where('id',$request->post_id)->select('id','dislikes','likes')->first();
-         
+          $post1=Post::where('id',$request->post_id)->select('id','share','dislikes','likes')->first();
+
+         Helper::postStageChange($request->post_id,$post1->share,$post1->likes,$post1->dislikes);
+
            return response()->json(['success'=>true,'lcount'=>$post1->likes,'dcount'=>$post1->dislikes,'type'=>$type], 200);
 
         }else{
@@ -293,7 +314,11 @@ class PostController extends Controller
         $value=$renameFile;
       }
 
-      post::insert(['user_id'=>$user->id,'message'=>$post->message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1,'state'=>$user->state,'district'=>$user->district,'city'=>$user->city]);
+      $newpost=post::create(['user_id'=>$user->id,'message'=>$post->message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1,'state'=>$user->state,'district'=>$user->district,'city'=>$user->city]);
+
+       Helper::ActivityAdd($user->id,$newpost->id,'share');
+
+       Helper::postStageChange($request->post_id,$post->share,$post->likes,$post->dislikes);
 
             return response()->json(['success'=>true,'message'=>'Successfully share'], 200);
          
@@ -367,6 +392,60 @@ class PostController extends Controller
 
         return response()->json(['success'=>true,'message'=>'Successfully'], 200);
     }
+
+
+    //post Comment
+    function postComment(Request $request)
+    {
+      $user = JWTAuth::toUser($request->token);
+      $validator = Validator::make($request->all(), ['post_id'=>'required','comment'=>'required|string|max:500']);
+
+      if($validator->fails())
+      {
+            return Response::json(array('success' => false, 'errors' => $validator->getMessageBag()->toArray())); 
+            // 400 being the HTTP code for an invalid request.
+      }
+
+        if(Post::where('id',$request->post_id)->count() > 0)
+        {
+           $comment=Comment::create(['post_id' => $request->post_id,'parent_id' => $request->comment_id,'user_id'=>$user->id,'message'=>$request->comment,'like'=>0]);
+
+            $image=URL::to('public/images/user/'.$user->image);
+         
+            Helper::ActivityAdd($user->id,$request->post_id,'comment');
+                
+           return response()->json(['success'=>true,'comment_id'=>$comment->id,'comment'=>$request->comment,'post_id'=>$request->post_id,'user_image'=>$image,'name'=>$name->first_name.' '.$name->last_name,'date'=>'just now'], 200);
+        }
+
+    }
+
+    //deleteComment
+    function deleteComment(Request $request)
+    {
+      $user = JWTAuth::toUser($request->token);
+        $validator = Validator::make($request->all(), ['post_id'=>'required','comment_id'=>'required']);
+
+      if($validator->fails())
+        {
+            return Response::json(array('success' => false,'errors' => $validator->getMessageBag()->toArray() )); // 400 being the HTTP code for an invalid request.
+        }
+
+       if(Comment::where('id',$request->comment_id)->where('post_id',$request->post_id)->where('user_id',$user->id)->count() > 0)
+        {
+           Comment::where('id',$request->comment_id)->delete();
+           Comment::where('parent_id',$request->comment_id)->delete();
+           Helper::ActivityDelete($user->id,$request->post_id,'comment');
+           return response()->json(['success'=>true,'message'=>'Successfully Removed'], 200);
+        }
+
+    }
+
+    public function allactivity(Request $request)
+    {
+       $user = JWTAuth::toUser($request->token);
+      $activity=Activity::with('post')->where('user_id',$user->id)->orderBy('id', 'DESC')->get();
+      echo json_encode(array('success'=>true,'activity'=>$activity),200);
+  }
 
 
 

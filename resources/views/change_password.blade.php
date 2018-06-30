@@ -5,38 +5,13 @@
       <section class="think-pnl post-pnl updates">
         <div class="container">
           <div class="row">
-            <div class="col-md-3 col-sm-3 col-xs-12">
-                <div class="profile">
+        
+          @include('left_bar')
 
-                    <div class="pro">
-                      {{Html::image('public/images/user/'.Auth::user()->image)}}
-                    </div> 
-                    <h4>{{Auth::user()->first_name}} {{Auth::user()->last_name}}</h4>
-                     <p><a href="{{url('home')}}">Home</a></p>
-                    <p><a href="#">Activity Log</a></p>
-                    <p><a href="{{url('user/profile')}}">Update Profile</a></p>
-                    <p><a href="{{url('user/change_password')}}">Change Password</a></p>
-                    <p><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" > Logout </a>
-                    </p>
-
-                    <form id="frm-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
-                </div>
-                  <?php $home_location=Session::get('home_location'); ?>
-                 @if($home_location)
-                  <a href="{{url('change_location')}}"> <button type="button" class="btn hme btn-warning">switch to Current location</button></a>
-                  @else
-                   <a href="{{url('change_location')}}"> <button type="button" class="btn hme btn-warning">switch to home location</button></a>
-                  @endif
-
-              
-            </div>
-
-            <div class="col-md-9 col-sm-4 col-xs-12">
+            <div class="col-md-8 col-sm-6 col-xs-12">
               <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20">
 
-            <h1>Update Profile</h1>
+            <h1>Change password</h1>
             <section>
               {!! Form::open(array('url' => 'user/change_password','method' => 'POST','class' => '','files' => true)) !!}
 

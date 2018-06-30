@@ -86,11 +86,11 @@
                             <?php endif; ?>
                           </a>
                      </li>
-                      <li ><a onclick="focus_form(<?php echo e($city_post->id); ?>)"><i class="fa fa-comment" aria-hidden="true"></i> Comment</i> </a></li>   
+                      <li><a onclick="focus_form(<?php echo e($city_post->id); ?>)"> <i class="fa fa-comment" aria-hidden="true"></i> Comment</i> </a></li>   
                    
-                      <li><a onclick="share_post_popup(<?php echo e($city_post->id); ?>)"> <i class="fa fa-share-alt" aria-hidden="true"></i> Share</i></a></li>
+                      <li><a onclick="share_post_popup(<?php echo e($city_post->id); ?>)">  <i class="fa fa-share-alt" aria-hidden="true"></i> Share</i></a></li>
                       
-                        <?php if($city_post->type=='image'): ?>
+                     <?php if($city_post->type=='image'): ?>
                        <li><a href="<?php echo e(url('download_image/'.$city_post->value)); ?>"><i class="fa fa-cloud-download" aria-hidden="true"></i>Download</a></li>
                        <?php endif; ?>
 
