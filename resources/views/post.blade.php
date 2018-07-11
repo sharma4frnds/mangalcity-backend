@@ -27,6 +27,7 @@
                   <div class="c-cover-pnl">
                       <span class="cover-user-name">{{Auth::user()->first_name}} {{Auth::user()->last_name}}</span>
                       <br>
+                      <span class="cover-user-name">{{$city_name->name}}</span>
                   </div>
               </div>
           </div>
@@ -47,10 +48,16 @@
                     <div class="share-area">
                         <div class="up-img"><input type="file" id="npimage" name="image" accept="image/*" onchange="displayImage(this);"></div>
                         <div class="up-vid"><input type="file" name="video" id="npvideo" accept="video/*" onchange="displayVideo(this);"></div>
+                         <div class="up-vid"><input type="file" name="audio" id="npaudio" onchange="displayAudio(this);"></div>
                         <ul>
                          <li><i class="fa fa-file-image-o" aria-hidden="true"></i></li>   
                          <li><i class="fa fa-video-camera" aria-hidden="true"></i></li> 
-                         <li><img id="imagePreview" class="prv"   style="display: none;"/> </li>
+                         <li><i class="fa fa-music" aria-hidden="true"></i></li> 
+                         <li> 
+                            <div id="imagePreviewDiv" style="display: none;"><img id="imagePreview" class="prv" />
+
+                             </div> 
+                         </li>
 
                          <li style="float: right;">
                             <input type="submit" value="Post" class="post-bt"  /> 

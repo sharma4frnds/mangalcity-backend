@@ -82,7 +82,7 @@ token
 <h4>update profile</h4>
 URL:http://emergingncr.com/mangalcity/api/userprofile
 <p>method:post</p>
-<p>parameter:token,first_name,last_name,email,country,state,district,city,image,cover_image,gender,marital_status,current_location,home_city,home_country,home_district,home_state
+<p>parameter:token,first_name,last_name,email,country,state,district,city,image,cover_image,gender,marital_status,current_location,home_city,home_country,home_district,home_state,address,dob,profession
 </p>
 
 <hr>
@@ -138,14 +138,32 @@ token,message,video,image
 
 
 <hr>
-<h2>feeds</h2>
+<h2>feeds city</h2>
 http://emergingncr.com/mangalcity/api/feeds
 <p>method:post </p>
 <p>parameter:token,home_location=1,page=2</p>
-
-
-
 <hr>
+
+<h2>district_feeds</h2>
+http://emergingncr.com/mangalcity/api/district_feeds
+<p>method:post </p>
+<p>parameter:token,home_location=1,page=2</p>
+<hr>
+
+<h2>state_feeds</h2>
+http://emergingncr.com/mangalcity/api/state_feeds
+<p>method:post </p>
+<p>parameter:token,home_location=1,page=2</p>
+<hr>
+
+<h2>country_feeds</h2>
+http://emergingncr.com/mangalcity/api/country_feeds
+<p>method:post </p>
+<p>parameter:token,home_location=1,page=2</p>
+<hr>
+
+
+
 <h2>like</h2>
 http://emergingncr.com/mangalcity/api/dolike
 <p>method:post </p>

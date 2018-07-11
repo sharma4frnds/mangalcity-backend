@@ -27,6 +27,7 @@
                   <div class="c-cover-pnl">
                       <span class="cover-user-name">{{Auth::user()->first_name}} {{Auth::user()->last_name}}</span>
                       <br>
+                      <span class="cover-user-name">{{$city_name->name}}</span>
                   </div>
               </div>
           </div>

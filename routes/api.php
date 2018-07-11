@@ -35,6 +35,9 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::POST('getuser', 'Api\UserController@getAuthUser');
 	Route::POST('/post','Api\PostController@posts');
 	Route::POST('/feeds','Api\PostController@feeds');
+	Route::POST('/district_feeds','Api\PostController@district_feeds');
+	Route::POST('/state_feeds','Api\PostController@state_feeds');
+	Route::POST('/country_feeds','Api\PostController@country_feeds');
 	Route::POST('/dolike','Api\PostController@dolikes');
 	Route::POST('/dodislikes','Api\PostController@dodislikes');	
 	Route::POST('/share_post','Api\PostController@share_post');	

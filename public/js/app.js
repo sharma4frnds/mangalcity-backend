@@ -34,6 +34,10 @@ catch(err) {
                 toastr.error(data.errors.video);
                 //$("#error_div").html(data.errors.video+'<button type="button" class="close" data-dismiss="alert">x</button>');
             }
+            if(data.errors.audio){
+                toastr.error(data.errors.audio);
+                //$("#error_div").html(data.errors.video+'<button type="button" class="close" data-dismiss="alert">x</button>');
+            }
             if(data.errors.error){
                 toastr.error(data.errors.error);
                // $("#error_div").html(data.errors.error+'<button type="button" class="close" data-dismiss="alert">x</button>');
@@ -72,6 +76,9 @@ catch(err) {
 
                 if(data.pdata.type=='video'){
                     hdiv +='<div class="post-video"><video width="100%" height="315" controls><source src="'+data.pdata.value+'" type="video/mp4"></video></div>';
+                }
+                if(data.pdata.type=='audio'){
+                    hdiv +='<div class="post-audio"><audio controls > <source src="'+data.pdata.value+'"></audio></div>';
                 }
                 hdiv +='<div class="share-area">';
                     hdiv +='<ul>';
@@ -403,27 +410,43 @@ function sharePost(post_id){
 
 function displayImage(elem)
 {
-      var image = document.getElementById("npimage");
-        //image= elem.name;
-       $("#queued-files").html('1 image selected').show();
-        $("#imagePreview").show();
-       
-        var reader = new FileReader();
-        reader.onload = function()
-        {
-        var output = document.getElementById('imagePreview');
-        output.src = reader.result;
-        }
-        reader.readAsDataURL(event.target.files[0]);
+  var image = document.getElementById("npimage");
+    //image= elem.name;
+   $("#queued-files").html('1 image selected <i class="fa fa-times" aria-hidden="true" onclick="removedImage(\'image\')"></i>').show();
+    $("#imagePreviewDiv").show();
+   
+    var reader = new FileReader();
+    reader.onload = function()
+    {
+    var output = document.getElementById('imagePreview');
+    output.src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
         
-
 }
+
+function removedImage()
+{
+  $("#npimage").val("");
+  $("#npaudio").val("");
+  $("#npvideo").val("");
+  $("#queued-files").html("");
+  $("#imagePreviewDiv").hide();
+}
+
 
 function displayVideo(elem)
 {
       var image = document.getElementById("npvideo");
        // image= elem.name;
-        $("#queued-files").html('1 video selected').show();
+        $("#queued-files").html('1 video selected <i class="fa fa-times" aria-hidden="true" onclick="removedImage(\'video\')"></i>').show();
+}
+
+function displayAudio(elem)
+{
+      var image = document.getElementById("npvideo");
+       // image= elem.name;
+        $("#queued-files").html('1 Audio selected <i class="fa fa-times" aria-hidden="true" onclick="removedImage(\'audio\')"></i>').show();
 }
 
 

@@ -2,9 +2,9 @@
       <div class="profile">
 
           <div class="pro">
-          	<a href="{{url('user/profile')}}">{{Html::image('public/images/user/'.Auth::user()->image)}}</a>
+          	<a href="{{url('profile/'.Auth::user()->url)}}">{{Html::image('public/images/user/'.Auth::user()->image)}}</a>
           </div> 
-          <h4><a href="{{url('user/profile')}}">{{Auth::user()->first_name}} {{Auth::user()->last_name}} </a></h4>
+          <h4><a href="{{url('profile/'.Auth::user()->url)}}">{{Auth::user()->first_name}} {{Auth::user()->last_name}} </a></h4>
          <p><a href="{{url('home')}}">Home</a></p>
           <p><a href="{{url('activity')}}">Activity Log</a></p>
           <p><a href="{{url('user/profile')}}">Update Profile</a></p>

@@ -9,7 +9,14 @@
             <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20" id="postdiv{{$city_post->id}}">
                 <div class="col-md-6">
                  <div class="pro1">
-                   {{Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))}}
+                  
+
+                    @if($city_post->user->id==Auth::user()->id)
+                       {{Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))}}
+                    @else
+                    <a href="{{url('profile/'.$city_post->user->url)}}">
+                        {{Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))}}</a>
+                    @endif
                     </div>  
                  <span class="pro-name">{{$city_post->user->first_name}} {{$city_post->user->last_name}}</span></br>
                 <span class="post-time">
@@ -46,6 +53,11 @@
                    @if($city_post->type=='video')
                     <div class="post-video">
                        <video width="100%" height="315" controls><source src="public/images/post/post_video/{{$city_post->value}}" type="video/mp4"></video>   
+                    </div>  
+                 @endif
+                @if($city_post->type=='audio')
+                    <div class="post-audio">
+                       <audio controls > <source src="public/images/post/post_audio/{{$city_post->value}}"></audio>;
                     </div>  
                  @endif
                 <div class="share-area">
@@ -98,8 +110,13 @@
                 @if($cmnt->parent_id==0)
                 <div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl" id="commentDiv{{$cmnt->id}}">
                 <div class="col-md-11 cmnt-pnl-ped">
-                 
-                <div class="pro1">{{Html::image('public/images/user/'.$cmnt->user->image,'img',array('class'=>'img-responsive'))}}
+
+                <div class="pro1">
+                    @if($city_post->user->id==Auth::user()->id)
+                    {{Html::image('public/images/user/'.$cmnt->user->image,'img',array('class'=>'img-responsive'))}}
+                    @else
+                    <a href="{{url('profile/'.$cmnt->user->url)}}">{{Html::image('public/images/user/'.$cmnt->user->image,'img',array('class'=>'img-responsive'))}}</a>
+                    @endif
                 </div> 
 
                  <div class="cmnt-box">
@@ -128,8 +145,14 @@
                 @foreach($cmnt->replies as $replie)
                 <div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl" id="commentDiv{{$replie->id}}">
                 <div class="col-md-11 cmnt-pnl-ped" >
-                <div class="pro1">{{Html::image('public/images/user/'.$replie->user->image,'img',array('class'=>'img-responsive'))}}
-                </div>
+            
+                <div class="pro1">
+                    @if($replie->user->id==Auth::user()->id)
+                    {{Html::image('public/images/user/'.$replie->user->image,'img',array('class'=>'img-responsive'))}}
+                    @else
+                    <a href="{{url('profile/'.$replie->user->url)}}">{{Html::image('public/images/user/'.$replie->user->image,'img',array('class'=>'img-responsive'))}}</a>
+                    @endif
+                </div> 
                  <div class="cmnt-box">
                  <span class="pro-name"><b>{{$replie->user->first_name.' '.$replie->user->last_name}}:</b>  : {{$replie->message}}</span><br>
                  <span class="post-time">

@@ -70,8 +70,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::GET('/image_popup/{url}','HomeController@image_popup');
 		Route::GET('/activity','ActivityController@allactivity');
 		Route::GET('/highlights/{slug}','PostController@highlights');
-	
-
+		Route::get('/profile/{url}','PostController@profile');
 	});
 });
 

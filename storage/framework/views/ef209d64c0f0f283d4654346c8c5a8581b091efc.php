@@ -2,9 +2,9 @@
       <div class="profile">
 
           <div class="pro">
-          	<a href="<?php echo e(url('user/profile')); ?>"><?php echo e(Html::image('public/images/user/'.Auth::user()->image)); ?></a>
+          	<a href="<?php echo e(url('profile/'.Auth::user()->url)); ?>"><?php echo e(Html::image('public/images/user/'.Auth::user()->image)); ?></a>
           </div> 
-          <h4><a href="<?php echo e(url('user/profile')); ?>"><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?> </a></h4>
+          <h4><a href="<?php echo e(url('profile/'.Auth::user()->url)); ?>"><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?> </a></h4>
          <p><a href="<?php echo e(url('home')); ?>">Home</a></p>
           <p><a href="<?php echo e(url('activity')); ?>">Activity Log</a></p>
           <p><a href="<?php echo e(url('user/profile')); ?>">Update Profile</a></p>

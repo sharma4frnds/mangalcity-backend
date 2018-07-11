@@ -17,9 +17,12 @@ use App\Model\Feedbacks;
 use App\Model\Activity;
 use Session;
 use Helper;
+use App\user;
+use App\Model\City;
 
 class PostController extends Controller
 {
+
    public function feeds(Request $request)
    {
 
@@ -50,19 +53,44 @@ class PostController extends Controller
     return response()->json(['html'=>$view]);
   }
 
+  $city_name=City::where('id',Auth::user()->city)->first();
+
   $country_posts=Post::where('status',1)->where('tag',4)->limit(10)->get();
   $state_posts=Post::where('status',1)->where('tag',3)->limit(10)->get();
   $district_posts=Post::where('status',1)->where('tag',2)->limit(10)->get();
 
-   	return view('post',compact('city_posts','district_posts','state_posts','country_posts'));
+  return view('post',compact('city_posts','district_posts','state_posts','country_posts','city_name'));
+   }
+
+   public function profile(Request $request,$url)
+   {
+      //get city post
+      $profile=User::where('url',$url)->where('status','active')->first();
+      $city_name=City::where('id',$profile->city)->first();
+      if(!$profile) abort(403, 'Unauthorized action.');
+
+      $city_posts=Post::with(['user','like' => function ($query) use($profile) {
+      $query->where('user_id', $profile->id);}])->where('status',1)->where('user_id',$profile->id)->orderBy('id', 'DESC')->paginate(10);
+
+      if($request->ajax())
+      {
+        $view = view('feed',compact('city_posts'))->render();
+        return response()->json(['html'=>$view]);
+      }
+
+    $country_posts=Post::where('status',1)->where('tag',4)->limit(10)->get();
+    $state_posts=Post::where('status',1)->where('tag',3)->limit(10)->get();
+    $district_posts=Post::where('status',1)->where('tag',2)->limit(10)->get();
+
+   	return view('profile',compact('city_posts','district_posts','state_posts','country_posts','profile','city_name'));
    }
 
 
    //post data
    public function posts(Request $request)
    {
-  	
-    	$validator = Validator::make($request->all(), ['message'=>'max:500','image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048','video' => 'mimes:flv,mp4,mpeg,mov,avi,wmv|max:20480']);
+  
+    	$validator = Validator::make($request->all(), ['message'=>'max:500','image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048','video' => 'mimes:flv,mp4,mpeg,mov,avi,wmv|max:20480','audio' =>'mimes:mp3,mpga,wav']);
 
   	 if ($validator->fails())
         {
@@ -73,9 +101,9 @@ class PostController extends Controller
     		), 400); // 400 being the HTTP code for an invalid request.
         }
 
-    if(empty($request->message) && empty($request->file('image')) && empty($request->file('video')))
+    if(empty($request->message) && empty($request->file('image')) && empty($request->file('video')) && empty($request->file('audio')))
     {
-        return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image or video')), 400);
+        return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image, video or audio')), 400);
     }
     
     $message = isset($request->message) ? $request->message : '';
@@ -120,12 +148,22 @@ class PostController extends Controller
             $post->save();
         }
 
+        if($request->file('audio'))
+        {
+            $audioName = time(). '.' .$request->file('audio')->getClientOriginalExtension();
+            $request->file('audio')->move(base_path() . '/public/images/post/post_audio/', $audioName);
+            $post->type='audio';  
+            $post->value=$audioName;
+            $post->save();
+        }
+
         $type=$post->type;
         $value='';
         $user_image=URL::to('public/images/user/'.Auth::user()->image);
 
         if($type=='image') $value=URL::to('public/images/post/post_image/'.$post->value);
         if($type=='video') $value=URL::to('public/images/post/post_video/'.$post->value);
+        if($type=='audio') $value=URL::to('public/images/post/post_audio/'.$post->value);
 
           Helper::ActivityAdd(Auth::user()->id,$post->id,'post'); 
 
@@ -176,11 +214,13 @@ class PostController extends Controller
       return response()->json(['html'=>$view]);
     }
 
+    $city_name=City::where('id',Auth::user()->city)->first();
+
     $country_posts=Post::where('status',1)->where('tag',4)->limit(10)->get();
     $state_posts=Post::where('status',1)->where('tag',3)->limit(10)->get();
     $district_posts=Post::where('status',1)->where('tag',2)->limit(10)->get();
 
-    return view('highlights',compact('city_posts','district_posts','state_posts','country_posts'));
+    return view('highlights',compact('city_posts','district_posts','state_posts','country_posts','city_name'));
 
    }
 

@@ -36,17 +36,17 @@ class UserController extends Controller
             $hcitys=City::where('district_id',$home_location->home_district)->get();
         }
 
-    	return view('profile',compact('states','districts','citys','home_location','hdistricts','hcitys'));
+    	return view('user_profile',compact('states','districts','citys','home_location','hdistricts','hcitys'));
     }
 
     public function update_profile(Request $request)
     {
         
-    	$this->validate($request, ['first_name' =>'required|max:20','last_name' =>'required|max:20','email' =>'nullable|email','country' =>'required|numeric','state' =>'required|numeric','district' =>'required|numeric','city' =>'required|numeric','city' =>'required|numeric','address' =>'max:50','gender' =>'required','marital_status' =>'required']);
+    	$this->validate($request, ['first_name' =>'required|max:20','last_name' =>'required|max:20','email' =>'nullable|email','country' =>'required|numeric','state' =>'required|numeric','district' =>'required|numeric','city' =>'required|numeric','city' =>'required|numeric','address' =>'max:50','gender' =>'required','marital_status' =>'required','dob'=>'required','profession'=>'max:50']);
 
-          
+           $url=str_slug(Auth::user()->id.' '.trim($request->first_name).' '.trim($request->last_name));
 
-    		User::where('id',Auth::user()->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'address'=>$request->address,'gender'=>$request->gender,'marital_status'=>$request->marital_status,'profile'=>1]);
+    		User::where('id',Auth::user()->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'address'=>$request->address,'gender'=>$request->gender,'marital_status'=>$request->marital_status,'profile'=>1,'dob'=>$request->dob,'profession'=>$request->profession,'url'=>$url]);
 
             if($request->email && empty(Auth::user()->provider))
             {
@@ -84,9 +84,9 @@ class UserController extends Controller
 
 
 
-public function get_change_password(){
-    return view('change_password');
-}
+    public function get_change_password(){
+        return view('change_password');
+    }
 
 
     public function change_password(Request $request)

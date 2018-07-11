@@ -24,7 +24,7 @@ class PostController extends Controller
    public function posts(Request $request)
    {
    	 
-   	   $validator = Validator::make($request->all(), ['message'=>'max:500','image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048','video' => 'mimes:flv,mp4,mpeg,mov,avi,wmv|max:2048']);
+   	   $validator = Validator::make($request->all(), ['message'=>'max:500','image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048','video' => 'mimes:flv,mp4,mpeg,mov,avi,wmv|max:20480','audio' =>'mimes:mp3,mpga,wav']);
 
   	 if ($validator->fails())
         {
@@ -32,9 +32,9 @@ class PostController extends Controller
             // 400 being the HTTP code for an invalid request.
         }
 
-        if(empty($request->message) && empty($request->file('image')) && empty($request->file('video')))
+        if(empty($request->message) && empty($request->file('image')) && empty($request->file('video')) && empty($request->file('audio')))
         {
-            return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image or video')));
+            return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image, audio or video')));
         }
 
           try{
@@ -83,6 +83,15 @@ class PostController extends Controller
             $post->save();
         }
 
+        if($request->file('audio'))
+        {
+            $audioName = time(). '.' .$request->file('audio')->getClientOriginalExtension();
+            $request->file('audio')->move(base_path() . '/public/images/post/post_audio/', $audioName);
+            $post->type='audio';  
+            $post->value=$audioName;
+            $post->save();
+        }
+
         $type=$post->type;
         $value='';
         $user_image=URL::to('public/images/user/'.$user->image);
@@ -111,21 +120,61 @@ class PostController extends Controller
     $city_posts=Post::with(['user','like' => function ($query)use ($user) {
     $query->where('user_id', $user->id);}
 
-   ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->get();
+   ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->paginate(10);;
     //->paginate(10);
-    $country_posts=Post::with(['user','like' => function ($query)use ($user) {
-    $query->where('user_id', $user->id);}])->where('status',1)->where('tag',4)->limit(10)->get();
 
-    $state_posts=Post::with(['user','like' => function ($query)use ($user) {
-    $query->where('user_id', $user->id);}])->where('status',1)->where('tag',3)->limit(10)->get();
-
-    $district_posts=Post::with(['user','like' => function ($query)use ($user) {
-    $query->where('user_id', $user->id);}])->where('status',1)->where('tag',2)->limit(10)->get();
-
-
-  echo json_encode(array('success'=>true,'city_posts'=>$city_posts,'district_posts'=>$district_posts,'state_posts'=>$state_posts,'country_posts'=>$country_posts),200);
+  echo json_encode(array('success'=>true,'city_posts'=>$city_posts),200);
   
    }
+
+  public function district_feeds(Request $request)
+   {
+     $user=JWTAuth::toUser($request->token);
+
+     $city=$user->city; $district=$user->district; $state=$user->state;
+    if($request->home_location==1){
+       $location=Home_location::where('user_id',$user->id)->first();
+       if($location){$city=$location->home_city; $district=$location->home_district; $state=$location->home_state; }
+      }
+
+    $district_posts=Post::with(['user','like' => function ($query)use ($user) {
+    $query->where('user_id', $user->id);}])->where('status',1)->where('tag',2)->paginate(10);
+
+    echo json_encode(array('success'=>true,'district_posts'=>$district_posts),200);
+   }
+
+  public function state_feeds(Request $request)
+   {
+     $user=JWTAuth::toUser($request->token);
+     
+     $city=$user->city; $district=$user->district; $state=$user->state;
+    if($request->home_location==1){
+       $location=Home_location::where('user_id',$user->id)->first();
+       if($location){$city=$location->home_city; $district=$location->home_district; $state=$location->home_state; }
+      }
+
+     $state_posts=Post::with(['user','like' => function ($query)use ($user) {
+    $query->where('user_id', $user->id);}])->where('status',1)->where('tag',3)->paginate(10);
+
+    echo json_encode(array('success'=>true,'state_posts'=>$state_posts),200);
+   }
+
+  public function country_feeds(Request $request)
+   {
+     $user=JWTAuth::toUser($request->token);
+     
+     $city=$user->city; $district=$user->district; $state=$user->state;
+    if($request->home_location==1){
+       $location=Home_location::where('user_id',$user->id)->first();
+       if($location){$city=$location->home_city; $district=$location->home_district; $state=$location->home_state; }
+      }
+
+    $country_posts=Post::with(['user','like' => function ($query)use ($user) {
+    $query->where('user_id', $user->id);}])->where('status',1)->where('tag',4)->paginate(10);
+
+    echo json_encode(array('success'=>true,'country_posts'=>$country_posts),200);
+   }
+
 
   public function dolikes(Request $request)
    {

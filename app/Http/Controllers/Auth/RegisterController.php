@@ -51,11 +51,11 @@ class RegisterController extends FrontController
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'first_name' => 'required|alpha|min:3|max:255',
-            'last_name' => 'required|alpha|string|max:255',
-            'email' => 'string|email|max:255',
+            'first_name' => 'required|alpha|min:3|max:55',
+            'last_name' => 'required|alpha|string|max:25',
+            'email' => 'string|email|max:100',
             'mobile' => 'numeric|digits:10|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'password' => 'required|string|min:6|confirmed|max:25',
         ]);
     }
 
@@ -86,7 +86,10 @@ class RegisterController extends FrontController
  
         $sms=new SmsOtp();
         $sms->verifyOtp($data['mobile'],$otp);
-     
+
+        $user->url=str_slug("$user->id $user->first_name $user->last_name");
+        $user->save();
+
         return $user;
 
     }

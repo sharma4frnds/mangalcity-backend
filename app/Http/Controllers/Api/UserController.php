@@ -67,8 +67,8 @@ class UserController extends Controller
         $credentials = $request->only('first_name', 'last_name','email','mobile', 'password','password_confirmation');
         
         $rules = [
-            'first_name' => 'required|string|min:3|max:255',
-            'last_name' => 'required|string|max:255',
+            'first_name' => 'required|string|min:3|max:50',
+            'last_name' => 'required|string|max:25',
             'email' => 'required|string|email|max:255',
             'mobile' => 'numeric|digits:10|unique:users',
             'password' => 'required|string|min:6|confirmed',
@@ -99,7 +99,9 @@ class UserController extends Controller
         $sms=new SmsOtp();
         $sms->verifyOtp($request->get('mobile'),$otp);
 
-
+        $url=str_slug($user->id.' '.trim($request->first_name).' '.trim($request->last_name));
+        $user->url=$url;
+        $user->save();
        // return response()->json(['status'=>true,'message'=>'User created successfully','data'=>$user]);
 
          return response()->json(['success'=> true, 'message'=> 'Please verify your mobile number'],200);
@@ -127,7 +129,7 @@ class UserController extends Controller
             'last_name' =>'required|string|max:255',
             'email' =>'required|string|email|max:255',
             'provider' =>'required|string|min:6|max:8',
-            'provider_id' =>'required|string|min:6|max:20',
+            'provider_id' =>'required|string|min:6|max:35',
         ];
     
        $validator = Validator::make($credentials, $rules);
@@ -157,6 +159,10 @@ class UserController extends Controller
                          ];
                         $user = new User($user_info);
                         $user->save();
+
+                         $url=str_slug($user->id.' '.trim($request->first_name).' '.trim($request->last_name));
+                         $user->url=$url;
+                         $user->save();
                     }
                     catch(\Exception $e){
                            // do task when error
@@ -232,7 +238,7 @@ public function userprofile(Request $request)
              return  json_encode(array('success'=>false,'errors'=>array('error'=>'User Not Found')));
         }
 
-    $validator = Validator::make($request->all(), ['first_name' =>'required|max:20','last_name' =>'required|max:20','email' =>'email','country' =>'required|numeric','state' =>'required|numeric','district' =>'required|numeric','city' =>'required|numeric','city' =>'required|numeric','address' =>'max:50','gender' =>'required','marital_status' =>'required']);
+    $validator = Validator::make($request->all(), ['first_name' =>'required|max:20','last_name' =>'required|max:20','email' =>'email','country' =>'required|numeric','state' =>'required|numeric','district' =>'required|numeric','city' =>'required|numeric','city' =>'required|numeric','address' =>'max:50','gender' =>'required','marital_status' =>'required','dob'=>'required','profession'=>'max:50']);
 
 
      if($validator->fails())
@@ -241,8 +247,10 @@ public function userprofile(Request $request)
           // 400 being the HTTP code for an invalid request.
       }
 
+      $url=str_slug($user->id.' '.trim($request->first_name).' '.trim($request->last_name));
 
-      User::where('id',$user->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'email'=>$request->email,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'address'=>$request->address,'gender'=>$request->gender,'marital_status'=>$request->marital_status,'profile'=>1]);
+      User::where('id',$user->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'email'=>$request->email,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'address'=>$request->address,'gender'=>$request->gender,'marital_status'=>$request->marital_status,'profile'=>1,'dob'=>$request->dob,'profession'=>$request->profession,'url'=>$url]);
+
 
           if($request->current_location =='active')
           {
