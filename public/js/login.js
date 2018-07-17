@@ -28,7 +28,7 @@ var registerForm = $("#registerForm");
             },
             error: function(data) {
                 $(".ragister_loader").hide();
-                console.log(data.responseText);
+               
                 var obj = jQuery.parseJSON(data.responseText);
                 if (obj.first_name) {
                     $('#register-errors-first_name').html(obj.first_name);
@@ -196,4 +196,82 @@ $("#change_password_btn").click(function(){
     });
 
 
+});
+
+
+//change password send otp
+$("#social_resendotp").click(function(){
+
+  var mobile=$('#sl_mobile').val();
+ 
+    $.ajax({
+        url:siteUrl+'/login/social_send_mobile',
+        type: 'POST',
+        beforeSend: function(xhr){
+        xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+        cache: false,
+        async:false,
+        data: {'mobile':mobile},
+        success: function(data) {
+           toastr.success('Successfully send Otp please enter OTP');
+            $('#lg_mobile_div').hide();
+            $('#social_resendotp').hide();
+            $('#lg_otp_div').show();
+            $('#social_submit_otp').show();
+           var obj = jQuery.parseJSON(data.responseText);
+           if(obj.success.success){
+             toastr.success(obj.success.success);
+          }
+
+         },
+        error: function(data) {
+          var obj = jQuery.parseJSON(data.responseText);
+          if(obj.errors.mobile){
+             toastr.warning(obj.errors.mobile);
+            
+          }
+          if(obj.error){
+            toastr.warning(obj.errors);
+          }
+
+           
+    
+        }
+    });
+});
+
+//social_submit_otp
+
+$("#social_submit_otp").click(function(){
+
+  var mobile=$('#sl_mobile').val();
+  var otp=$('#sl_otp').val();
+    $.ajax({
+        url:siteUrl+'/login/social_submit_otp',
+        type: 'POST',
+        dataType: "json",
+        beforeSend: function(xhr){
+        xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+        cache: false,
+        async:false,
+        data: {'mobile':mobile,'otp':otp},
+        success: function(data) {
+        
+            $('#lg_mobile_div').hide();
+            $('#social_resendotp').hide();
+            $('#lg_otp_div').show();
+            $('#social_submit_otp').show();
+             location.reload();
+         },
+        error: function(data) {
+            var obj = jQuery.parseJSON(data.responseText);
+              if(obj.errors.mobile){
+             toastr.warning(obj.errors.mobile);
+          }
+            if(obj.errors.otp){
+             toastr.warning(obj.errors.otp);
+          }
+    
+        }
+    });
 });

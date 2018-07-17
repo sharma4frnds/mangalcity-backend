@@ -34,7 +34,7 @@
                        @endif
                        <li>
                         <a data-toggle="modal" href="{{url('/reportFeedback/'.$city_post->id)}}" data-target="#myModal">
-                            Give Feedback on This Post</a>
+                            Report spam</a>
                         </li>
                      </ul>
                    </div>
@@ -44,7 +44,7 @@
 
                   @if($city_post->type=='image')
                     <div class="post-img">
-                        <a  data-toggle="modal" href="{{url('image_popup/'.$city_post->value)}}" data-target="#myModal">
+                        <a  data-toggle="modal" href="{{url('image_popup/'.$city_post->id)}}" data-target="#myModal">
                          {{Html::image('public/images/post/post_image/'.$city_post->value,'img',array('class'=>'img-responsive'))}}  
                      </a>
                     </div>

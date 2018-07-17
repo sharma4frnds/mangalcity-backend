@@ -196,5 +196,5 @@
 
 @endsection
 @section('footer_script')
-
+ 
 @endsection

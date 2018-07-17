@@ -4,7 +4,8 @@
     <h4 class="modal-title" id="myModalLabel"></h4>
   </div>
   <div class="modal-body">
-  {{Html::image('public/images/post/post_image/'.$image,'img',array('class'=>'img-responsive'))}}  
+  	<p class="post-txt">{{$post->message}}</p>
+  {{Html::image('public/images/post/post_image/'.$post->value,'img',array('class'=>'img-responsive'))}}  
   </div>
   <div class="modal-footer">
    

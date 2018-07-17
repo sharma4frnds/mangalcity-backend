@@ -55,6 +55,13 @@
                   @if($act->post->type=='video')
                   <li> <video width="100%" height="315" controls><source src="public/images/post/post_video/{{$act->post->value}}" type="video/mp4"></video> </li>
                   @endif
+
+                 @if($act->post->type=='audio')
+                  <li>
+                       <audio controls > <source src="public/images/post/post_audio/{{$act->post->value}}"></audio>
+                   </li>
+                  @endif  
+
                   <li><p class="post-txt">{{$act->post->message}}</p></li>
                   @if($act->type=='comment')
                   <li> </li>

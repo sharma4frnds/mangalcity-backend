@@ -59,6 +59,13 @@
                   <?php if($act->post->type=='video'): ?>
                   <li> <video width="100%" height="315" controls><source src="public/images/post/post_video/<?php echo e($act->post->value); ?>" type="video/mp4"></video> </li>
                   <?php endif; ?>
+
+                 <?php if($act->post->type=='audio'): ?>
+                  <li>
+                       <audio controls > <source src="public/images/post/post_audio/<?php echo e($act->post->value); ?>"></audio>
+                   </li>
+                  <?php endif; ?>  
+
                   <li><p class="post-txt"><?php echo e($act->post->message); ?></p></li>
                   <?php if($act->type=='comment'): ?>
                   <li> </li>

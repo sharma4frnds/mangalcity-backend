@@ -8,7 +8,8 @@
        <?php echo e(csrf_field()); ?>
 
       <div class="">
-          <p class="post-txt"><?php echo e($post->message); ?></p>
+       
+          <textarea  class="post-txt form-control" id="share_message" placeholder="Write something here.. "><?php echo e($post->message); ?></textarea>
             <?php if($post->type=='image'): ?>
               <div class="post-img">
                    <?php echo e(Html::image('public/images/post/post_image/'.$post->value,'img',array('class'=>'img-responsive'))); ?>  
@@ -20,6 +21,12 @@
                  <video width="100%" height="315" controls><source src="public/images/post/post_video/<?php echo e($post->value); ?>" type="video/mp4"></video>   
               </div>  
            <?php endif; ?>
+
+        <?php if($post->type=='audio'): ?>
+           <div class="post-audio">
+              <audio controls="" > <source src="public/images/post/post_audio/<?php echo e($post->value); ?>"></audio>;
+            </div>
+        <?php endif; ?>
       </div>
     
        <input type="hidden" name="post_id" value="<?php echo e($post->id); ?>">

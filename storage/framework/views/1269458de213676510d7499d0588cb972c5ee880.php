@@ -145,5 +145,15 @@
   </div>
 </div>
 </div>
+
 <!-- side-3 -->
+<!-- search -->
+<div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
+<div class="form-group">
+  
+  <?php echo Form::text('search_text', null, array('placeholder' => 'Search Text','class' => 'form-control','id'=>'search_text')); ?>
+
+</div>
+</div>
+
 <!-- end right Side bar -->

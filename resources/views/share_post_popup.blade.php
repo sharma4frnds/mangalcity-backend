@@ -7,7 +7,8 @@
     <form class="form-horizontal">
        {{ csrf_field() }}
       <div class="">
-          <p class="post-txt">{{$post->message}}</p>
+       
+          <textarea  class="post-txt form-control" id="share_message" placeholder="Write something here.. ">{{$post->message}}</textarea>
             @if($post->type=='image')
               <div class="post-img">
                    {{Html::image('public/images/post/post_image/'.$post->value,'img',array('class'=>'img-responsive'))}}  
@@ -19,6 +20,12 @@
                  <video width="100%" height="315" controls><source src="public/images/post/post_video/{{$post->value}}" type="video/mp4"></video>   
               </div>  
            @endif
+
+        @if($post->type=='audio')
+           <div class="post-audio">
+              <audio controls="" > <source src="public/images/post/post_audio/{{$post->value}}"></audio>;
+            </div>
+        @endif
       </div>
     
        <input type="hidden" name="post_id" value="{{$post->id}}">

@@ -20,8 +20,11 @@ Route::get('login/facebook', 'Auth\SocialController@redirectToProvider');
 Route::get('login/facebook/callback', 'Auth\SocialController@handleProviderCallback');
 Route::get('login/google', 'Auth\SocialController@redirectToProvider');
 Route::get('login/google/callback', 'Auth\SocialController@handleProviderCallback');
-Route::get('login/twitter', 'Auth\SocialController@redirectToProvider');
-Route::get('login/twitter/callback', 'Auth\SocialController@handleProviderCallback');
+
+Route::get('login/social_verify_mobile', 'Auth\SocialController@social_mobile');
+Route::POST('login/social_send_mobile', 'Auth\SocialController@social_send_mobile');
+Route::POST('login/social_submit_otp', 'Auth\SocialController@social_submit_otp');
+
 Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 Route::post('auth/ragisterOtp', ['as' => 'ragisterOtp', 'uses' => 'Auth\RegisterController@ragisterOtp']);
 Route::post('auth/resend_otp', ['as' => 'resend_otp', 'uses' => 'Auth\RegisterController@resend_otp']);
@@ -71,6 +74,8 @@ Route::group(['middleware' => 'auth'], function()
 		Route::GET('/activity','ActivityController@allactivity');
 		Route::GET('/highlights/{slug}','PostController@highlights');
 		Route::get('/profile/{url}','PostController@profile');
+
+		Route::POST('/search','SearchController@index');
 	});
 });
 

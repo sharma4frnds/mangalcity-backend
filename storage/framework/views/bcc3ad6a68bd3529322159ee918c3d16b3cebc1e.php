@@ -41,6 +41,8 @@
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script type="text/javascript" src="<?php echo e(asset('public/js/bootstrap.min.js')); ?>"></script>
+   <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">
+   <script src="http://demo.expertphp.in/js/jquery-ui.min.js"></script>
   <script type="text/javascript" src="<?php echo e(asset('public/js/app.js')); ?>"></script>
   <script src="<?php echo e(asset('public/js/toastr.min.js')); ?>"></script>
   <link href="<?php echo e(asset('public/css/toastr.min.css')); ?>" rel="stylesheet">

@@ -35,6 +35,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::POST('getuser', 'Api\UserController@getAuthUser');
 	Route::POST('/post','Api\PostController@posts');
 	Route::POST('/feeds','Api\PostController@feeds');
+	Route::POST('/profile','Api\PostController@profile');
 	Route::POST('/district_feeds','Api\PostController@district_feeds');
 	Route::POST('/state_feeds','Api\PostController@state_feeds');
 	Route::POST('/country_feeds','Api\PostController@country_feeds');
@@ -48,6 +49,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::POST('/activity','Api\PostController@allactivity');
 	Route::POST('/post_comment','Api\PostController@postComment');
 	Route::POST('/delete_comment','Api\PostController@deleteComment');
+	Route::post('auth/social_login_otp', 'Api\UserController@social_login_otp');
+	Route::POST('/search','Api\CommonController@search');
 	
 });
 
@@ -55,6 +58,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 //login
 Route::post('auth/login', 'Api\UserController@login');
 Route::post('auth/social_login', 'Api\UserController@social_login');
+
+
 Route::post('auth/register', 'Api\UserController@register');
 Route::post('auth/resend_otp', 'Api\UserController@resend_otp');
 Route::post('auth/verifyUser', 'Api\UserController@verifyUser');

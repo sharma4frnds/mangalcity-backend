@@ -18,6 +18,7 @@ use Image;
 use Carbon\Carbon;
 use Helper;
 use App\Model\Feedbacks;
+use App\Model\Activity;
 
 class PostController extends Controller
 {
@@ -174,6 +175,30 @@ class PostController extends Controller
 
     echo json_encode(array('success'=>true,'country_posts'=>$country_posts),200);
    }
+
+
+   public function profile(Request $request)
+   {
+       $user = JWTAuth::toUser($request->token);
+      $validator = Validator::make($request->all(), ['url'=>'required']);
+
+       if($validator->fails())
+        {
+          return Response::json(array('success' => false, 'errors' => $validator->getMessageBag()->toArray())); 
+        }
+         $profile=User::where('url',$request->url)->where('status','active')->first();
+        if($profile)
+        {
+          $city_posts=Post::with(['user','like' => function ($query) use($profile) {
+         $query->where('user_id', $profile->id);}])->where('status',1)->where('user_id',$profile->id)->orderBy('id', 'DESC')->paginate(10);
+          echo json_encode(array('success'=>true,'city_posts'=>$city_posts),200);
+        }
+
+      echo json_encode(array('success'=>false,'city_posts'=>''),200);
+
+   }
+
+
 
 
   public function dolikes(Request $request)
@@ -336,6 +361,13 @@ class PostController extends Controller
       {
       Post::where('id',$request->post_id)->increment('share');
       $post=post::where('id',$request->post_id)->first();
+
+      if(empty($request->share_message) && empty($post->type) )
+      {
+        return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image, video or audio')));
+      }
+
+
        $type='';
        $value='';
       if($post->type=='image')
@@ -363,6 +395,19 @@ class PostController extends Controller
         $value=$renameFile;
       }
 
+      if($post->type=='audio')
+      {
+
+        $file=base_path('public/images/post/post_audio/'.$post->value);
+        $ext =explode('.', $post->value);
+        $extension=end($ext);
+        $renameFile=round(microtime(true) * 1000).'.'.$extension;
+        $newFile=base_path('public/images/post/post_audio/'.$renameFile);
+        copy($file,$newFile);
+        $type='audio';
+        $value=$renameFile;
+      }
+      
       $newpost=post::create(['user_id'=>$user->id,'message'=>$post->message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1,'state'=>$user->state,'district'=>$user->district,'city'=>$user->city]);
 
        Helper::ActivityAdd($user->id,$newpost->id,'share');
@@ -492,7 +537,7 @@ class PostController extends Controller
     public function allactivity(Request $request)
     {
        $user = JWTAuth::toUser($request->token);
-      $activity=Activity::with('post')->where('user_id',$user->id)->orderBy('id', 'DESC')->get();
+      $activity=Activity::with('post')->where('user_id',$user->id)->orderBy('id', 'DESC')->paginate(10);
       echo json_encode(array('success'=>true,'activity'=>$activity),200);
   }
 

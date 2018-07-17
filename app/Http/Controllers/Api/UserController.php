@@ -13,6 +13,7 @@ use App\Otp\SmsOtp;
 use Hash;
 use Socialite;
 use Helper;
+use Image;
 class UserController extends Controller
 {   
     private $user;
@@ -109,6 +110,8 @@ class UserController extends Controller
     
 
 //social login 
+
+
   public function social_login(Request $request)
   {
 
@@ -146,6 +149,9 @@ class UserController extends Controller
                 $user = User::where('email', $request->email)->first();
             
                 if (empty($user)) {
+
+                   return response()->json(['success' =>'mobile', 'error' =>'Please enter mobile number']);
+
                    try{
                         $user_info = [
                         'first_name'   =>$request->first_name,
@@ -196,6 +202,48 @@ class UserController extends Controller
 
   }
 
+ public function social_login_otp(Request $request)
+ {
+        if(!$user = JWTAuth::toUser($request->token)) {
+             return  json_encode(array('success'=>false,'errors'=>array('error'=>'User Not Found')));
+        }
+
+        $this->validate($request, ['mobile' => 'required|digits:10' ]);
+        
+        if(!empty($request->mobile) && empty($request->otp))
+        {
+
+           $otp=rand(10000,99999);
+           $vuser=VerifyUser::where('mobile',$request->mobile)->first();
+           if(empty($vuser))
+           {
+              $sms=new SmsOtp();
+              $sms->verifyOtp($request->mobile,$otp);
+              VerifyUser::where('mobile',$request->mobile)->update(['otp'=>$otp]);
+              return response()->json(['success'=>true, 'message'=>'successfully send']);
+           }else
+           {
+              return response()->json(['success'=>false, 'message'=> 'Invalid mobile']);
+           }
+        }
+
+        if(!empty($request->mobile) && !empty($request->otp))
+        {
+            $verifyUser = VerifyUser::where('otp', $request->otp)->where('mobile', $request->mobile)->first();
+            if(isset($verifyUser) ){
+
+                User::where('mobile',$request->mobile)->update(['verified' => 1]);
+                VerifyUser::where('otp', $request->otp)->where('mobile', $request->mobile)->delete();
+
+              return response()->json(['success'=> true, 'message'=>'Your mobile number is verified. You can now login'], 200);
+                 //Your e-mail is verified. You can now login.
+            }else{
+             return response()->json(['success'=> false, 'message'=> 'Invalid otp']);
+            }
+        }
+     
+
+ }
 
 //verify User 
 public function verifyUser(Request $request)
@@ -288,7 +336,7 @@ public function getprofile(Request $request)
      echo json_encode(array('success'=>true,'user'=>$user,'current_location'=>'active',
       'home_location'=>array('home_country'=>$home_location->home_country,'home_state'=>$home_location->home_state,'home_district'=>$home_location->home_district,'home_city'=>$home_location->home_city) ));
   }else{
-     echo json_encode(array('success'=>true,'user'=>$user,'current_location'=>'inactive','home_location'=>array() ));
+     echo json_encode(array('success'=>true,'user'=>$user,'current_location'=>'inactive','home_location'=>new \stdClass() ));
   }
  
 }
@@ -464,7 +512,7 @@ public function forgot_password_otp(Request $request)
          $user->cover_image=$imageName;
          $user->save();
 
-        return response()->json(['success'=>false, 'message'=>'successfully update'],200);
+        return response()->json(['success'=>true, 'message'=>'successfully update'],200);
         
     }
 

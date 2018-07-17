@@ -36,7 +36,7 @@
                        <?php endif; ?>
                        <li>
                         <a data-toggle="modal" href="<?php echo e(url('/reportFeedback/'.$city_post->id)); ?>" data-target="#myModal">
-                            Give Feedback on This Post</a>
+                            Report spam</a>
                         </li>
                      </ul>
                    </div>
@@ -46,7 +46,7 @@
 
                   <?php if($city_post->type=='image'): ?>
                     <div class="post-img">
-                        <a  data-toggle="modal" href="<?php echo e(url('image_popup/'.$city_post->value)); ?>" data-target="#myModal">
+                        <a  data-toggle="modal" href="<?php echo e(url('image_popup/'.$city_post->id)); ?>" data-target="#myModal">
                          <?php echo e(Html::image('public/images/post/post_image/'.$city_post->value,'img',array('class'=>'img-responsive'))); ?>  
                      </a>
                     </div>

@@ -77,4 +77,25 @@ class CommonController extends Controller
   }
 
 
+  public function search(Request $request)
+  {
+    $query=$request->query;
+    if(!$query && $query == '') return response()->json(['success' => false, 'data'=>array()]);
+  
+      $products=User::with('citydata')->where('first_name','LIKE','%'.$query.'%')->get();
+      $data=array();
+     foreach ($products as $product) {
+       $image=URL::to('public/images/user/'.$product->image);
+        $url=$product->url;
+             $data[]=array('name'=>$product->first_name.' '.$product->last_name,'id'=>$product->id,'url'=>$url,'image'=>$image,'city'=>$product->citydata->name);
+        }
+
+        if(!empty($data))
+          return response()->json(['success' => true, 'data'=>$data]);
+        else
+          return response()->json(['success' => false, 'data'=>$data]);
+   
+  }
+
+
 }

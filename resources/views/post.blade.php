@@ -42,8 +42,7 @@
                      <span class="pro-name">Update Your Status</span><br>
                     </div>
 
-                  
-                      <textarea name="message" cols="30" rows="1" class="form-control" placeholder="Write what you wish"></textarea>
+                      <textarea name="message" cols="30" rows="1" class="form-control" placeholder="Write something here..."></textarea>
                       <div id="queued-files" style="display: none;">1 image selected</div>
                     <div class="share-area">
                         <div class="up-img"><input type="file" id="npimage" name="image" accept="image/*" onchange="displayImage(this);"></div>
@@ -53,15 +52,17 @@
                          <li><i class="fa fa-file-image-o" aria-hidden="true"></i></li>   
                          <li><i class="fa fa-video-camera" aria-hidden="true"></i></li> 
                          <li><i class="fa fa-music" aria-hidden="true"></i></li> 
-                         <li> 
+                         <li > 
                             <div id="imagePreviewDiv" style="display: none;"><img id="imagePreview" class="prv" />
 
                              </div> 
                          </li>
+                       
 
                          <li style="float: right;">
                             <input type="submit" value="Post" class="post-bt"  /> 
                             </li> 
+                              <li style="float: right; display: none;" id="mloader">{{Html::image('public/img/bx_loader.gif')}}</li>
                         </ul>
                     </div>
 
@@ -154,6 +155,5 @@ function loadMoreData(page){
         });
 }
 </script>
-
 
 @endsection

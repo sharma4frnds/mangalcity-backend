@@ -2,7 +2,6 @@
 
 <?php $__env->startSection('content'); ?>
 
-
 <section class="think-pnl post-pnl">
       <div class="container">
         <div class="row">

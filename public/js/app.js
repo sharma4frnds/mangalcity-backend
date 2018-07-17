@@ -7,8 +7,13 @@ var siteUrl=$('meta[name=base-url]').attr("content");
         post Images & vedies
     */
 try {
+  
+ 
 $('#feedForm').ajaxForm({ 
         // dataType identifies the expected content type of the server response 
+        beforeSubmit: function() {
+        $("#mloader").show();
+        },
         dataType:  'json', 
         success: processJson,
     });
@@ -19,6 +24,7 @@ catch(err) {
 
     function processJson(data) 
     { 
+       $("#mloader").hide();
         $("#error_div").html('');
         if(data.success==false){
             //$("#error_div").show();
@@ -71,7 +77,7 @@ catch(err) {
 
                 hdiv +='<p class="post-txt">'+data.pdata.message+'</p>';
                 if(data.pdata.type=='image'){
-                    hdiv +='<div class="post-img"> <img src="'+data.pdata.value+'" class="img-responsive"></div>'
+                    hdiv +='<div class="post-img"><a data-toggle="modal" href="'+siteUrl+'/image_popup/'+data.pdata.id+'" data-target="#myModal"> <img src="'+data.pdata.value+'" class="img-responsive"> </a></div>'
                 }
 
                 if(data.pdata.type=='video'){
@@ -389,20 +395,82 @@ function share_post_popup(post_id){
 }
 
 function sharePost(post_id){
+  var share_message=$("#share_message").val();
     $.ajax({
+    dataType : "json",
     url: siteUrl+'/share_post',
     type: 'POST',
     beforeSend: function(xhr){
     xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
     cache: false,
     async:false,
-    data:{'post_id':post_id},
+    data:{'post_id':post_id,'share_message':share_message},
     success:function(data){
         $('#myModal').modal('hide');
         toastr.success('successfully share your post');
+                    var hdiv='';
+            hdiv +='<div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20" id="postdiv'+data.pdata.id+'">';
+                hdiv +='<div class="col-md-6">';
+                 hdiv +='<div class="pro1"><img src="'+data.pdata.image+'" class="img-responsive"></div>';  
+                 hdiv +='<span class="pro-name">'+data.pdata.name+'</span></br>';
+                hdiv +='<span class="post-time">just now</span>'; 
+                hdiv +='</div>';
+            
+                hdiv +='<div class="col-md-6">';
+                    hdiv +='<div class="dropdown">';
+                     hdiv +='<i data-toggle="dropdown" class="fa dropdown-toggle fa fa-ellipsis-v"></i>';
+                     hdiv +='<ul class="dropdown-menu side-fix">';
+                        hdiv +='<li><a onclick="delete_post_popup('+data.pdata.id+')">Delete</a></li>';
+              
+                       hdiv +='<li><a data-toggle="modal" href="'+siteUrl+'/reportFeedback/'+data.pdata.id+'" data-target="#myModal"> Give Feedback on This Post</a></li>';
+                     hdiv +='</ul>';
+                   hdiv +='</div>';
+                hdiv +='</div>';
+
+                hdiv +='<p class="post-txt">'+data.pdata.message+'</p>';
+                if(data.pdata.type=='image'){
+                    hdiv +='<div class="post-img"><a data-toggle="modal" href="'+siteUrl+'/image_popup/'+data.pdata.id+'" data-target="#myModal"> <img src="'+data.pdata.value+'" class="img-responsive"> </a></div>'
+                }
+
+                if(data.pdata.type=='video'){
+                    hdiv +='<div class="post-video"><video width="100%" height="315" controls><source src="'+data.pdata.value+'" type="video/mp4"></video></div>';
+                }
+                if(data.pdata.type=='audio'){
+                    hdiv +='<div class="post-audio"><audio controls > <source src="'+data.pdata.value+'"></audio></div>';
+                }
+                hdiv +='<div class="share-area">';
+                    hdiv +='<ul>';
+                     hdiv +='<li ><a onclick="doLike('+data.pdata.id+',0)" id="dolike'+data.pdata.id+'" ><i class="fa fa-thumbs-o-up"></i> 0</a> </li>';   
+                     hdiv +='<li ><a onclick="dodislikes('+data.pdata.id+',1)" id="dodislikes'+data.pdata.id+'" ><i class="fa fa-thumbs-o-down"></i> 0</a>  </i></li>';   
+                     hdiv +='<li><a onclick="focus_form('+data.pdata.id+')"><i class="fa fa-comment" aria-hidden="true"></i> Comment</i></a> </li>';  
+                     hdiv +='<li><a onclick="share_post_popup('+data.pdata.id+')"><i class="fa fa-share-alt" aria-hidden="true"></i> Share</a> </li>';   
+                    hdiv +='</ul>';
+                hdiv +='</div>';
+           
+
+                  hdiv +='<div class="hr"></div>';
+                  hdiv +='<div id="comment_section'+data.pdata.id+'"></div>';
+
+                    hdiv +='<div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl">';
+                    hdiv +='<div class="col-md-12 cmnt-pnl-ped">';
+                     hdiv +='<div class="pro1"><img src="'+data.pdata.image+'" class="img-responsive"></div>';  
+                     hdiv +='<div class="cmnt-box">';
+                        hdiv +='<textarea rows="2" cols="100" name="comment" id="comment-form'+data.pdata.id+'" placeholder="Leave a comment..."></textarea>';
+                        hdiv +='<button class="post-bt" onclick="postComment('+data.pdata.id+',0)">Post</button>';
+                    hdiv +='</div>';
+                    hdiv +='</div>';
+                hdiv +='</div>';
+                hdiv +='</div>';
+
+             hdiv +='</div>';
+
+
+         $("#currentMessage").prepend(hdiv);
+
+
     },
     error: function(data) {
-           
+        toastr.error('Please enter some text');
         }
   
     });
@@ -546,3 +614,41 @@ function hideReplydiv(comment_id)
 {
     $("#rply"+comment_id).show();
 }
+
+
+
+
+
+
+   $(document).ready(function() {
+     $("#search_text").autocomplete({
+        source: function(request, response) {
+            $.ajax({
+               url: siteUrl+'/search',
+                beforeSend: function(xhr){
+                xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+                dataType: "json",
+                type:"POST",
+                data: {
+                    q : request.term
+                },
+                success: function(data) {
+                    response(data);
+                   
+                }
+            });
+        },
+        minLength: 1,
+       
+    }).data("ui-autocomplete")._renderItem = function (ul, item) {
+    
+            var inner_html = 
+                 '<a href="'+ item.url +'"><div class="list_item_container"><div class="image"><img src="' + 
+                 item.image + '"></div><div class="">' + item.value + '</div><div class="description">' + 
+                 item.city + '</div></div></a>';
+                  return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append(inner_html)
+                .appendTo(ul);
+        };;
+});

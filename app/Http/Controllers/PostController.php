@@ -513,6 +513,15 @@ class PostController extends Controller
                 }
             }
 
+            if($post->type=='audio')
+            {
+                $file='public/images/post/post_audio/'.$post->value;
+                if(file_exists($file))
+                {
+                   @unlink($file);
+                }
+            }
+
            return response()->json(['success'=>true,'message'=>'Successfully Removed'], 200);
         }else{
             return response()->json(['success'=>false,'message'=>'invalid post'], 405);
@@ -563,6 +572,13 @@ class PostController extends Controller
         {
           Post::where('id',$request->post_id)->increment('share');
           $post=post::where('id',$request->post_id)->first();
+
+        if(empty($request->share_message) && empty($post->type) )
+        {
+          return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image, video or audio')), 400);
+        }
+
+
        $type='';
        $value='';
       if($post->type=='image')
@@ -590,12 +606,37 @@ class PostController extends Controller
         $value=$renameFile;
       }
 
-     $newpost= post::create(['user_id'=>Auth::user()->id,'message'=>$post->message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1, 'state'=>Auth::user()->state,'district'=>Auth::user()->district,'city'=>Auth::user()->city]);
+      if($post->type=='audio')
+      {
+
+        $file=base_path('public/images/post/post_audio/'.$post->value);
+        $ext =explode('.', $post->value);
+        $extension=end($ext);
+        $renameFile=round(microtime(true) * 1000).'.'.$extension;
+        $newFile=base_path('public/images/post/post_audio/'.$renameFile);
+        copy($file,$newFile);
+        $type='audio';
+        $value=$renameFile;
+      }
+
+     $newpost= post::create(['user_id'=>Auth::user()->id,'message'=>$request->share_message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1, 'state'=>Auth::user()->state,'district'=>Auth::user()->district,'city'=>Auth::user()->city]);
  
         Helper::ActivityAdd(Auth::user()->id,$newpost->id,'share');
         Helper::postStageChange($request->post_id,$post->share,$post->likes,$post->dislikes);
 
-        return response()->json(['success'=>true,'message'=>'Successfully share'], 200);
+    
+
+        $type=$newpost->type;
+        $value='';
+        $user_image=URL::to('public/images/user/'.Auth::user()->image);
+
+        if($type=='image') $value=URL::to('public/images/post/post_image/'.$newpost->value);
+        if($type=='video') $value=URL::to('public/images/post/post_video/'.$newpost->value);
+        if($type=='audio') $value=URL::to('public/images/post/post_audio/'.$newpost->value);
+
+        $pdata=array('id'=>$newpost->id,'user_id'=>$newpost->user_id,'message'=>$newpost->message,'type'=>$type,'value'=>$value,'likes'=>$newpost->likes,'created_at'=>date('d-M-Y', strtotime($newpost->created_at)) ,'name'=>Auth::user()->first_name.' '.Auth::user()->last_name,'image'=>$user_image);
+
+        echo json_encode(array('success'=>true,'pdata'=>$pdata,'message'=>'Successfully share'),200);
          
         }else
         {

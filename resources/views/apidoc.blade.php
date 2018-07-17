@@ -17,6 +17,12 @@ URL:http://emergingncr.com/mangalcity/api/auth/social_login
 
 
 
+<hr>
+<h4>Social login otpr</h4>
+URL:http://emergingncr.com/mangalcity/api/auth/social_login_otp
+<p>parameter:mobile,otp,token</p>
+<p>Responce:</p>
+<hr>
 
 <h4>Register</h4>
 URL:http://emergingncr.com/mangalcity/api/auth/register
@@ -76,7 +82,7 @@ token
 </p>
 
 <hr>
-<h2>Profile </h2>
+<h2>user Profile </h2>
 
 <hr>
 <h4>update profile</h4>
@@ -163,6 +169,12 @@ http://emergingncr.com/mangalcity/api/country_feeds
 <hr>
 
 
+<h2>profile(get all data )</h2>
+	http://emergingncr.com/mangalcity/api/profile
+<p>method:post </p>
+<p>parameter:token,page=1</p>
+<hr>
+
 
 <h2>like</h2>
 http://emergingncr.com/mangalcity/api/dolike
@@ -182,7 +194,7 @@ http://emergingncr.com/mangalcity/api/dodislikes
 <h2>share post</h2>
 http://emergingncr.com/mangalcity/api/share_post
 <p>method:post </p>
-<p>parameter:token,post_id</p>
+<p>parameter:token,post_id,share_message</p>
 
 <hr>
 <h2>Delete Post</h2>
@@ -222,3 +234,17 @@ http://emergingncr.com/mangalcity/api/post_comment
 http://emergingncr.com/mangalcity/api/delete_comment
 <p>Method:POST </p>
 <p>parameter:token,post_id,comment_id</p>
+
+
+<hr>
+<h2>activity</h2>
+http://emergingncr.com/mangalcity/api/activity
+<p>Method:POST </p>
+<p></p>
+
+
+<hr>
+<h2>Search</h2>
+http://emergingncr.com/mangalcity/api/search
+<p>Method:POST </p>
+<p>parameter:query </p>

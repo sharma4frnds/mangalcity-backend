@@ -10,7 +10,7 @@ use Mail;
 use Session;
 use App\Model\Home_location;
 use Auth;
-
+use App\Model\Post;
 class HomeController extends FrontController
 {
     /**
@@ -86,10 +86,11 @@ class HomeController extends FrontController
     }
 
 
-function image_popup($image)
-{
-    return view('show_image_popup',compact('image'));
-}
+    function image_popup($image)
+    {
+        $post=Post::where('id',$image)->first();
+        return view('show_image_popup',compact('post'));
+    }
 
 
 
