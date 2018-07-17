@@ -19,6 +19,9 @@ use Session;
 use Helper;
 use App\user;
 use App\Model\City;
+use App\Model\State;
+use App\Model\District;
+
 
 class PostController extends Controller
 {
@@ -66,23 +69,19 @@ class PostController extends Controller
    {
       //get city post
       $profile=User::where('url',$url)->where('status','active')->first();
-      $city_name=City::where('id',$profile->city)->first();
+      
       if(!$profile) abort(403, 'Unauthorized action.');
 
-      $city_posts=Post::with(['user','like' => function ($query) use($profile) {
-      $query->where('user_id', $profile->id);}])->where('status',1)->where('user_id',$profile->id)->orderBy('id', 'DESC')->paginate(10);
+      $state_name=State::where('id',$profile->state)->first();
+      $district_name=District::where('id',$profile->district)->first();
+      $city_name=City::where('id',$profile->city)->first();
 
-      if($request->ajax())
-      {
-        $view = view('feed',compact('city_posts'))->render();
-        return response()->json(['html'=>$view]);
-      }
 
     $country_posts=Post::where('status',1)->where('tag',4)->limit(10)->get();
     $state_posts=Post::where('status',1)->where('tag',3)->limit(10)->get();
     $district_posts=Post::where('status',1)->where('tag',2)->limit(10)->get();
 
-   	return view('profile',compact('city_posts','district_posts','state_posts','country_posts','profile','city_name'));
+   	return view('profile',compact('district_posts','state_posts','country_posts','profile','city_name','state_name','district_name'));
    }
 
 

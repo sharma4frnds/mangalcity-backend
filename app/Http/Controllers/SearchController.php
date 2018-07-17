@@ -16,10 +16,14 @@ class SearchController extends Controller
 	
   		$products=User::with('citydata')->where('first_name','LIKE','%'.$query.'%')->get();
     	$data=array();
+   
+    	if($products){
 		 foreach ($products as $product) {
 		 	 $image=URL::to('public/images/user/'.$product->image);
 		 	 $url=URL::to('profile/'.$product->url);
-             $data[]=array('value'=>$product->first_name.' '.$product->last_name,'id'=>$product->id,'url'=>$url,'image'=>$image,'city'=>$product->citydata->name);
+		 	 $city=isset($product->citydata->name) ? $product->citydata->name : '';
+             $data[]=array('value'=>$product->first_name.' '.$product->last_name,'id'=>$product->id,'url'=>$url,'image'=>$image,'city'=>$city);
+    	}
         }
 
 

@@ -46,7 +46,12 @@ class UserController extends Controller
 
            $url=str_slug(Auth::user()->id.' '.trim($request->first_name).' '.trim($request->last_name));
 
-    		User::where('id',Auth::user()->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'address'=>$request->address,'gender'=>$request->gender,'marital_status'=>$request->marital_status,'profile'=>1,'dob'=>$request->dob,'profession'=>$request->profession,'url'=>$url]);
+           $dob_hidden=isset($request->dob_hidden) ? $request->dob_hidden :'0';
+           $mobile_hidden=isset($request->mobile_hidden) ? $request->mobile_hidden :'0';
+           
+    		User::where('id',Auth::user()->id)->update(['first_name'=>$request->first_name,'last_name'=>$request->last_name,'country'=>$request->country,'state'=>$request->state,'district'=>$request->district,'city'=>$request->city,'address'=>$request->address,'gender'=>$request->gender,'marital_status'=>$request->marital_status,'profile'=>1,'dob'=>$request->dob,'profession'=>$request->profession,'url'=>$url,
+                'dob_hidden'=>$dob_hidden,'mobile_hidden'=>$mobile_hidden
+        ]);
 
             if($request->email && empty(Auth::user()->provider))
             {

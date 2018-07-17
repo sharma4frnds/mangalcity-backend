@@ -33,15 +33,25 @@
           </div>
           <?php echo $__env->make('left_bar', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
           <div class="col-md-8 col-sm-6 col-xs-12">
+
             <!-- start activity -->
-            <div id="post-data">
-              <?php echo $__env->make('feed', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
-          <!-- end  activity -->
-            </div>
-              <br/>
-            <div class="ajax-load text-center" style="display:none">
-               <p><?php echo e(Html::image('public/img/loader.gif')); ?> Loading More post</p>
-            </div>
+            <br>
+            <h2>User Profile</h2>
+              <dl class="dl-horizontal">
+                  <dt> Name</dt> <dd><?php echo e($profile->first_name); ?> <?php echo e($profile->last_name); ?></dd>
+                  <dt> Email</dt> <dd> <?php echo e($profile->email); ?> </dd>
+                  <?php if($profile->mobile_hidden=='0'): ?>
+                  <dt> Mobile</dt> <dd><?php echo e($profile->mobile); ?> </dd>
+                   <?php endif; ?>
+                   <?php if($profile->dob_hidden=='0'): ?>
+                  <dt> DOB</dt> <dd><?php echo e($profile->dob); ?> </dd>
+                   <?php endif; ?>
+                  <dt> Gender</dt> <dd><?php echo e($profile->gender); ?> </dd>
+                  <dt> Marital status</dt> <dd><?php echo e($profile->marital_status); ?> </dd>
+                  <dt> Profession</dt> <dd><?php echo e($profile->profession); ?> </dd>
+                  <dt> Address</dt> <dd><?php echo e($profile->address); ?>, <?php echo e($city_name->name); ?>, <?php echo e($state_name->name); ?>, <?php echo e($city_name->name); ?>, India</dd>
+                </dl>
+          
       
           </div>
         </div>

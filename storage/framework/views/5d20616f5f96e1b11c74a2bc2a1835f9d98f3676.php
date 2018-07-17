@@ -8,6 +8,14 @@
         <div class="row">
           <!-- left-pro -->
           <div class="col-md-9">
+            <div class="col-md-12 col-sm-12 col-xs-12 bg-sld">
+              <i class="fa fa-search tp-srh" aria-hidden="true"></i>
+<div class="form-group">
+  
+  <?php echo Form::text('search_text', null, array('placeholder' => 'Search Text','class' => 'form-control','id'=>'search_text')); ?>
+
+</div>
+</div>
           <div class="col-md-12 cv-relt">
               <div class="cover">
                   <div class="over-ic1"><a data-toggle="modal" href="<?php echo e(url('/coverpopup/')); ?>" data-target="#myModal"><i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
@@ -48,7 +56,7 @@
                     <div class="share-area">
                         <div class="up-img"><input type="file" id="npimage" name="image" accept="image/*" onchange="displayImage(this);"></div>
                         <div class="up-vid"><input type="file" name="video" id="npvideo" accept="video/*" onchange="displayVideo(this);"></div>
-                         <div class="up-vid"><input type="file" name="audio" id="npaudio" onchange="displayAudio(this);"></div>
+                         <div class="up-aud"><input type="file" name="audio" accept="audio/*" id="npaudio" onchange="displayAudio(this);"></div>
                         <ul>
                          <li><i class="fa fa-file-image-o" aria-hidden="true"></i></li>   
                          <li><i class="fa fa-video-camera" aria-hidden="true"></i></li> 
@@ -102,6 +110,7 @@
 <div class="modal-dialog">
   <div class="modal-content">
       <!-- Content will be loaded here from "remote.php" file -->
+      <p class="text-center"><?php echo e(Html::image('public/img/bx_loader.gif')); ?></p>
   </div>
 </div>
 </div>
@@ -111,6 +120,13 @@
     $(this).removeData('bs.modal');
   });
 </script>
+<script type="text/javascript">
+  $('#myModal').on('hidden.bs.modal', function () {
+            $('.modal-content').html('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Modal Header</h4></div><div class="modal-body"><p class="text-center"><?php echo e(Html::image("public/img/bx_loader.gif")); ?> </p></div><div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
+    });
+
+</script>
+
 <!-- End Remote popup -->
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('footer_script'); ?>

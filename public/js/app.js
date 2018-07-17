@@ -621,6 +621,9 @@ function hideReplydiv(comment_id)
 
 
    $(document).ready(function() {
+
+    if ( $( "#search_text" ).length ) {
+
      $("#search_text").autocomplete({
         source: function(request, response) {
             $.ajax({
@@ -636,7 +639,9 @@ function hideReplydiv(comment_id)
                     response(data);
                    
                 }
+
             });
+
         },
         minLength: 1,
        
@@ -650,5 +655,19 @@ function hideReplydiv(comment_id)
                 .data("item.autocomplete", item)
                 .append(inner_html)
                 .appendTo(ul);
-        };;
+        };
+      }
 });
+
+
+/* Audio Autho Play */
+$(function(){
+   $("audio").on("play", function() {
+    $("audio").not(this).each(function(index, audio) {
+        audio.pause();
+    });
+  });
+
+ });
+
+/* End  Autho Play */

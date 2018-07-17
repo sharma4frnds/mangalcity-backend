@@ -6,11 +6,9 @@
         <div class="container">
           <div class="row">
 
-           @include('left_bar')
-
+      
             <div class="col-md-8 col-sm-6 col-xs-12">
                  <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20">
-
 
                    <!-- tab -->
 
@@ -55,6 +53,19 @@
                       </div>
 
                       <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Mobile</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control"  value="{{Auth::user()->mobile}}" readonly>
+                              <div class="checkbox">
+                                <label>
+                                  <input id="mobile_hidden" name="mobile_hidden" type="checkbox" value="1" @if(Auth::user()->mobile_hidden==1) checked @endif>
+                                  <small> Hide the mobile number on profile.</small>
+                                </label>
+                              </div>
+                        </div>
+                      </div>
+
+                      <div class="form-group">
                         <label for="inputPassword3" class="col-sm-2 control-label">Gender</label>
                         <div class="col-sm-10">
                          
@@ -69,14 +80,20 @@
                       <div class="form-group">
                         <label for="inputPassword3" class="col-sm-2 control-label">Profession</label>
                         <div class="col-sm-10">
-                          <input type="text" class="form-control"  placeholder="profession" name="profession" required="" value="{{Auth::user()->professsion}}">
+                          <input type="text" class="form-control" placeholder="profession" name="profession" required="" value="{{Auth::user()->profession}}">
                         </div>
                       </div>
 
                       <div class="form-group">
-                        <label for="inputPassword3" class="col-sm-2 control-label">dob</label>
+                        <label for="inputPassword3" class="col-sm-2 control-label">DOB</label>
                         <div class="col-sm-10">
                           <input type="date" class="form-control"  placeholder="dob" name="dob" required="" value="{{Auth::user()->dob}}">
+                          <div class="checkbox">
+                          <label>
+                            <input id="dob_hidden" name="dob_hidden" type="checkbox" value="1" @if(Auth::user()->dob_hidden==1) checked @endif>
+                            <small> Hide the DOB on profile.</small>
+                          </label>
+                        </div>
                         </div>
                       </div>
 

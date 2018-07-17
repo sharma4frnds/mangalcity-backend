@@ -9,20 +9,12 @@
             <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20" id="postdiv{{$city_post->id}}">
                 <div class="col-md-6">
                  <div class="pro1">
-                  
-
-                    @if($city_post->user->id==Auth::user()->id)
-                       {{Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))}}
-                    @else
                     <a href="{{url('profile/'.$city_post->user->url)}}">
                         {{Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))}}</a>
-                    @endif
                     </div>  
-                 <span class="pro-name">{{$city_post->user->first_name}} {{$city_post->user->last_name}}</span></br>
+                 <span class="pro-name"> <a href="{{url('profile/'.$city_post->user->url)}}">{{$city_post->user->first_name}} {{$city_post->user->last_name}}</a></span></br>
                 <span class="post-time">
                   {!! Helper::dateFormate($city_post->created_at); !!}
-
-
                 </span> 
                 </div>
                 <div class="col-md-6">
@@ -57,7 +49,7 @@
                  @endif
                 @if($city_post->type=='audio')
                     <div class="post-audio">
-                       <audio controls > <source src="public/images/post/post_audio/{{$city_post->value}}"></audio>;
+                       <audio controls > <source src="public/images/post/post_audio/{{$city_post->value}}"></audio>
                     </div>  
                  @endif
                 <div class="share-area">

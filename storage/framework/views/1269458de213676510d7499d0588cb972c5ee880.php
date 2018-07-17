@@ -1,9 +1,7 @@
-<!--right Side bar -->
+
 <!-- Country -->
  <div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
-<div class="roted">
-  <h2>Country Highlights</h2>
-</div>
+
 <div class="slide-three">
   <div id="myCarousel2" class="carousel slide" data-ride="carousel">
     
@@ -15,8 +13,9 @@
     </ol>
 
     <!-- Wrapper for slides -->
+    <h4><a href="<?php echo e(url('highlights/country')); ?>" >Country Highlights</a></h4>
     <div class="carousel-inner">
-     <h4><a href="<?php echo e(url('highlights/country')); ?>" >Country Highlights</a></h4>
+     
       <?php $i=0; ?>
        <?php $__currentLoopData = $country_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <div class="item <?php if($i==0): ?>active <?php endif; ?>">
@@ -50,10 +49,9 @@
   </div>
 
 <div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
-<div class="roted">
-  <h2>State Highlights</h2>
-</div>
+
 <div class="slide-three">
+  <h4><a href="<?php echo e(url('highlights/state')); ?>">State Highlights</a></h4>
   <div id="myCarousel3" class="carousel slide" data-ride="carousel">
     
     <!-- Indicators -->
@@ -62,7 +60,7 @@
       <li data-target="#myCarousel" data-slide-to="1"></li>
       <li data-target="#myCarousel" data-slide-to="2"></li>
     </ol>
-    <h4><a href="<?php echo e(url('highlights/state')); ?>">State Highlights</a></h4>
+    
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
       <?php $i=0; ?>
@@ -98,12 +96,11 @@
 <!-- side-2 -->
 <!-- side-3 -->
 <div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
-<div class="roted">
-  <h2>District Highlights</h2>
-</div>
+
 <div class="slide-three">
-  <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <h4><a href="<?php echo e(url('highlights/district')); ?>">District Highlights</a></h4>
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+  
     <!-- Indicators -->
     <ol class="carousel-indicators">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
@@ -143,17 +140,19 @@
       <span class="sr-only">Next</span>
     </a>
   </div>
+  <div class="t-post">
+<img src="http://emergingncr.com/mangalcity/public/images/post/post_image/t1.jpg" class="img-responsive" alt="img">
 </div>
+<div class="t-post">
+<img src="http://emergingncr.com/mangalcity/public/images/post/post_image/t2.jpg" class="img-responsive" alt="img">
+</div>
+</div>
+
+
 </div>
 
 <!-- side-3 -->
+
 <!-- search -->
-<div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
-<div class="form-group">
-  
-  <?php echo Form::text('search_text', null, array('placeholder' => 'Search Text','class' => 'form-control','id'=>'search_text')); ?>
 
-</div>
-</div>
 
-<!-- end right Side bar -->

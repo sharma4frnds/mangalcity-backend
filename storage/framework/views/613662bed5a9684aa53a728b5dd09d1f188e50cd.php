@@ -9,21 +9,12 @@
             <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20" id="postdiv<?php echo e($city_post->id); ?>">
                 <div class="col-md-6">
                  <div class="pro1">
-                  
-
-                    <?php if($city_post->user->id==Auth::user()->id): ?>
-                       <?php echo e(Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))); ?>
-
-                    <?php else: ?>
                     <a href="<?php echo e(url('profile/'.$city_post->user->url)); ?>">
                         <?php echo e(Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))); ?></a>
-                    <?php endif; ?>
                     </div>  
-                 <span class="pro-name"><?php echo e($city_post->user->first_name); ?> <?php echo e($city_post->user->last_name); ?></span></br>
+                 <span class="pro-name"> <a href="<?php echo e(url('profile/'.$city_post->user->url)); ?>"><?php echo e($city_post->user->first_name); ?> <?php echo e($city_post->user->last_name); ?></a></span></br>
                 <span class="post-time">
                   <?php echo Helper::dateFormate($city_post->created_at);; ?>
-
-
 
                 </span> 
                 </div>
@@ -59,7 +50,7 @@
                  <?php endif; ?>
                 <?php if($city_post->type=='audio'): ?>
                     <div class="post-audio">
-                       <audio controls > <source src="public/images/post/post_audio/<?php echo e($city_post->value); ?>"></audio>;
+                       <audio controls > <source src="public/images/post/post_audio/<?php echo e($city_post->value); ?>"></audio>
                     </div>  
                  <?php endif; ?>
                 <div class="share-area">

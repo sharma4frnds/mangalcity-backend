@@ -86,8 +86,9 @@ class CommonController extends Controller
       $data=array();
      foreach ($products as $product) {
        $image=URL::to('public/images/user/'.$product->image);
+        $city=isset($product->citydata->name) ? $product->citydata->name : '';
         $url=$product->url;
-             $data[]=array('name'=>$product->first_name.' '.$product->last_name,'id'=>$product->id,'url'=>$url,'image'=>$image,'city'=>$product->citydata->name);
+             $data[]=array('name'=>$product->first_name.' '.$product->last_name,'id'=>$product->id,'url'=>$url,'image'=>$image,'city'=>$city);
         }
 
         if(!empty($data))

@@ -32,15 +32,25 @@
           </div>
           @include('left_bar')
           <div class="col-md-8 col-sm-6 col-xs-12">
+
             <!-- start activity -->
-            <div id="post-data">
-              @include('feed')
-          <!-- end  activity -->
-            </div>
-              <br/>
-            <div class="ajax-load text-center" style="display:none">
-               <p>{{Html::image('public/img/loader.gif')}} Loading More post</p>
-            </div>
+            <br>
+            <h2> Profile</h2>
+              <dl class="dl-horizontal">
+                  <dt> Name</dt> <dd>{{$profile->first_name}} {{$profile->last_name}}</dd>
+                  <dt> Email</dt> <dd> {{$profile->email}} </dd>
+                  @if($profile->mobile_hidden=='0')
+                  <dt> Mobile</dt> <dd>{{$profile->mobile}} </dd>
+                   @endif
+                   @if($profile->dob_hidden=='0')
+                  <dt> DOB</dt> <dd>{{$profile->dob}} </dd>
+                   @endif
+                  <dt> Gender</dt> <dd>{{$profile->gender}} </dd>
+                  <dt> Marital status</dt> <dd>{{$profile->marital_status}} </dd>
+                  <dt> Profession</dt> <dd>{{$profile->profession}} </dd>
+                  <dt> Address</dt> <dd>{{$profile->address}}, {{$city_name->name}}, {{$state_name->name}}, {{$city_name->name}}, India</dd>
+                </dl>
+          
       
           </div>
         </div>
