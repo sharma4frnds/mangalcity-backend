@@ -1,6 +1,8 @@
 @extends('layouts.master_home')
 @section('title','Mangalcity')
-
+@section('header_css')
+<!-- <link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css"> -->
+@endsection
 @section('content')
 
      <section class="think-pnl">
@@ -104,17 +106,17 @@
                           <div class="main-login-form">
                             <div class="login-group">
                               <div class="form-group">
-                                <input type="text" class="form-control" id="rg_firstname" name="first_name" placeholder="First Name" >
+                                <input type="text" class="form-control required" id="rg_firstname" name="first_name" placeholder="First Name" >
                                    <span class="help-block"><strong id="register-errors-first_name"> </strong></span>
                               </div>
 
                                 <div class="form-group">
-                                <input type="text" class="form-control" id="rg_lastname" name="last_name" placeholder="Last name">
+                                <input type="text" class="form-control required" id="rg_lastname" name="last_name" placeholder="Last name">
                                    <span class="help-block"><strong id="register-errors-last_name"> </strong></span>
                               </div>
 
                               <div class="form-group">
-                                <input type="text" class="form-control" id="rg_mobile" name="mobile" placeholder="Mobile No">
+                                <input type="text" class="form-control required mobile" id="rg_mobile" name="mobile" placeholder="Mobile No" >
                                 <span class="help-block"><strong id="register-errors-mobile"> </strong></span>
                               </div>
                               <div class="form-group">
@@ -122,14 +124,14 @@
                                 <span class="help-block"><strong id="register-errors-email"> </strong></span>
                               </div>
                               <div class="form-group">
-                                <input type="password" class="form-control" id="rg_password" name="password" placeholder="Password">
+                                <input type="password" class="form-control required" id="rg_password" name="password" placeholder="Password">
                                 <span class="help-block"><strong id="register-errors-password"> </strong></span>
                               </div>
                               <div class="form-group">
-                                <input type="password" class="form-control" id="rg_cpassword" name="password_confirmation" placeholder="Confirm Password">
+                                <input type="password" class="form-control required" id="rg_cpassword" name="password_confirmation" placeholder="Confirm Password">
                                 <span class="help-block"><strong id="register-errors-password_confirmation"> </strong></span>
                               </div>
-                              <span class="tm"><input type="checkbox" checked="checked" required="">  I agree to the terms and conditions</span>
+                              <span class="tm"><input type="checkbox" checked="checked" required="" name="agree"> <a href="{{url('page/terms_condition')}}">I agree to the terms and conditions</a></span>
                               
                                <div class="form-group" id="register-errors">
                                     <span class="help-block">
@@ -196,5 +198,5 @@
 
 @endsection
 @section('footer_script')
- 
+
 @endsection

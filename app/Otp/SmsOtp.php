@@ -19,11 +19,11 @@ class SmsOtp
     
     public function verifyOtp($mobile,$otp)
     {
-         $message=urlencode("Your varification code is $otp");
-        $ch =curl_init("$this->smsUrl&mobileno=$mobile&message=$message"); 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $responsech = curl_exec($ch);
-        curl_close($ch);
+        //  $message=urlencode("Your varification code is $otp");
+        // $ch =curl_init("$this->smsUrl&mobileno=$mobile&message=$message"); 
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // $responsech = curl_exec($ch);
+        // curl_close($ch);
     }
     /**
      * Build the message.

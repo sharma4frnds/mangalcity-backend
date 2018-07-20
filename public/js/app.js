@@ -238,7 +238,7 @@ function postComment(post_id,comment_id)
                  
                 hdiv+='<div class="pro1"><img src="'+data.user_image+'" class="img-responsive" alt="img"></div>'; 
                   hdiv+='<div class="cmnt-box">';
-                 hdiv+='<span class="pro-name"><b>'+data.name+':</b> '+data.comment+'</span><br>';
+                 hdiv+='<span class="pro-name"><b>'+data.name+':</b> '+data.comment+'</span>';
                 hdiv+='<span class="post-time"><i class="fa fa-clock-o" aria-hidden="true"></i>'+data.date+'</span>'; 
                  hdiv+='</div>';
                  hdiv+='</div>';
@@ -518,8 +518,6 @@ function displayAudio(elem)
 }
 
 
-
-
 $(document).on('submit', 'form#imageUpload', function (event) {
     event.preventDefault();
         $('.image_ajax_load').show();
@@ -565,12 +563,15 @@ $(document).on('submit', 'form#imageUpload', function (event) {
 
 
 $(document).on('submit', 'form#change_cover_Upload', function (event) {
+       $("#progressbar").css("display", "");
     event.preventDefault();
+
       var form = $(this);
         var data = new FormData($(this)[0]);
         $.ajax({
         url: siteUrl+'/user/change_cover_image',
         beforeSend: function(xhr){
+          showLoader();
         xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
         type: 'POST',              
         data: data,
@@ -583,6 +584,7 @@ $(document).on('submit', 'form#change_cover_Upload', function (event) {
         },
         error: function(request)
         {
+          $("#image_ajax_load").hide();
              if (request.status == 422) {
             // Parser the json response expected
             var $errors = $.parseJSON(request.responseText);
@@ -603,6 +605,9 @@ $(document).on('submit', 'form#change_cover_Upload', function (event) {
  return false; 
 });
 
+function showLoader() {
+    $("#image_ajax_load").css("display", "");
+}
 
 function showReplydiv(comment_id)
 {

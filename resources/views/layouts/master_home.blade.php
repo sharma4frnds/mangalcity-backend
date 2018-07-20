@@ -39,6 +39,8 @@
      <script type="text/javascript" src="{{ asset('public/js/login.js')}}"></script>
        <script src="{{ asset('public/js/toastr.min.js') }}"></script>
   <link href="{{ asset('public/css/toastr.min.css') }}" rel="stylesheet">
+   <script type="text/javascript" src="{{ asset('public/js/jquery.validate.js')}}"></script>
+
   {!! Toastr::render() !!}
     @yield('footer_script')
 </body>

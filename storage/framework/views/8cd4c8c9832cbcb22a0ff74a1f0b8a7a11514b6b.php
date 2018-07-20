@@ -66,6 +66,16 @@
 </div>
 </div>
 
+<!-- Remote popup large -->
+<div id="myModal_large" class="modal fade">
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <p class="text-center"><?php echo e(Html::image('public/img/bx_loader.gif')); ?></p>
+      <!-- Content will be loaded here from "remote.php" file -->
+  </div>
+</div>
+</div>
+
 <script type="text/javascript">
   $('body').on('hidden.bs.modal', '.modal', function () {
     $(this).removeData('bs.modal');

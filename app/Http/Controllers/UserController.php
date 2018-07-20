@@ -13,7 +13,7 @@ use Validator;
 use Hash;
 use Image;
 use File;
-
+use Session;
 class UserController extends Controller
 {
     public function index()
@@ -84,6 +84,28 @@ class UserController extends Controller
                     }
             }
 
+            //update loation
+            $location=Home_location::where('user_id',$request->city)->first();
+            $cCity_name=City::where('id',Auth::user()->city)->first();
+          
+            if(!empty($location))
+            {
+                $city_name=City::where('id',$location->home_city)->first();
+                Session::put('clocation',array('home_city'=>$city_name->name,'current_city'=>$cCity_name->name,'current_location'=>'default','no_of_location'=>2));
+                Session::save();
+
+                if(Session::has('home_location')){
+                    Session::put('home_location',array('home_city'=>$location->home_city,'home_district'=>$location->home_district,'home_state'=>$location->home_state));
+                    Session::save();
+                }
+            }else
+            {
+                Session::put('clocation',array('home_city'=>'','current_city'=>$cCity_name->name,'current_location'=>'default','no_of_location'=>1));
+                Session::save();
+            }
+
+           //end 
+
     		return redirect('/home')->with('message', 'Profile Update  successfully');
     }
 
@@ -121,6 +143,42 @@ class UserController extends Controller
 
     public function uploadImagechanges(Request $request)
     {
+
+        $validator = Validator::make($request->all(), ['image' => 'required']);
+        
+        if($validator->fails()) 
+        {
+            return response()->json(['success'=>true, 'errors'=>$validator->getMessageBag()->toArray()],422);
+        }
+
+        $image = $request->image;  // your base64 encoded
+        $image = str_replace('data:image/png;base64,', '', $image);
+        $image = str_replace(' ', '+', $image);
+        $imageName = str_random(10).'.'.'png';
+         $file='public/images/user/'.$imageName;
+        $vupload= \File::put($file, base64_decode($image));
+
+        $user=User::find(Auth::user()->id);
+
+        if($user->image !='default.default'){
+            $file='public/images/user/'.$user->image;
+            if(file_exists($file))
+            {
+                  
+                   @unlink($file);
+            }
+         }
+ 
+        $user->image=$imageName;
+        $user->save();
+                
+             
+
+
+           return response()->json(['success'=>false, 'message'=>'successfully change images'],200);
+
+        /* file upload */
+
         $validator = Validator::make($request->all(), ['image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1048']);
         
         if($validator->fails()) 
@@ -139,7 +197,6 @@ class UserController extends Controller
             $file='public/images/user/'.$user->image;
             if(file_exists($file))
             {
-                  
                    @unlink($file);
             }
          }
@@ -154,7 +211,34 @@ class UserController extends Controller
     public function change_cover_image(Request $request)
     {
 
-        $validator = Validator::make($request->all(), ['cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1048']);
+        $validator = Validator::make($request->all(), ['cover_image' => 'required']);
+        
+        if($validator->fails()) 
+        {
+            return response()->json(['success'=>true, 'errors'=>$validator->getMessageBag()->toArray()],422);
+        }
+
+        $image = $request->cover_image;  // your base64 encoded
+        $image = str_replace('data:image/png;base64,', '', $image);
+        $image = str_replace(' ', '+', $image);
+        $imageName = str_random(10).'.'.'png';
+        $file='public/images/user/cover/'.$imageName;
+        $vupload= \File::put($file, base64_decode($image));
+
+         $user=User::find(Auth::user()->id);
+
+        $file='public/images/user/cover/'.$user->cover_image;
+        if(file_exists($file))
+        {
+           @unlink($file);
+        }
+
+         $user->cover_image=$imageName;
+         $user->save();
+        return response()->json(['success'=>false, 'message'=>'successfully update'],200);
+
+
+        $validator = Validator::make($request->all(), ['cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5096|dimensions:min_width=850,min_height=351']);
         
         if($validator->fails())
         {
@@ -163,7 +247,7 @@ class UserController extends Controller
 
        $imageName = time(). '.' .$request->file('cover_image')->getClientOriginalExtension();
 
-        Image::make($request->file('cover_image')->getRealPath())->fit(300, 400)->save('public/images/user/cover/'.$imageName);
+        Image::make($request->file('cover_image')->getRealPath())->fit(850, 351)->save('public/images/user/cover/'.$imageName);
     
         $user=User::find(Auth::user()->id);
 
@@ -188,6 +272,14 @@ class UserController extends Controller
     public function coverpopup()
     {
         return view('cover_popup');
+    
     }
+
+ public function imagepopup_demo()
+    {
+        return view('imagepopup_demo');
+    }
+
+    
 
 }

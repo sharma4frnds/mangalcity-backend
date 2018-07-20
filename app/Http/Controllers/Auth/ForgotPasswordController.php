@@ -79,6 +79,12 @@ class ForgotPasswordController extends FrontController
         }
 
         $data=Session::get('mobile_otp');
+        if(empty($data)){
+             $validator->errors()->add('message', 'Invalid otp and mobile number.');
+             return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()],422);
+        }
+        
+        return response()->json(['message' =>'successfully update password,please login',], 200);
 
         if($data['otp']==$request->otp)
         {
@@ -90,10 +96,12 @@ class ForgotPasswordController extends FrontController
                 Session::put('mobile_otp', '');
                 return response()->json(['message' =>'successfully update password,please login',], 200);
              }else{
-                 return response()->json(['error' =>'invalid mobile number', 'code' => 405 ], 405); 
+                $validator->errors()->add('otp', 'invalid mobile number.');
+                return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()],422);
              }
         }else{
-              return response()->json(['error' =>'invalid otp', 'code' => 405 ], 405); 
+             $validator->errors()->add('otp', 'Invalid otp.');
+             return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()],422);
         }
 
 

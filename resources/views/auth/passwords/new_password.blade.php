@@ -46,7 +46,7 @@
                     <div role="tabpanel" class="tab-pane active" id="Section1">
                       <h1 class="hone"><span class="no-text">Choose a new password</span></h1>
                       <div id="form-errors"></div>
-                        <form id="login-form" class="text-left">
+                        <form id="forget_change_password" class="text-left" method="get">
                           <div class="login-form-main-message"></div>
                             <div class="main-login-form">
                             <div class="login-group">

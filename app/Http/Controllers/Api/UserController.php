@@ -462,7 +462,7 @@ public function forgot_password_otp(Request $request)
 
     public function upload_image_changes(Request $request)
     {
-        $validator = Validator::make($request->all(), ['image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1048']);
+        $validator = Validator::make($request->all(), ['image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5048']);
         
         if($validator->fails()) 
         {
@@ -472,7 +472,9 @@ public function forgot_password_otp(Request $request)
       $user = JWTAuth::toUser($request->token);
 
        $imageName = time(). '.' .$request->file('image')->getClientOriginalExtension();
-        Image::make($request->file('image')->getRealPath())->fit(50, 50)->save('public/images/user/'.$imageName);
+       //Image::make($request->file('image')->getRealPath())->save('public/images/user/'.$imageName);
+
+        $request->file('image')->move(base_path().'/public/images/user/', $imageName);
 
         $user=User::find($user->id);
      
@@ -493,7 +495,7 @@ public function forgot_password_otp(Request $request)
 
     public function change_cover_image(Request $request)
     {
-        $validator = Validator::make($request->all(), ['cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1048']);
+        $validator = Validator::make($request->all(), ['cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5048']);
         
         if($validator->fails())
         {
@@ -502,7 +504,8 @@ public function forgot_password_otp(Request $request)
 
        $imageName = time(). '.' .$request->file('cover_image')->getClientOriginalExtension();
 
-        Image::make($request->file('cover_image')->getRealPath())->fit(300, 400)->save('public/images/user/cover/'.$imageName);
+        //Image::make($request->file('cover_image')->getRealPath())->fit(850, 400)->save('public/images/user/cover/'.$imageName);
+        $request->file('image')->move(base_path().'/public/images/user/cover/', $imageName);
         $user1 = JWTAuth::toUser($request->token);
         $user=User::find($user1->id);
 

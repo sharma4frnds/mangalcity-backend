@@ -41,6 +41,8 @@
      <script type="text/javascript" src="<?php echo e(asset('public/js/login.js')); ?>"></script>
        <script src="<?php echo e(asset('public/js/toastr.min.js')); ?>"></script>
   <link href="<?php echo e(asset('public/css/toastr.min.css')); ?>" rel="stylesheet">
+   <script type="text/javascript" src="<?php echo e(asset('public/js/jquery.validate.js')); ?>"></script>
+
   <?php echo Toastr::render(); ?>
 
     <?php echo $__env->yieldContent('footer_script'); ?>

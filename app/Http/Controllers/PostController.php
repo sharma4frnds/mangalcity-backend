@@ -645,7 +645,13 @@ class PostController extends Controller
     }
 
 
+    public function post_view($id)
+    {
+      $post=Post::with(['user','like' => function ($query) {
+      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('id',$id)->orderBy('id', 'DESC')->first();
 
+      return view('post_view_popup',compact('post'));
+    }
 
 }
 

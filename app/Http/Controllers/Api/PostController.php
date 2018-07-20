@@ -408,7 +408,7 @@ class PostController extends Controller
         $value=$renameFile;
       }
       
-      $newpost=post::create(['user_id'=>$user->id,'message'=>$post->message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1,'state'=>$user->state,'district'=>$user->district,'city'=>$user->city]);
+      $newpost=post::create(['user_id'=>$user->id,'message'=>$request->share_message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1,'state'=>$user->state,'district'=>$user->district,'city'=>$user->city]);
 
        Helper::ActivityAdd($user->id,$newpost->id,'share');
 

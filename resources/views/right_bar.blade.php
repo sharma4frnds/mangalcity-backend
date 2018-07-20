@@ -20,18 +20,22 @@
        @foreach($country_posts as $cposts)
       <div class="item @if($i==0)active @endif">
           @if($cposts->type=='image')
-              {{Html::image('public/images/post/post_image/'.$cposts->value,'img',array('class'=>'img-responsive'))}}  
+             <a data-toggle="modal" href="{{url('post_view/'.$cposts->id)}}" data-target="#myModal"> {{Html::image('public/images/post/post_image/'.$cposts->value,'img',array('class'=>'img-responsive'))}} </a> 
 
          @elseif($cposts->type=='video')
             <video width="100%" height="150" controls><source src="public/images/post/post_video/{{$cposts->value}}" type="video/mp4"></video>  
          @else
             <p>{{str_limit($cposts->message, 25)}}</p>
          @endif
+        <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$cposts->id)}}" data-target="#myModal">View more</a>
       </div>
       <?php  $i=$i+1; ?>
 
+    
        @endforeach
 
+      
+               
 
     </div>
 

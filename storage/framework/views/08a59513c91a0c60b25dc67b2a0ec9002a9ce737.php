@@ -36,7 +36,7 @@
 
             <!-- start activity -->
             <br>
-            <h2>User Profile</h2>
+            <h2> Profile</h2>
               <dl class="dl-horizontal">
                   <dt> Name</dt> <dd><?php echo e($profile->first_name); ?> <?php echo e($profile->last_name); ?></dd>
                   <dt> Email</dt> <dd> <?php echo e($profile->email); ?> </dd>

@@ -70,9 +70,17 @@ class HomeController extends FrontController
     {
         $home_location=Session::get('home_location');
         $location=Home_location::where('user_id',Auth::user()->id)->first();
+    
         if($home_location)
         {
+
         Session::forget('home_location');
+        //set location for view
+        $clocation=Session::get('clocation');
+        $clocation1= Session::put('clocation',array('home_city'=>$clocation['home_city'],'current_city'=>$clocation['current_city'],
+            'current_location'=>'default','no_of_location'=>2));
+         Session::save();
+
         return redirect('/home');
         }
 
@@ -80,6 +88,13 @@ class HomeController extends FrontController
         {
             Session::put('home_location',array('home_city'=>$location->home_city,'home_district'=>$location->home_district,'home_state'=>$location->home_state));
             Session::save();
+
+           //set location for view
+            $clocation=Session::get('clocation');
+            $clocation1= Session::put('clocation',array('home_city'=>$clocation['home_city'],'current_city'=>$clocation['current_city'],
+            'current_location'=>'home','no_of_location'=>2));
+            Session::save();
+            
         }
 
       return redirect('/home');

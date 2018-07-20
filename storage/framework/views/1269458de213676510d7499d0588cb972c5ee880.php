@@ -20,18 +20,22 @@
        <?php $__currentLoopData = $country_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <div class="item <?php if($i==0): ?>active <?php endif; ?>">
           <?php if($cposts->type=='image'): ?>
-              <?php echo e(Html::image('public/images/post/post_image/'.$cposts->value,'img',array('class'=>'img-responsive'))); ?>  
+             <a data-toggle="modal" href="<?php echo e(url('post_view/'.$cposts->id)); ?>" data-target="#myModal"> <?php echo e(Html::image('public/images/post/post_image/'.$cposts->value,'img',array('class'=>'img-responsive'))); ?> </a> 
 
          <?php elseif($cposts->type=='video'): ?>
             <video width="100%" height="150" controls><source src="public/images/post/post_video/<?php echo e($cposts->value); ?>" type="video/mp4"></video>  
          <?php else: ?>
             <p><?php echo e(str_limit($cposts->message, 25)); ?></p>
          <?php endif; ?>
+        <a class="post_view_t" data-toggle="modal" href="<?php echo e(url('post_view/'.$cposts->id)); ?>" data-target="#myModal">View more</a>
       </div>
       <?php  $i=$i+1; ?>
 
+    
        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
+      
+               
 
     </div>
 

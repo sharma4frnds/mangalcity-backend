@@ -45,17 +45,20 @@
                 <div class="tab-content forgt">
                     <div role="tabpanel" class="tab-pane active" id="Section1">
                       <h1 class="hone"><span class="no-text">Please enter your mobile number</span></h1>
-                        <form id="login-form" class="text-left">
+                       
+                        <form class="text-left" role="form" id="forget_password" name="forget_password" method="POST" >
                           <div class="login-form-main-message"></div>
                           <div class="main-login-form">
                             <div class="login-group">
                               <div class="form-group">
                                 <label for="lg_mobile" class="sr-only">Mobile No</label>
                                 <input type="text" class="form-control" id="lg_mobile" name="lg_mobile" placeholder="Mobile number" value="">
+                                <span class="help-block"><strong id="forget-errors-mobile"> </strong></span>
                               </div>
                                                           
                             </div>
-                             <button type="button" class="login-button" id="resendotp">Send</button>
+                         
+                             <button type="submit" class="login-button" id="s">Send</button>
                              <br><br>
                             <a href="<?php echo e(url('login')); ?>" class="forget"> Sign in here</a>
                           </div>  

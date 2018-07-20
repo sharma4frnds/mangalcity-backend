@@ -55,7 +55,7 @@
                       </div>
 
                        <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
+                        <div class=" col-sm-12">
                           <button type="submit" class=" upd btn btn-primary">Update</button>
                         </div>
                       </div>

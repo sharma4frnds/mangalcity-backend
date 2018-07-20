@@ -11,6 +11,7 @@ use App\Model\State;
 use App\Model\District;
 use App\User;
 use App\Model\Spam_tag;
+use URL;
 class CommonController extends Controller
 {
    public function getState(Request $request)
@@ -79,8 +80,8 @@ class CommonController extends Controller
 
   public function search(Request $request)
   {
-    $query=$request->query;
-    if(!$query && $query == '') return response()->json(['success' => false, 'data'=>array()]);
+    $query=$request->q;
+    if(!$query && $query == ''){ return response()->json(['success' => false, 'data'=>array()]); }
   
       $products=User::with('citydata')->where('first_name','LIKE','%'.$query.'%')->get();
       $data=array();
