@@ -1,4 +1,4 @@
-<div class="col-md-4 col-sm-3 col-xs-12">
+<div class="col-md-4 col-sm-3 col-xs-12 ped-0">
       <div class="profile">
 
           <div class="pro">
@@ -18,26 +18,8 @@
           </form>
 
       </div>
-       <?php 
-     
-      
-      //  Session::forget('key');
-      //  Session::forget('clocation');
-      //  Session::flush('clocation');
-      //   $clocation=Session::get('clocation');
-      //  print_r($clocation); exit;
-      
-      // if (Session::has('clocation'))
-      // {
-      //   $clocation=Session::get('clocation');
-      //   print_r($clocation);
-      //     echo 'test'; exit;
-      // }
-      //  exit;
-       ?>
-
-       <?php if(Session::has('clocation')): ?>
-       <?php  $clocation=Session::get('clocation');  print_r($clocation);?>
+            <?php if(Session::has('clocation')): ?>
+       <?php  $clocation=Session::get('clocation');  //print_r($clocation);?>
        <?php if($clocation['no_of_location']==2): ?>
         <?php if($clocation['current_location']=='home'): ?>
         <a href="<?php echo e(url('change_location')); ?>"> <button type="button" class="btn hme btn-warning">switch to <?php echo e($clocation['current_city']); ?> location</button></a>
@@ -47,4 +29,13 @@
         <?php endif; ?>
         <?php endif; ?>
         <?php endif; ?>
+
+<div class="col-md-12 col-sm-12 col-xs-12 left-pst">
+<div class="t-post">
+<img src="http://emergingncr.com/mangalcity/public/images/post/post_image/nt1.jpg" class="img-responsive" alt="img">
+</div>
+<div class="t-post">
+<img src="http://emergingncr.com/mangalcity/public/images/post/post_image/nt2.jpg" class="img-responsive" alt="img">
+</div>
+</div>
 </div>  

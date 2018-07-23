@@ -676,3 +676,186 @@ $(function(){
  });
 
 /* End  Autho Play */
+
+
+  // $('body').on('keydown', '#comment-form', function(e) {
+  //     if (e.keyCode == 13 && e.shiftKey != true) {
+  //         e.preventDefault();
+  //             var val = $("#inputComment").val();
+  //       alert("send");
+  //     }
+  // });
+
+  $(document).on('keypress', '.cmnt-box textarea, .cmnt-box input', function(event) {
+     if (event.keyCode == 13 && event.shiftKey == false) {
+
+     post_id,comment_id 
+      var comment = $(this).parent('.cmnt-box').children('textarea').val().trim();
+      var post_id =$(this).parent('.cmnt-box').children('[name="cmnt_post_id"]').val().trim();
+      var comment_id =$(this).parent('.cmnt-box').children('[name="cmnt_comment_id"]').val().trim();
+    
+      if(comment !='' && post_id !='' && comment_id !='' ){
+        
+      var prefix='';
+     prefix_id=post_id;
+    if(comment_id !=0){
+        prefix='_reply';
+         prefix_id=comment_id;
+        var comment=$("#comment-form"+prefix+prefix_id).val();
+    }else{
+    var comment=$("#comment-form"+post_id).val();
+    }
+
+    $.ajax({
+    url: siteUrl+'/postComment',
+    type: 'POST',
+    beforeSend: function(xhr){
+    xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+    cache: false,
+    async:false,
+    data:{'post_id':post_id,'comment_id':comment_id,'comment':comment},
+    success:function(data){
+    var rdata='';
+
+      if(prefix !='_reply')
+      {
+        rdata +='<span class="rpl'+data.comment_id+'"><a onclick="showReplydiv('+data.comment_id+')">Reply</a></span>';
+        rdata +='<div class="rply" id="rply'+data.comment_id+'" style="display:none">';
+           rdata +='<div id="comment_section_reply'+data.comment_id+'"> </div>';
+           rdata +='<div class="col-md-12 cmnt-pnl-ped ped-2">';
+               rdata +='<div class="pro1"><img src="'+data.user_image+'"class="img-responsive" alt="img"> </div>';  
+            rdata +='<div class="cmnt-box">';
+               rdata +='<textarea rows="2" cols="90" name="comment" form="usrform" id="comment-form_reply'+data.comment_id+'" placeholder="write a reply..."> </textarea>';    
+                rdata +='<input type="hidden" name="cmnt_post_id" value="'+data.post_id+'">';
+               rdata +='<input type="hidden" name="cmnt_comment_id" value="'+data.comment_id+'">';
+           rdata +='</div>';
+           rdata +='</div>';
+        rdata +='</div>';
+      }
+
+
+      var hdiv='';
+      hdiv+='<div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl" id="commentDiv'+data.comment_id+'">'
+          hdiv+='<div class="col-md-11 cmnt-pnl-ped">';
+           
+          hdiv+='<div class="pro1"><img src="'+data.user_image+'" class="img-responsive" alt="img"></div>'; 
+            hdiv+='<div class="cmnt-box">';
+           hdiv+='<span class="pro-name"><b>'+data.name+':</b> '+data.comment+'</span>';
+          hdiv+='<span class="post-time"><i class="fa fa-clock-o" aria-hidden="true"></i>'+data.date+'</span> '+rdata; 
+           hdiv+='</div>';
+           hdiv+='</div>';
+        
+          hdiv+='<div class="dropdown">';
+           hdiv+='<i data-toggle="dropdown" class="fa dropdown-toggle fa-angle-down"></i>';
+           hdiv+='<ul class="dropdown-menu side-fix">';
+             hdiv+='<li><a onclick="deleteComment('+post_id+','+data.comment_id+')">Delete</a></li>';
+           hdiv+='</ul>';
+         hdiv+='</div>';
+
+       hdiv+='</div>';
+
+       $("#comment_section"+prefix+prefix_id).append(hdiv);
+       $("#comment-form"+prefix+prefix_id).val('');
+        toastr.success('Successfully posted');
+      },
+      error: function(data) {
+              var hdiv='';
+               var obj = jQuery.parseJSON(data.responseText);
+                num= Math.floor(Math.random() * 1000) + 1 ;
+                  hdiv +='<div class="message-notification" id="post_comment_'+num+'">';
+                  hdiv +='<div class="message-reported">'+obj.errors.comment;
+                   hdiv +='<a onclick="deleteNotification('+num+')" title="Close"><div class="delete_btn"></div></a>';
+                   hdiv +='</div>';
+                   hdiv +='</div>';
+                   
+                $("#comment_section"+prefix+prefix_id).append(hdiv);
+          }
+    
+      });
+
+
+
+      }else{
+         $(this).parent('.cmnt-box').children('textarea').val('');
+         toastr.error('Please write comment');
+
+      }
+
+    }
+  });
+
+
+$(document).ready(function(){
+
+    // initialize tooltip
+    $( ".content_like span" ).tooltip({
+        track:true,
+        open: function( event, ui ) {
+              var id = this.id;
+              var split_id = id.split('_');
+              var post_id = split_id[1];
+        
+              $.ajax({
+                  url:'likeuser',
+                  type:'post',
+                  beforeSend: function(xhr){
+                  xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+                  cache: false,
+                  async:false,
+                  data:{post_id:post_id,'type':'0'},
+                  success: function(response){
+                      // Setting content option
+                      $("#"+id).tooltip('option','content',response);
+                        
+                  }
+              });
+        }
+    });
+
+    $(".content_like span").mouseout(function(){
+        // re-initializing tooltip
+        $(this).attr('title','Please wait...');
+        $(this).tooltip();
+        $('.ui-tooltip').hide();
+    });
+
+
+
+
+//content_dislike
+
+    $( ".content_dislike span" ).tooltip({
+        track:true,
+        open: function( event, ui ) {
+              var id = this.id;
+              var split_id = id.split('_');
+              var post_id = split_id[1];
+        
+              $.ajax({
+                  url:'likeuser',
+                  type:'post',
+                  beforeSend: function(xhr){
+                  xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+                  cache: false,
+                  async:false,
+                  data:{post_id:post_id,'type':'1'},
+                  success: function(response){
+                      // Setting content option
+                      $("#"+id).tooltip('option','content',response);
+                        
+                  }
+              });
+        }
+    });
+
+    $(".content_dislike span").mouseout(function(){
+        // re-initializing tooltip
+        $(this).attr('title','Please wait...');
+        $(this).tooltip();
+        $('.ui-tooltip').hide();
+    });
+
+    
+});
+
+

@@ -85,16 +85,18 @@ class UserController extends Controller
             }
 
             //update loation
-            $location=Home_location::where('user_id',$request->city)->first();
+            $location=Home_location::where('user_id',Auth::user()->id)->first();
+
             $cCity_name=City::where('id',Auth::user()->city)->first();
           
-            if(!empty($location))
+            if($location)
             {
+
                 $city_name=City::where('id',$location->home_city)->first();
                 Session::put('clocation',array('home_city'=>$city_name->name,'current_city'=>$cCity_name->name,'current_location'=>'default','no_of_location'=>2));
                 Session::save();
-
-                if(Session::has('home_location')){
+                
+                  if(Session::has('home_location')){
                     Session::put('home_location',array('home_city'=>$location->home_city,'home_district'=>$location->home_district,'home_state'=>$location->home_state));
                     Session::save();
                 }

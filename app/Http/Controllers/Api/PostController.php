@@ -119,7 +119,11 @@ class PostController extends Controller
       }
 
     $city_posts=Post::with(['user','like' => function ($query)use ($user) {
-    $query->where('user_id', $user->id);}
+    $query->where('user_id', $user->id);},'comment'=>function($query) 
+   {
+       $query->leftJoin('users', 'users.id', '=', 'comments.user_id');
+       $query->select('comments.*', 'users.first_name','users.last_name','users.image');
+    }
 
    ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->paginate(10);;
     //->paginate(10);
@@ -508,7 +512,7 @@ class PostController extends Controller
          
             Helper::ActivityAdd($user->id,$request->post_id,'comment');
                 
-           return response()->json(['success'=>true,'comment_id'=>$comment->id,'comment'=>$request->comment,'post_id'=>$request->post_id,'user_image'=>$image,'name'=>$name->first_name.' '.$name->last_name,'date'=>'just now'], 200);
+           return response()->json(['success'=>true,'comment_id'=>$comment->id,'comment'=>$request->comment,'post_id'=>$request->post_id,'user_image'=>$image,'name'=>$user->first_name.' '.$user->last_name,'date'=>'just now'], 200);
         }
 
     }

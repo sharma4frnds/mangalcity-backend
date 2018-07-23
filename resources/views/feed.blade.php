@@ -7,12 +7,12 @@
             ?>
 
             <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20" id="postdiv{{$city_post->id}}">
-                <div class="col-md-6">
+                <div class="col-md-6 ped-0">
                  <div class="pro1">
                     <a href="{{url('profile/'.$city_post->user->url)}}">
                         {{Html::image('public/images/user/'.$city_post->user->image,'img',array('class'=>'img-responsive'))}}</a>
                     </div>  
-                 <span class="pro-name"> <a href="{{url('profile/'.$city_post->user->url)}}">{{$city_post->user->first_name}} {{$city_post->user->last_name}}</a></span></br>
+                 <span class="pro-name"> <a href="{{url('profile/'.$city_post->user->url)}}">{{$city_post->user->first_name}} {{$city_post->user->last_name}}</a></span>
                 <span class="post-time">
                   {!! Helper::dateFormate($city_post->created_at); !!}
                 </span> 
@@ -56,7 +56,8 @@
 
                     <ul>
 
-                     <li><a onclick="doLike({{$city_post->id}},0)" id="dolike{{$city_post->id}}" > 
+
+                     <li><a  onclick="doLike({{$city_post->id}},0)" id="dolike{{$city_post->id}}" > 
                       @if(isset($city_post->like))
                             @if($city_post->like->type==0)
                                  <i class="fa fa-thumbs-up"></i> {{$city_post->likes}} 
@@ -69,6 +70,12 @@
                             @endif
                          </a> 
                      </li>
+
+                     <li> <div class='content_like'>
+                            <span title='Please wait..' id='clike_{{$city_post->id}}'>Like </span>
+                        </div>
+                    </li>
+                   
 
                      <li>
                         <a onclick="dodislikes({{$city_post->id}},1)" id="dodislikes{{$city_post->id}}" > 
@@ -83,6 +90,13 @@
                             @endif
                           </a>
                      </li>
+                     
+                     <li>
+                        <div class='content_dislike'>
+                            <span title='Please wait..' id='cdislike_{{$city_post->id}}'>Dislike </span>
+                        </div>
+                     </li>
+                    
                       <li><a onclick="focus_form({{$city_post->id}})"> <i class="fa fa-comment" aria-hidden="true"></i> Comment</i> </a></li>   
                    
                       <li><a onclick="share_post_popup({{$city_post->id}})">  <i class="fa fa-share-alt" aria-hidden="true"></i> Share</i></a></li>
@@ -98,7 +112,14 @@
 
                 <div id="comment_section{{$city_post->id}}">
                 @if(isset($city_post->comment[0]))
+                <?php $cmnt_cout=0; $tcomment= count($city_post->comment); ?>
+                 @if($tcomment>5) 
+                <div id="comment_sectionhghg"> view {{$tcomment-5}} more comments<div>
+                @endif
                 @foreach($city_post->comment as $cmnt)
+               
+                @if($cmnt_cout<5)
+
                 @if($cmnt->parent_id==0)
                 <div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl" id="commentDiv{{$cmnt->id}}">
                 <div class="col-md-11 cmnt-pnl-ped">
@@ -112,7 +133,7 @@
                 </div> 
 
                  <div class="cmnt-box">
-                 <span class="pro-name"><b>{{$cmnt->user->first_name.' '.$cmnt->user->last_name}}:</b> {{$cmnt->message}}</span><br>
+                 <span class="pro-name"><b>{{$cmnt->user->first_name.' '.$cmnt->user->last_name}}:</b> {{$cmnt->message}}</span>
                     
                 <span class="post-time">
                    <i class="fa fa-clock-o" aria-hidden="true"></i> 
@@ -146,7 +167,7 @@
                     @endif
                 </div> 
                  <div class="cmnt-box">
-                 <span class="pro-name"><b>{{$replie->user->first_name.' '.$replie->user->last_name}}:</b>  : {{$replie->message}}</span><br>
+                 <span class="pro-name"><b>{{$replie->user->first_name.' '.$replie->user->last_name}}:</b>  : {{$replie->message}}</span>
                  <span class="post-time">
                    <i class="fa fa-clock-o" aria-hidden="true"></i> 
                     {!! Helper::dateFormate($replie->created_at); !!}
@@ -170,7 +191,10 @@
                         <div class="pro1">{{Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))}} </div>  
                      <div class="cmnt-box">
                         <textarea rows="2" cols="90" name="comment" form="usrform" id="comment-form_reply{{$cmnt->id}}" placeholder="write a reply..."> </textarea>
-                        <button class="post-bt" onclick="postComment({{$city_post->id}},{{$cmnt->id}})">Reply</button>
+                        <input type="hidden" name="cmnt_post_id"  value="{{$city_post->id}}">
+                        <input type="hidden" name="cmnt_comment_id" value="{{$cmnt->id}}">
+
+                        
                     </div>
                     </div>
                  </div>
@@ -181,8 +205,9 @@
                     <div class="col-md-12 cmnt-pnl-ped ped-2">
                         <div class="pro1">{{Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))}} </div>  
                      <div class="cmnt-box">
-                        <textarea rows="2" cols="90" name="comment" form="usrform" id="comment-form_reply{{$cmnt->id}}" placeholder="write a reply..."> </textarea>
-                        <button class="post-bt" onclick="postComment({{$city_post->id}},{{$cmnt->id}})">Reply</button>
+                        <textarea rows="2" cols="90" name="comment" form="usrform" id="comment-form_reply{{$cmnt->id}}" placeholder="write a reply..."> </textarea>    
+                         <input type="hidden" name="cmnt_post_id"  value="{{$city_post->id}}">
+                        <input type="hidden" name="cmnt_comment_id" value="{{$cmnt->id}}">
                     </div>
                     </div>
                  </div>
@@ -192,6 +217,9 @@
                 <!-- End Reply -->
             </div>
             @endif
+            @endif
+            <?php $cmnt_cout=$cmnt_cout+1; ?>
+
             @endforeach
             @endif
          </div>
@@ -200,9 +228,11 @@
             <div class="col-md-12 col-sm-4 col-xs-12 top-pd-20 cmnt-pnl">
                 <div class="col-md-12 cmnt-pnl-ped">
                  <div class="pro1">{{Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))}} </div>  
-                 <div class="cmnt-box">
+                <div class="cmnt-box">
                     <textarea rows="2" cols="100" name="comment" id="comment-form{{$city_post->id}}" placeholder="Leave a comment..."></textarea>
-                    <button class="post-bt" onclick="postComment({{$city_post->id}},0)">Post</button>
+                    <input type="hidden" name="cmnt_post_id"  value="{{$city_post->id}}">
+                    <input type="hidden" name="cmnt_comment_id" value="0">
+                 
                 </div>
                 </div>
             </div>

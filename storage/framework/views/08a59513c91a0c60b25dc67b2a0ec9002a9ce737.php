@@ -6,27 +6,29 @@
       <div class="container">
         <div class="row">
           <!-- left-pro -->
-          <div class="col-md-9">
-          <div class="col-md-12 cv-relt">
+          <div class="col-md-9 ped-0">
+          <div class="col-md-12 cv-relt ped-15-0">
               <div class="cover">
-                  <div class="over-ic1"><a data-toggle="modal" href="<?php echo e(url('/coverpopup/')); ?>" data-target="#myModal"><i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
+                <?php if($profile->user_id==Auth::user()->id): ?>
+                  <div class="over-ic1"><a data-toggle="modal" href="<?php echo e(url('/coverpopup/')); ?>" data-target="#myModal_large"><i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
                   </div>
-
+                <?php endif; ?>
                   <?php echo e(Html::image('public/images/user/cover/'.$profile->cover_image,'img',array('class'=>'img-responsive'))); ?>
 
               </div>
               <div class="cover-pro">
-
+                  <?php if($profile->user_id==Auth::user()->id): ?>
                   <div class="over-ic">
-                      <a data-toggle="modal" href="<?php echo e(url('/imagepopup/')); ?>" data-target="#myModal">
+                      <a data-toggle="modal" href="<?php echo e(url('/imagepopup/')); ?>" data-target="#myModal_large">
                           <i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
                   </div>
+                  <?php endif; ?>
                   <?php echo e(Html::image('public/images/user/'.$profile->image,'img',array('class'=>'img-responsive'))); ?>
 
 
-                  <div class="c-cover-pnl">
-                      <span class="cover-user-name"><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?></span><br>
-                      <span class="cover-user-name"><?php echo e($city_name->name); ?></span>
+                  <div class="c-cover-pnl est">
+                      <span class="cover-user-name"><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?></span>
+                      <span class="cover-user-name">(<?php echo e($city_name->name); ?>)</span>
                       <br>
                   </div>
               </div>
@@ -34,8 +36,7 @@
           <?php echo $__env->make('left_bar', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
           <div class="col-md-8 col-sm-6 col-xs-12">
 
-            <!-- start activity -->
-            <br>
+            <div class="profile-bg">
             <h2> Profile</h2>
               <dl class="dl-horizontal">
                   <dt> Name</dt> <dd><?php echo e($profile->first_name); ?> <?php echo e($profile->last_name); ?></dd>
@@ -51,7 +52,7 @@
                   <dt> Profession</dt> <dd><?php echo e($profile->profession); ?> </dd>
                   <dt> Address</dt> <dd><?php echo e($profile->address); ?>, <?php echo e($city_name->name); ?>, <?php echo e($state_name->name); ?>, <?php echo e($city_name->name); ?>, India</dd>
                 </dl>
-          
+          </div>
       
           </div>
         </div>
@@ -75,10 +76,27 @@
 </div>
 </div>
 
+<!-- Remote popup large -->
+<div id="myModal_large" class="modal fade">
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <p class="text-center"><?php echo e(Html::image('public/img/bx_loader.gif')); ?></p>
+      <!-- Content will be loaded here from "remote.php" file -->
+  </div>
+</div>
+</div>
+
 <script type="text/javascript">
   $('body').on('hidden.bs.modal', '.modal', function () {
     $(this).removeData('bs.modal');
   });
+</script>
+
+<script type="text/javascript">
+
+  $('#myModal_large').on('hidden.bs.modal', function () {
+            $('.modal-content').html('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title"> </h4></div><div class="modal-body"><p class="text-center"><?php echo e(Html::image("public/img/bx_loader.gif")); ?> </p></div><div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
+    });
 </script>
 <!-- End Remote popup -->
 <?php $__env->stopSection(); ?>

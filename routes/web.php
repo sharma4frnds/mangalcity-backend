@@ -50,7 +50,6 @@ Route::group(['middleware' => 'auth'], function()
 	Route::group(['middleware' => 'user'], function()
 	{
 		Route::get('/user','UserController@index');
-		Route::get('/imagepopup_demo','UserController@imagepopup_demo');
 		Route::get('/imagepopup','UserController@imagepopup');
 		Route::get('/coverpopup','UserController@coverpopup');
 		Route::GET('/user/change_password','UserController@get_change_password');
@@ -60,9 +59,9 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('/home','PostController@feeds');
 		Route::POST('/post','PostController@posts');
 		Route::GET('/post_view/{url}','PostController@post_view');
-		
 		Route::POST('/dolike','PostController@dolikes');
 		Route::POST('/dodislikes','PostController@dodislikes');
+		Route::POST('/likeuser','PostController@likeuser');
 		Route::POST('/postComment','PostController@postComment');
 		Route::POST('/deleteComment','PostController@deleteComment');
 		Route::GET('/reportFeedback/{post_id}','PostController@reportPopup');

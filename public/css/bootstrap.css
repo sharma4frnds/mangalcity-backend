@@ -1599,7 +1599,7 @@ pre code {
 }
 @media (min-width: 1200px) {
   .container {
-    width: 1170px;
+    width: 970px !important;
   }
 }
 .container-fluid {
@@ -1608,6 +1608,9 @@ pre code {
   margin-right: auto;
   margin-left: auto;
 }
+.container {
+    width: 970px !important;
+  }
 .row {
   margin-right: -15px;
   margin-left: -15px;

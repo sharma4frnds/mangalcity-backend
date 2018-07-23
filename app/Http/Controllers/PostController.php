@@ -653,5 +653,28 @@ class PostController extends Controller
       return view('post_view_popup',compact('post'));
     }
 
+    public function likeuser(Request $request)
+    {
+       $validator = Validator::make($request->all(), ['post_id'=>'required','type'=>'required']);
+
+      if($validator->fails())
+        {
+          return Response::json(array(
+          'success' => false,
+          'errors' => $validator->getMessageBag()->toArray()
+        ), 400);
+        }
+
+        $users=Like::with(['user'])->where('post_id',$request->post_id)->where('type',$request->type)->get();
+        if($request->type==0) $typet='Like';
+        else $typet='Dislike';
+        $html='<div><span> '.$typet.' </span><br/>';
+        foreach ($users as $key => $value) {
+              $html .= "<span>".$value->user->first_name.' '.$value->user->last_name."</span><br/>";
+        }
+      $html .='<div>';
+      echo $html;
+    }
+
 }
 

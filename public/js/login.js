@@ -330,36 +330,119 @@ $("#change_password_btn").click(function(){
 
 //social login get mobile
 
-  $("#get_social_mobile").validate({
-    debug: true,
-    rules: {
-      // simple rule, converted to {required:true}
-         sl_mobile:{
-              required: true,
-              number: true,
-              minlength:10,
-              maxlength:10
-          }
-       
-
-    },
-     submitHandler: function(form) {
-      form.submit();
-     }
-});
-
 
 
 });
 
 
 
+ $(document).ready(function () {
+  try{
+     $("#social_mobileform").validate({
+         ignore: ":hidden",
+         rules: {
+             sl_mobile: {
+                 required: true,
+                 minlength: 1,
+                 maxlength: 10,
+                 number: true
+             }
+         },
+         submitHandler: function (form) {
+          $(".gif-loader").show();
+          var mobile=$("#sl_mobile").val()
+            $.ajax({
+            url:siteUrl+'/login/social_send_mobile',
+            type: 'POST',
+            beforeSend: function(xhr){
+            xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));
+
+            },
+            cache: false,
+            //async:false,
+            data: {'mobile':mobile},
+            success: function(data) {
+               toastr.success('Successfully send Otp please enter OTP');
+               $(".gif-loader").hide();
+                $('#social_mobileform').hide();
+                $('#social_otpform').show();
+                return false;
+             },
+            error: function(data) {
+               $(".gif-loader").hide();
+              var obj = jQuery.parseJSON(data.responseText);
+              if(obj.errors.mobile){
+                $("#social_mobile_error").html('<br><div class="alert alert-warning alert-dismissible  show" role="alert">'+obj.errors.mobile+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+              }
+              if(obj.error){
+                $("#social_mobile_error").html('<br><div class="alert alert-warning alert-dismissible  show" role="alert">'+obj.errors+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+              }
+
+               return false;
+        
+            }
+
+        });
+             
+         }
+
+     });
+   }catch(err){}
+
+ });
 
 
 
 
+ $(document).ready(function () {
+  try{
+     $("#social_otpform").validate({
+         ignore: ":hidden",
+         rules: {
+             sl_mobile: {
+                 required: true,
+                 minlength: 5,
+                 maxlength: 5,
+                 number: true
+             }
+         },
+         submitHandler: function (form) {
+          $(".gif-loader1").show();
+            var mobile=$('#sl_mobile').val();
+            var otp=$('#sl_otp').val();
+              $.ajax({
+                  url:siteUrl+'/login/social_submit_otp',
+                  type: 'POST',
+                  dataType: "json",
+                  beforeSend: function(xhr){
+                  xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+                  cache: false,
+                  async:false,
+                  data: {'mobile':mobile,'otp':otp},
+                  success: function(data) {
+                       location.reload();
+                        return false;
+                   },
+                  error: function(data) {
+                    $(".gif-loader1").hide();
+                      var obj = jQuery.parseJSON(data.responseText);
+                        if(obj.errors.mobile){
+                            $("#social_otp_error").html('<br><div class="alert alert-warning alert-dismissible  show" role="alert">'+obj.errors.mobile+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                        }
 
+                      if(obj.errors.otp){
+                       $("#social_otp_error").html('<br><div class="alert alert-warning alert-dismissible  show" role="alert">'+obj.errors.otp+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                    }
+              
+                  }
+              });
+             
+         }
 
+     });
+   }catch(err){}
+
+ });
 
 
 
@@ -399,81 +482,5 @@ function resend_otp()
 
 
 
-
-
-
-//change password send otp
-$("#social_resendotp1").click(function(){
-
-  var mobile=$('#sl_mobile').val();
- 
-    $.ajax({
-        url:siteUrl+'/login/social_send_mobile',
-        type: 'POST',
-        beforeSend: function(xhr){
-        xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
-        cache: false,
-        async:false,
-        data: {'mobile':mobile},
-        success: function(data) {
-           toastr.success('Successfully send Otp please enter OTP');
-            $('#lg_mobile_div').hide();
-            $('#social_resendotp').hide();
-            $('#lg_otp_div').show();
-            $('#social_submit_otp').show();
-           var obj = jQuery.parseJSON(data.responseText);
-           if(obj.success.success){
-             toastr.success(obj.success.success);
-          }
-
-         },
-        error: function(data) {
-          var obj = jQuery.parseJSON(data.responseText);
-          if(obj.errors.mobile){
-             toastr.warning(obj.errors.mobile);
-            
-          }
-          if(obj.error){
-            toastr.warning(obj.errors);
-          }
-
-           
-    
-        }
-    });
-});
-
 //social_submit_otp
-$("#social_submit_otp").click(function(){
 
-  var mobile=$('#sl_mobile').val();
-  var otp=$('#sl_otp').val();
-    $.ajax({
-        url:siteUrl+'/login/social_submit_otp',
-        type: 'POST',
-        dataType: "json",
-        beforeSend: function(xhr){
-        xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
-        cache: false,
-        async:false,
-        data: {'mobile':mobile,'otp':otp},
-        success: function(data) {
-        
-            $('#lg_mobile_div').hide();
-            $('#social_resendotp').hide();
-            $('#lg_otp_div').show();
-            $('#social_submit_otp').show();
-             location.reload();
-         },
-        error: function(data) {
-            var obj = jQuery.parseJSON(data.responseText);
-              if(obj.errors.mobile){
-             toastr.warning(obj.errors.mobile);
-          }
-            if(obj.errors.otp){
-             toastr.warning(obj.errors.otp);
-          }
-    
-        }
-    });
-});

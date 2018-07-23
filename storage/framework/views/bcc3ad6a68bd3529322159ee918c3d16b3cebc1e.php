@@ -16,15 +16,24 @@
     <title><?php echo $__env->yieldContent('title'); ?></title>
     <?php echo $__env->yieldContent('header_css'); ?>
   </head>
-  <body style="background: #f0f0f0;">
-    <div class="main-pnl "  style="background: #f0f0f0;">
+  <body style="background: #e9ebee;">
+    <div class="main-pnl "  style="background: #e9ebee;">
       <header class="header">
         <div class="container">
           <div class="row">
             <div class="col-md-2 col-sm-2 col-xs-12">
-                 <a href="<?php echo e(url('/home')); ?>"><?php echo e(Html::image('public/img/logo.png','logo')); ?></a>
+           
+                 <a class="m-logo" href="<?php echo e(url('/home')); ?>"><?php echo e(Html::image('public/img/logo.png','logo')); ?></a>
             </div>
-            <div class="col-md-10 col-sm-10 col-xs-12">
+             <div class="col-md-4 col-sm-4 col-xs-12">
+                 <i class="fa fa-search tp-srh" aria-hidden="true"></i>
+<div class="form-group">
+  
+  <?php echo Form::text('search_text', null, array('placeholder' => 'Search Text','class' => 'form-control','id'=>'search_text')); ?>
+
+</div>
+             </div>
+            <div class="col-md-6 col-sm-6 col-xs-12">
               <div class="tagline">
                 एक ऐसा नेटवर्क जो आपको आपके गाँव के साथ जोड़ता है
               </div>
@@ -46,6 +55,11 @@
   <script type="text/javascript" src="<?php echo e(asset('public/js/app.js')); ?>"></script>
   <script src="<?php echo e(asset('public/js/toastr.min.js')); ?>"></script>
   <link href="<?php echo e(asset('public/css/toastr.min.css')); ?>" rel="stylesheet">
+  <?php echo e(Html::script('public/js/croppie.js')); ?>
+
+  <?php echo e(Html::style('public/css/croppie.css')); ?>
+
+
   <?php echo Toastr::render(); ?>
 
 

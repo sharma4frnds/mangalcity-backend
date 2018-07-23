@@ -8,15 +8,9 @@
       <div class="container">
         <div class="row">
           <!-- left-pro -->
-          <div class="col-md-9">
-            <div class="col-md-12 col-sm-12 col-xs-12 bg-sld">
-              <i class="fa fa-search tp-srh" aria-hidden="true"></i>
-<div class="form-group">
-  
-  {!! Form::text('search_text', null, array('placeholder' => 'Search Text','class' => 'form-control','id'=>'search_text')) !!}
-</div>
-</div>
-          <div class="col-md-12 cv-relt">
+          <div class="col-md-9 ped-0">
+           
+          <div class="col-md-12 cv-relt ped-15-0">
               <div class="cover">
                   <div class="over-ic1"><a data-toggle="modal" href="{{url('/coverpopup/')}}" data-target="#myModal_large"><i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
                   </div>
@@ -24,30 +18,37 @@
                   {{Html::image('public/images/user/cover/'.Auth::user()->cover_image,'img',array('class'=>'img-responsive'))}}
               </div>
               <div class="cover-pro">
+
                   <div class="over-ic">
                       <a data-toggle="modal" href="{{url('/imagepopup/')}}" data-target="#myModal_large">
                           <i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
                   </div>
                   {{Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))}}
 
-                  <div class="c-cover-pnl">
-                      <span class="cover-user-name">{{Auth::user()->first_name}} {{Auth::user()->last_name}}</span>
-                  </div>
+                
+
               </div>
+                <div class="col-md-12 c-cover-pnl">
+                      <span class="cover-user-name">{{Auth::user()->first_name}} {{Auth::user()->last_name}}</span>
+                    
+                      <span class="cover-user-name">({{$city_name->name}})</span>
+                  </div>
           </div>
- 
           @include('left_bar')
-          <div class="col-md-8 col-sm-6 col-xs-12">
-                <form method="POST" enctype="multipart/form-data" id="feedForm" action="post">
+          <div class="col-md-8 col-sm-6 col-xs-12 scrl">
+                      <form method="POST" enctype="multipart/form-data" id="feedForm" action="post">
                     <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
+                    <span class="pro-name new-dt">Update Your Status</span>
                  <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20">
-                    <div class="col-md-6 pd0">
+
+                    <div class="col-md-12 pd0">
+
                      <div class="pro1">{{Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))}}  
                     </div>  
-                     <span class="pro-name">Update Your Status</span><br>
+                       <textarea name="message" cols="30" rows="1" class="form-control" placeholder="Write something here..."></textarea>
                     </div>
 
-                      <textarea name="message" cols="30" rows="1" class="form-control" placeholder="Write something here..."></textarea>
+                    
                       <div id="queued-files" style="display: none;">1 image selected</div>
                     <div class="share-area">
                         <div class="up-img"><input type="file" id="npimage" name="image" accept="image/*" onchange="displayImage(this);"></div>
@@ -102,8 +103,8 @@
 
   </style>
 <!-- Remote popup -->
-<div id="myModal" class="modal fade ">
-<div class="modal-dialog ">
+<div id="myModal" class="modal fade">
+<div class="modal-dialog">
   <div class="modal-content">
       <!-- Content will be loaded here from "remote.php" file -->
       <p class="text-center">{{Html::image('public/img/bx_loader.gif')}}</p>
@@ -128,9 +129,12 @@
 </script>
 <script type="text/javascript">
   $('#myModal').on('hidden.bs.modal', function () {
-            $('.modal-content').html('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title"></h4></div><div class="modal-body"><p class="text-center">{{Html::image("public/img/bx_loader.gif")}} </p></div><div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
+            $('.modal-content').html('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title"> </h4></div><div class="modal-body"><p class="text-center">{{Html::image("public/img/bx_loader.gif")}} </p></div><div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
     });
 
+  $('#myModal_large').on('hidden.bs.modal', function () {
+            $('.modal-content').html('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title"> </h4></div><div class="modal-body"><p class="text-center">{{Html::image("public/img/bx_loader.gif")}} </p></div><div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div>');
+    });
 </script>
 
 <!-- End Remote popup -->
@@ -178,6 +182,6 @@ function loadMoreData(page){
         });
 }
 </script>
-
-
+  <script type="text/javascript" src="{{ asset('public/js/jquery-ui.js')}}"></script>
+  {{ Html::style('public/js/jquery-ui.css')}}
 @endsection

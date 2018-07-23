@@ -6,7 +6,7 @@
           <div class="row">
 
       
-            <div class="col-md-8 col-sm-6 col-xs-12">
+            <div class="col-md-offset-2 col-md-8 col-sm-6 col-xs-12">
                  <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20">
 
                    <!-- tab -->

@@ -10,4 +10,10 @@ class Like extends Model
      protected $fillable = [
        'id','post_id' ,'user_id','type'
     ];
+
+    public function user()
+    {
+        return $this->hasOne('App\User','id','user_id');
+    }
+    
 }

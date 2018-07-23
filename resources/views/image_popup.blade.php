@@ -42,13 +42,13 @@
 $uploadCrop = $('#profile_image_cropp').croppie({
     enableExif: true,
     viewport: {
-        width: 200,
-        height: 200,
-        type: 'circle'
+        width: 120,
+        height: 120,
+        //type: 'circle'
     },
     boundary: {
-        width: 300,
-        height: 300
+        width: 200,
+        height: 200
     }
 });
 
