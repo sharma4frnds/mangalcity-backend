@@ -56,7 +56,7 @@ class UserController extends Controller
     public function getAuthUser(Request $request){
         $user = JWTAuth::toUser($request->token);
          // $user = JWTAuth::parseToken()->toUser();
-        return response()->json(['success' => true, 'data'=> ['token' => $token,'user'=>$user]]);
+        return response()->json(['success' => true, 'data'=> ['token' => $request->token,'user'=>$user]]);
     }
 
     /* 
@@ -116,7 +116,7 @@ class UserController extends Controller
   {
 
   // $googleAuthCode = $request->social_token;
-    // $accessTokenResponse= Socialite::driver('google')->getAccessTokenResponse($googleAuthCode);
+  //   $accessTokenResponse= Socialite::driver('google')->getAccessTokenResponse($googleAuthCode);
    
     // $accessToken=$accessTokenResponse["access_token"];
     // $expiresIn=$accessTokenResponse["expires_in"];
@@ -146,12 +146,9 @@ class UserController extends Controller
             // CREATE LOCAL USER IF DON'T EXISTS
             if (empty($user)) {
                 // Before... Check if user has not signup with an email
-                $user = User::where('email', $request->email)->first();
-            
+                $user=User::where('email', $request->email)->first();
+    
                 if (empty($user)) {
-
-                   return response()->json(['success' =>'mobile', 'error' =>'Please enter mobile number']);
-
                    try{
                         $user_info = [
                         'first_name'   =>$request->first_name,
@@ -159,15 +156,20 @@ class UserController extends Controller
                         'mobile'=>$request->provider_id,
                         'password'=>'',
                         'email'=>$request->email,
+                        'verified'=>'0',
+                        'profile'=>'0',
                         'provider'=>$request->provider,
                         'provider_id'=>$request->provider_id, 
                         'created_at'=>date('Y-m-d H:i:s'),
                          ];
+
                         $user = new User($user_info);
                         $user->save();
 
                          $url=str_slug($user->id.' '.trim($request->first_name).' '.trim($request->last_name));
                          $user->url=$url;
+                         $user->verified="0";
+                          $user->profile="0";
                          $user->save();
                     }
                     catch(\Exception $e){
@@ -336,10 +338,10 @@ public function getprofile(Request $request)
   $userdata=user::where('id',$user->id)->first();
   $home_location=Home_location::where('user_id',$user->id)->first();
   if($home_location){
-     echo json_encode(array('success'=>true,'user'=>$user,'current_location'=>'active',
+     echo json_encode(array('success'=>true,'user'=>$user,'current_location'=>'inactive',
       'home_location'=>array('home_country'=>$home_location->home_country,'home_state'=>$home_location->home_state,'home_district'=>$home_location->home_district,'home_city'=>$home_location->home_city) ));
   }else{
-     echo json_encode(array('success'=>true,'user'=>$user,'current_location'=>'inactive','home_location'=>new \stdClass() ));
+     echo json_encode(array('success'=>true,'user'=>$user,'current_location'=>'active','home_location'=>new \stdClass() ));
   }
  
 }
@@ -504,8 +506,7 @@ public function forgot_password_otp(Request $request)
 
        $imageName = time(). '.' .$request->file('cover_image')->getClientOriginalExtension();
 
-        //Image::make($request->file('cover_image')->getRealPath())->fit(850, 400)->save('public/images/user/cover/'.$imageName);
-        $request->file('image')->move(base_path().'/public/images/user/cover/', $imageName);
+        Image::make($request->file('cover_image')->getRealPath())->fit(850, 400)->save('public/images/user/cover/'.$imageName);
         $user1 = JWTAuth::toUser($request->token);
         $user=User::find($user1->id);
 

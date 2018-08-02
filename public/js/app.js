@@ -9,7 +9,7 @@ var siteUrl=$('meta[name=base-url]').attr("content");
 try {
   
  
-$('#feedForm').ajaxForm({ 
+$('#feedForm1').ajaxForm({ 
         // dataType identifies the expected content type of the server response 
         beforeSubmit: function() {
         $("#mloader").show();
@@ -103,7 +103,7 @@ catch(err) {
                     hdiv +='<div class="col-md-12 cmnt-pnl-ped">';
                      hdiv +='<div class="pro1"><img src="'+data.pdata.image+'" class="img-responsive"></div>';  
                      hdiv +='<div class="cmnt-box">';
-                        hdiv +='<textarea rows="2" cols="100" name="comment" id="comment-form'+data.pdata.id+'" placeholder="Leave a comment..."></textarea>';
+                        hdiv +='<textarea rows="1" cols="100" name="comment" id="comment-form'+data.pdata.id+'" placeholder="Leave a comment..."></textarea>';
                         hdiv +='<button class="post-bt" onclick="postComment('+data.pdata.id+',0)">Post</button>';
                     hdiv +='</div>';
                     hdiv +='</div>';
@@ -429,7 +429,13 @@ function sharePost(post_id){
 
                 hdiv +='<p class="post-txt">'+data.pdata.message+'</p>';
                 if(data.pdata.type=='image'){
-                    hdiv +='<div class="post-img"><a data-toggle="modal" href="'+siteUrl+'/image_popup/'+data.pdata.id+'" data-target="#myModal"> <img src="'+data.pdata.value+'" class="img-responsive"> </a></div>'
+                     var media=data.pdata.value;
+                    var imgCount=media.length;
+                   hdiv +='<div class="image-layout-'+imgCount+'">';
+                     $.each(media, function(key,value) {
+                         hdiv +='<div class="post-img2" style="background-image: url('+value+')"></div>';
+                    });
+                  hdiv +='</div>';
                 }
 
                 if(data.pdata.type=='video'){
@@ -440,10 +446,13 @@ function sharePost(post_id){
                 }
                 hdiv +='<div class="share-area">';
                     hdiv +='<ul>';
-                     hdiv +='<li ><a onclick="doLike('+data.pdata.id+',0)" id="dolike'+data.pdata.id+'" ><i class="fa fa-thumbs-o-up"></i> 0</a> </li>';   
-                     hdiv +='<li ><a onclick="dodislikes('+data.pdata.id+',1)" id="dodislikes'+data.pdata.id+'" ><i class="fa fa-thumbs-o-down"></i> 0</a>  </i></li>';   
+                     hdiv +='<li ><a onclick="doLike('+data.pdata.id+',0)" id="dolike'+data.pdata.id+'" ><i class="fa fa-thumbs-o-up"></i> 0</a> <div class="content_like"><span class="tooltiptext" data-toggle="tooltip" title="Please wait.." id="clike_'+data.pdata.id+'">Like </span></div></li>';   
+                     hdiv +='<li ><a onclick="dodislikes('+data.pdata.id+',1)" id="dodislikes'+data.pdata.id+'" ><i class="fa fa-thumbs-o-down"></i> 0</a></i> <div class="content_dislike"><span title="Please wait.." id="cdislike_'+data.pdata.id+'">Dislike</span></div></li>';
                      hdiv +='<li><a onclick="focus_form('+data.pdata.id+')"><i class="fa fa-comment" aria-hidden="true"></i> Comment</i></a> </li>';  
-                     hdiv +='<li><a onclick="share_post_popup('+data.pdata.id+')"><i class="fa fa-share-alt" aria-hidden="true"></i> Share</a> </li>';   
+                     hdiv +='<li><a onclick="share_post_popup('+data.pdata.id+')"><i class="fa fa-share-alt" aria-hidden="true"></i> Share</a> </li>';
+                    if(data.pdata.type=='image'){
+                        hdiv +='<li><a href="'+siteUrl+'/download_image/'+data.pdata.id+'"><i class="fa fa-cloud-download" aria-hidden="true"></i>Download</a></li>';
+                      }      
                     hdiv +='</ul>';
                 hdiv +='</div>';
            
@@ -455,8 +464,9 @@ function sharePost(post_id){
                     hdiv +='<div class="col-md-12 cmnt-pnl-ped">';
                      hdiv +='<div class="pro1"><img src="'+data.pdata.image+'" class="img-responsive"></div>';  
                      hdiv +='<div class="cmnt-box">';
-                        hdiv +='<textarea rows="2" cols="100" name="comment" id="comment-form'+data.pdata.id+'" placeholder="Leave a comment..."></textarea>';
-                        hdiv +='<button class="post-bt" onclick="postComment('+data.pdata.id+',0)">Post</button>';
+                      hdiv +='<textarea rows="1" cols="100" name="comment" form="usrform" id="comment-form'+data.pdata.id+'" placeholder="Leave a comment..."> </textarea>';
+                       hdiv +='<input type="hidden" name="cmnt_post_id"  value="'+data.pdata.id+'">';
+                        hdiv +='<input type="hidden" name="cmnt_comment_id" value="0">';
                     hdiv +='</div>';
                     hdiv +='</div>';
                 hdiv +='</div>';
@@ -500,11 +510,12 @@ function removedImage()
   $("#npvideo").val("");
   $("#queued-files").html("");
   $("#imagePreviewDiv").hide();
+  $("#dropzonePreview").html('');
 }
 
 
 function displayVideo(elem)
-{
+{     $("#dropzonePreview").html('');
       var image = document.getElementById("npvideo");
        // image= elem.name;
         $("#queued-files").html('1 video selected <i class="fa fa-times" aria-hidden="true" onclick="removedImage(\'video\')"></i>').show();
@@ -512,6 +523,7 @@ function displayVideo(elem)
 
 function displayAudio(elem)
 {
+  $("#dropzonePreview").html('');
       var image = document.getElementById("npvideo");
        // image= elem.name;
         $("#queued-files").html('1 Audio selected <i class="fa fa-times" aria-hidden="true" onclick="removedImage(\'audio\')"></i>').show();
@@ -625,7 +637,7 @@ function hideReplydiv(comment_id)
 
 
 
-   $(document).ready(function() {
+$(document).ready(function() {
 
     if ( $( "#search_text" ).length ) {
 
@@ -649,17 +661,41 @@ function hideReplydiv(comment_id)
 
         },
         minLength: 1,
+    response: function(event, ui) {
+    if (!ui.content.length) {
+        var noResult = { 
+             value: "", 
+             label: "No results found" 
+         };
+         ui.content.push(noResult);                    
+     } else {
+        $("#message").empty();
+     }
+},
+    select: function(e, ui){
+        // Do stuff here
+        return false;
+    }
        
     }).data("ui-autocomplete")._renderItem = function (ul, item) {
-    
-            var inner_html = 
-                 '<a href="'+ item.url +'"><div class="list_item_container"><div class="image"><img src="' + 
-                 item.image + '"></div><div class="">' + item.value + '</div><div class="description">' + 
-                 item.city + '</div></div></a>';
-                  return $("<li></li>")
-                .data("item.autocomplete", item)
-                .append(inner_html)
-                .appendTo(ul);
+      if(item.id){
+        var inner_html = 
+         '<a href="'+ item.url +'"><div class="list_item_container"><div class="image"><img src="' + 
+         item.image + '"></div><div class="">' + item.value + '</div><div class="description">' + 
+         item.city + '</div></div></a>';
+          return $("<li></li>")
+        .data("item.autocomplete", item)
+        .append(inner_html)
+        .appendTo(ul);
+      }else{
+           var inner_html = 
+         '<div class="list_item_container"><div class="">' + item.label + '</div></div>';
+          return $("<li></li>")
+        .data("item.autocomplete", item)
+        .append(inner_html)
+        .appendTo(ul);
+      }
+
         };
       }
 });
@@ -725,7 +761,7 @@ $(function(){
            rdata +='<div class="col-md-12 cmnt-pnl-ped ped-2">';
                rdata +='<div class="pro1"><img src="'+data.user_image+'"class="img-responsive" alt="img"> </div>';  
             rdata +='<div class="cmnt-box">';
-               rdata +='<textarea rows="2" cols="90" name="comment" form="usrform" id="comment-form_reply'+data.comment_id+'" placeholder="write a reply..."> </textarea>';    
+               rdata +='<textarea rows="1" cols="90" name="comment" form="usrform" id="comment-form_reply'+data.comment_id+'" placeholder="write a reply..."> </textarea>';    
                 rdata +='<input type="hidden" name="cmnt_post_id" value="'+data.post_id+'">';
                rdata +='<input type="hidden" name="cmnt_comment_id" value="'+data.comment_id+'">';
            rdata +='</div>';
@@ -796,7 +832,7 @@ $(document).ready(function(){
               var post_id = split_id[1];
         
               $.ajax({
-                  url:'likeuser',
+                  url:siteUrl+'/likeuser',
                   type:'post',
                   beforeSend: function(xhr){
                   xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
@@ -824,7 +860,7 @@ $(document).ready(function(){
 
 //content_dislike
 
-    $( ".content_dislike span" ).tooltip({
+    $(".content_dislike span" ).tooltip({
         track:true,
         open: function( event, ui ) {
               var id = this.id;
@@ -832,7 +868,7 @@ $(document).ready(function(){
               var post_id = split_id[1];
         
               $.ajax({
-                  url:'likeuser',
+                  url:siteUrl+'/likeuser',
                   type:'post',
                   beforeSend: function(xhr){
                   xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
@@ -858,4 +894,45 @@ $(document).ready(function(){
     
 });
 
+function showMoreComment(element){
+  var id=element.id
+  var split_id = id.split('_');
+  var post_id = split_id[2];
+  $.ajax({
+    url:siteUrl+'/all_comment',
+    type:'post',
+    beforeSend: function(xhr){
+    xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+    cache: false,
+    async:false,
+    data:{post_id:post_id},
+    success: function(response){
+    $("#comment_section"+post_id).html(response.html);
+    
+    }
+  });
+}
+
+/*
+   lightbox image popup
+   Ajax Load Data
+
+ */
+$( "body" ).on('click','.lightboxp', function () {
+   var post_id = $(this).attr("data-id");
+    $.ajax({
+        type: 'POST',
+         beforeSend: function(xhr){
+        xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+        data:{'post_id':post_id},
+        url: siteUrl+'/imageload',
+        dataType: 'json',
+        success: function (data) {
+            $.fancybox.open(data, {
+            helpers : { buttons : true},
+            loop : false,
+          });
+        }
+    });
+});
 

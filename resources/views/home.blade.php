@@ -131,7 +131,7 @@
                                 <input type="password" class="form-control required" id="rg_cpassword" name="password_confirmation" placeholder="Confirm Password">
                                 <span class="help-block"><strong id="register-errors-password_confirmation"> </strong></span>
                               </div>
-                              <span class="tm"><input type="checkbox" checked="checked" required="" name="agree"> <a href="{{url('page/terms_condition')}}">I agree to the terms and conditions</a></span>
+                              <span class="tm"><input type="checkbox" checked="checked" required="" name="agree"> <a  data-toggle="modal" data-target="#myModal">I agree to the terms and conditions</a></span>
                               
                                <div class="form-group" id="register-errors">
                                     <span class="help-block">
@@ -198,5 +198,29 @@
 
 @endsection
 @section('footer_script')
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Terms of Service</h4>
+      </div>
+      <div class="modal-body">
+       
+        <h3> Welcome to mangalcity! </h3>
+        <p>Our mission is to give people the power to build community and bring the world closer together. To help advance this mission, we provide the Products and services described below to you:</p>
+        <p>Our mission is to give people the power to build community and bring the world closer together. To help advance this mission, we provide the Products and services described below to you:</p>
+        <p>Our mission is to give people the power to build community and bring the world closer together. To help advance this mission, we provide the Products and services described below to you:</p>
+        <p>Our mission is to give people the power to build community and bring the world closer together. To help advance this mission, we provide the Products and services described below to you:</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 @endsection

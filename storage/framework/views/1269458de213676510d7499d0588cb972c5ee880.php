@@ -20,13 +20,16 @@
        <?php $__currentLoopData = $country_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <div class="item <?php if($i==0): ?>active <?php endif; ?>">
           <?php if($cposts->type=='image'): ?>
+          <?php $cposts_img=''; if(isset($cposts->media[0])) $cposts_img=$cposts->media[0]->name; ?>
+            <span><?php echo e(str_limit($cposts->message, 30)); ?></span>
           <a class="post_view_t" data-toggle="modal" href="<?php echo e(url('post_view/'.$cposts->id)); ?>" data-target="#myModal">
-              <?php echo e(Html::image('public/images/post/post_image/'.$cposts->value,'img',array('class'=>'img-responsive'))); ?>  </a>
+              <?php echo e(Html::image('public/images/post/post_image/'.$cposts_img,'img',array('class'=>'img-responsive'))); ?>  </a>
 
          <?php elseif($cposts->type=='video'): ?>
+          <span><?php echo e(str_limit($cposts->message, 30)); ?></span>
             <video width="100%" height="150" controls><source src="public/images/post/post_video/<?php echo e($cposts->value); ?>" type="video/mp4"></video>  
          <?php else: ?>
-            <p><?php echo e(str_limit($cposts->message, 25)); ?></p>
+            <p><?php echo e(str_limit($cposts->message, 210)); ?></p>
          <?php endif; ?>
 
           <a class="post_view_t" data-toggle="modal" href="<?php echo e(url('post_view/'.$cposts->id)); ?>" data-target="#myModal"> View More </a>
@@ -71,14 +74,18 @@
       <?php $i=0; ?>
        <?php $__currentLoopData = $state_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
       <div class="item <?php if($i==0): ?>active <?php endif; ?>">
+
           <?php if($sposts->type=='image'): ?>
+          <?php $spost_img=''; if(isset($sposts->media[0])) $spost_img=$sposts->media[0]->name; ?>
+            <span><?php echo e(str_limit($sposts->message, 30)); ?></span>
             <a class="post_view_t" data-toggle="modal" href="<?php echo e(url('post_view/'.$sposts->id)); ?>" data-target="#myModal">
-              <?php echo e(Html::image('public/images/post/post_image/'.$sposts->value,'img',array('class'=>'img-responsive'))); ?>  </a>
+              <?php echo e(Html::image('public/images/post/post_image/'.$spost_img,'img',array('class'=>'img-responsive'))); ?>  </a>
 
          <?php elseif($sposts->type=='video'): ?>
+         <span><?php echo e(str_limit($sposts->message, 30)); ?></span>
             <video width="100%" height="150" controls><source src="public/images/post/post_video/<?php echo e($sposts->value); ?>" type="video/mp4"></video>  
          <?php else: ?>
-            <p><?php echo e(str_limit($sposts->message, 25)); ?></p>
+            <p><?php echo e(str_limit($sposts->message, 210)); ?></p>
          <?php endif; ?>
          <a class="post_view_t" data-toggle="modal" href="<?php echo e(url('post_view/'.$sposts->id)); ?>" data-target="#myModal">View More</a>
       </div>
@@ -120,19 +127,22 @@
     
       <?php $i=0; ?>
        <?php $__currentLoopData = $district_posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $dposts): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
       <div class="item <?php if($i==0): ?>active <?php endif; ?>">
           <?php if($dposts->type=='image'): ?>
+           <span><?php echo e(str_limit($dposts->message, 30)); ?></span>
+          <?php $dpost_img=''; if(isset($dposts->media[0])) $dpost_img=$dposts->media[0]->name; ?>
           <a class="post_view_t" data-toggle="modal" href="<?php echo e(url('post_view/'.$dposts->id)); ?>" data-target="#myModal">
-              <?php echo e(Html::image('public/images/post/post_image/'.$dposts->value,'img',array('class'=>'img-responsive'))); ?>  </a>
-
+              <?php echo e(Html::image('public/images/post/post_image/'.$dpost_img,'img',array('class'=>'img-responsive'))); ?>  </a>
          <?php elseif($dposts->type=='video'): ?>
+          <span><?php echo e(str_limit($dposts->message, 30)); ?></span>
             <video width="100%" height="150" controls><source src="public/images/post/post_video/<?php echo e($dposts->value); ?>" type="video/mp4"></video>  
          <?php else: ?>
-            <p><?php echo e(str_limit($dposts->message, 25)); ?></p>
+            <p><?php echo e(str_limit($dposts->message, 210)); ?></p>
          <?php endif; ?>
           <a class="post_view_t" data-toggle="modal" href="<?php echo e(url('post_view/'.$dposts->id)); ?>" data-target="#myModal">View More</a>
       </div>
-      <?php  $i=$i+1; ?>
+      <?php $i=$i+1; ?>
 
        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     

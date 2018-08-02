@@ -10,11 +10,21 @@
       <div class="">
        
           <textarea  class="post-txt form-control" id="share_message" placeholder="Write something here.. "><?php echo e($post->message); ?></textarea>
-            <?php if($post->type=='image'): ?>
-              <div class="post-img">
-                   <?php echo e(Html::image('public/images/post/post_image/'.$post->value,'img',array('class'=>'img-responsive'))); ?>  
-              </div>
-           <?php endif; ?>
+   
+             <?php if($post->type=='image'): ?>
+                <?php   $imgCount= count($post->media);?>
+                <div class="image-layout-<?php if($imgCount>5): ?>5 <?php else: ?><?php echo e($imgCount); ?><?php endif; ?>">
+                  <?php $im=1; $imid=''; $spim=''; ?>
+                  <?php $__currentLoopData = $post->media; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $media): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                     <?php if($im==5 && $imgCount>5  ): ?> <?php $imid='moreImgDef'; $rim=$imgCount-5; $spim="<span>$rim+</span>";?> <?php endif; ?>
+                      <div class="post-img2" id="<?php echo e($imid); ?>" style="background-image: url(<?php echo e(url('public/images/post/post_image/'.$media->name)); ?>);"><?php echo $spim; ?></div>
+                  <?php if($im==5): ?> <?php break; ?> <?php endif; ?>
+                  <?php $im=$im+1;?>
+                  <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                  </div>
+
+            <?php endif; ?>
+
 
              <?php if($post->type=='video'): ?>
               <div class="post-video">

@@ -35,6 +35,7 @@ Route::get('changepassword', 'Auth\ForgotPasswordController@getchangepassword');
 Route::post('changepassword', 'Auth\ForgotPasswordController@changepassword');
 Route::get('/','HomeController@index')->middleware('guest');
 
+Route::post('test', 'TestController@index');
 
 Route::get('apidoc',function(){
 	return view('apidoc');
@@ -64,6 +65,8 @@ Route::group(['middleware' => 'auth'], function()
 		Route::POST('/likeuser','PostController@likeuser');
 		Route::POST('/postComment','PostController@postComment');
 		Route::POST('/deleteComment','PostController@deleteComment');
+		Route::POST('/all_comment','PostController@all_comment');
+		
 		Route::GET('/reportFeedback/{post_id}','PostController@reportPopup');
 		Route::POST('/reportFeedback','PostController@reportFeedback');
 		Route::POST('/delete_post_popup','PostController@delete_post_popup');
@@ -78,6 +81,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('/profile/{url}','PostController@profile');
 
 		Route::POST('/search','SearchController@index');
+		Route::POST('/imageload','PostController@imageload');
 	});
 });
 

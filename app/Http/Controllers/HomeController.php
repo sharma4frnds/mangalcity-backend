@@ -11,6 +11,7 @@ use Session;
 use App\Model\Home_location;
 use Auth;
 use App\Model\Post;
+use App\Model\Media;
 class HomeController extends FrontController
 {
     /**
@@ -49,8 +50,11 @@ class HomeController extends FrontController
 
     function download_image($url)
     {
-         $filepath='public/images/post/post_image/'.$url;
-        //Process download
+        $medias=Media::where('post_id',$url)->get();
+     
+        if($medias){
+        foreach ($medias as $media) {
+          $filepath='public/images/post/post_image/'.$media->name;
         if(file_exists($filepath)) {
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
@@ -61,9 +65,14 @@ class HomeController extends FrontController
             header('Content-Length: ' . filesize($filepath));
             flush(); // Flush system output buffer
             readfile($filepath);
-            exit;
+
             }
+        }
+
+        }
     }
+
+
 
     //change_location
     function change_location(Request $request)

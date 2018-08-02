@@ -1,6 +1,11 @@
 @extends('layouts.master')
 @section('title','Mangalcity')
 
+@section('header_css')
+ {{ Html::style('public/css/dropzone.css')}}
+ {{ Html::style('public/css/fancybox.css')}}
+@endsection
+
 @section('content')
 
 
@@ -20,7 +25,7 @@
               <div class="cover-pro">
 
                   <div class="over-ic">
-                      <a data-toggle="modal" href="{{url('/imagepopup/')}}" data-target="#myModal_large">
+                      <a data-toggle="modal" href="{{url('/imagepopup/')}}" data-target="#myModal">
                           <i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
                   </div>
                   {{Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))}}
@@ -36,8 +41,9 @@
           </div>
           @include('left_bar')
           <div class="col-md-8 col-sm-6 col-xs-12 scrl">
-                      <form method="POST" enctype="multipart/form-data" id="feedForm" action="post">
-                    <input name="_token" type="hidden" value="{{ csrf_token() }}"/>
+                     
+                  {!! Form::open(['url' => 'post', 'class' => 'dropzone', 'files'=>true, 'id'=>'real-dropzone']) !!}
+
                     <span class="pro-name new-dt">Update Your Status</span>
                  <div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20">
 
@@ -45,28 +51,32 @@
 
                      <div class="pro1">{{Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))}}  
                     </div>  
-                       <textarea name="message" cols="30" rows="1" class="form-control" placeholder="Write something here..."></textarea>
+                       <textarea name="message" id="npmessage" cols="30" rows="1" class="form-control" placeholder="Write something here..."></textarea>
                     </div>
 
-                    
+                   
                       <div id="queued-files" style="display: none;">1 image selected</div>
+                     
                     <div class="share-area">
-                        <div class="up-img"><input type="file" id="npimage" name="image" accept="image/*" onchange="displayImage(this);"></div>
-                        <div class="up-vid"><input type="file" name="video" id="npvideo" accept="video/*" onchange="displayVideo(this);"></div>
-                         <div class="up-aud"><input type="file" name="audio" accept="audio/*" id="npaudio" onchange="displayAudio(this);"></div>
+
+                      <div class="up-img" "> <div class="fallback"> <input name="image[]" type="file" multiple /> </div></div>
+                      <div class="up-vid"><input type="file" name="video" id="npvideo" accept="video/*" onchange="displayVideo(this);"></div>
+                         <div class="up-aud"><input type="file" name="audio" accept="audio/*" id="npaudio" onchange="displayAudio(this);" capture></div>
+                     
                         <ul>
-                         <li><i class="fa fa-file-image-o" aria-hidden="true"></i></li>   
+                       <li><i class="fa fa-file-image-o" aria-hidden="true" id="npimage"></i></li>   
                          <li><i class="fa fa-video-camera" aria-hidden="true"></i></li> 
                          <li><i class="fa fa-music" aria-hidden="true"></i></li> 
-                         <li > 
-                            <div id="imagePreviewDiv" style="display: none;"><img id="imagePreview" class="prv" />
-
-                             </div> 
+                     
+                         <li> 
+                            <div class="dz-message"></div>
+                           <div class="dropzone-previews" id="dropzonePreview"></div>
                          </li>
                        
 
                          <li style="float: right;">
-                            <input type="submit" value="Post" class="post-bt"  /> 
+                            <input type="submit" name="submit" value="Post" class="post-bt" id="submitfiles" /> 
+
                             </li> 
                               <li style="float: right; display: none;" id="mloader">{{Html::image('public/img/bx_loader.gif')}}</li>
                         </ul>
@@ -75,8 +85,25 @@
                 </div>
 
                  <div class="alert alert-info fade in" id="error_div" style="display: none"></div>
+                    <span class="fileupload-process">
+                    <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                    </div>
+                  </span>
 
             </form>
+          <!-- Dropzone Preview Template -->
+          <div id="preview-template" style="display: none;">
+              <div class="dz-preview dz-file-preview">
+                  <div class="dz-image"><img data-dz-thumbnail=""></div>
+                  <div class="dz-details">
+                      <div class="dz-error-mark"><span></span></div>
+                      <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                  </div>
+              </div>
+          </div>
+
+
             <!--City  post -->
             <div id="currentMessage"></div>
             <!-- post -->
@@ -182,6 +209,8 @@ function loadMoreData(page){
         });
 }
 </script>
-  <script type="text/javascript" src="{{ asset('public/js/jquery-ui.js')}}"></script>
   {{ Html::style('public/js/jquery-ui.css')}}
+  {!! HTML::script('public/js/dropzone.js') !!}
+  {!! HTML::script('/public/js/dropzone-config.js') !!}
+  {!! HTML::script('/public/js/jquery.fancybox.js') !!}
 @endsection

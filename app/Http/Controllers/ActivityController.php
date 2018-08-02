@@ -16,7 +16,7 @@ use App\Model\Spam_tag;
 use App\Model\Feedbacks;
 use Session;
 use App\Model\Activity;
-
+use App\Model\Media;
 class ActivityController extends FrontController
 {
 
@@ -38,9 +38,10 @@ class ActivityController extends FrontController
               return response()->json(['html'=>$view]);
             }
 
-	       $country_posts=Post::where('status',1)->where('tag',4)->limit(10)->get();
-	       $state_posts=Post::where('status',1)->where('tag',3)->limit(10)->get();
-	       $district_posts=Post::where('status',1)->where('tag',2)->limit(10)->get();
+          $country_posts=Post::with('media')->where('status',1)->where('tag',4)->orderBy('id','DESC')->limit(10)->get();
+          $state_posts=Post::with('media')->where('status',1)->where('tag',3)->orderBy('id','DESC')->limit(10)->get();
+          $district_posts=Post::with('media')->where('status',1)->where('tag',2)->orderBy('id','DESC')->limit(10)->get();
+
 
 	   	return view('allactivity',compact('district_posts','state_posts','country_posts','activity'));
 

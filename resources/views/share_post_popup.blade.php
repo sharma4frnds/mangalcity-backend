@@ -9,11 +9,21 @@
       <div class="">
        
           <textarea  class="post-txt form-control" id="share_message" placeholder="Write something here.. ">{{$post->message}}</textarea>
-            @if($post->type=='image')
-              <div class="post-img">
-                   {{Html::image('public/images/post/post_image/'.$post->value,'img',array('class'=>'img-responsive'))}}  
-              </div>
-           @endif
+   
+             @if($post->type=='image')
+                <?php   $imgCount= count($post->media);?>
+                <div class="image-layout-@if($imgCount>5)5 @else{{$imgCount}}@endif">
+                  <?php $im=1; $imid=''; $spim=''; ?>
+                  @foreach ($post->media as $media)
+                     @if($im==5 && $imgCount>5  ) <?php $imid='moreImgDef'; $rim=$imgCount-5; $spim="<span>$rim+</span>";?> @endif
+                      <div class="post-img2" id="{{$imid}}" style="background-image: url({{url('public/images/post/post_image/'.$media->name)}});">{!! $spim !!}</div>
+                  @if($im==5) @break @endif
+                  <?php $im=$im+1;?>
+                  @endforeach
+                  </div>
+
+            @endif
+
 
              @if($post->type=='video')
               <div class="post-video">

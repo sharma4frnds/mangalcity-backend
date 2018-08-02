@@ -9,10 +9,10 @@
 
 
       <div class="row">
-        <div class="col-md-4 text-center">
+        <div class="col-md-6 text-center">
         <div id="profile_image_cropp" style="width:350px"></div>
         </div>
-        <div class="col-md-4" style="padding-top:30px;">
+        <div class="col-md-6" style="padding-top:30px;">
         <strong>Select Image:</strong>
         <br/>
         <input type="file" id="profile_image_cropp_upload" accept="image/*">
@@ -81,7 +81,7 @@ $('.upload-image-result').on('click', function (ev) {
         beforeSend: function(xhr){
         xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
         cache: false,
-        async:false,
+       // async:false,
       data: {"image":resp},
       success: function (data) {
          $('.image_ajax_load').hide();

@@ -45,15 +45,16 @@
 
 
 
-                  <div class="c-cover-pnl est">
+              
+
+              </div>
+                  <div class="col-md-12 c-cover-pnl est">
 
                       <span class="cover-user-name"><?php echo e(Auth::user()->first_name); ?> <?php echo e(Auth::user()->last_name); ?></span>
 
-                      <br>
+                      
 
                   </div>
-
-              </div>
 
           </div>
 

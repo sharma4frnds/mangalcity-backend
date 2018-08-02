@@ -20,13 +20,16 @@
        @foreach($country_posts as $cposts)
       <div class="item @if($i==0)active @endif">
           @if($cposts->type=='image')
+          <?php $cposts_img=''; if(isset($cposts->media[0])) $cposts_img=$cposts->media[0]->name; ?>
+            <span>{{str_limit($cposts->message, 30)}}</span>
           <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$cposts->id)}}" data-target="#myModal">
-              {{Html::image('public/images/post/post_image/'.$cposts->value,'img',array('class'=>'img-responsive'))}}  </a>
+              {{Html::image('public/images/post/post_image/'.$cposts_img,'img',array('class'=>'img-responsive'))}}  </a>
 
          @elseif($cposts->type=='video')
+          <span>{{str_limit($cposts->message, 30)}}</span>
             <video width="100%" height="150" controls><source src="public/images/post/post_video/{{$cposts->value}}" type="video/mp4"></video>  
          @else
-            <p>{{str_limit($cposts->message, 25)}}</p>
+            <p>{{str_limit($cposts->message, 210)}}</p>
          @endif
 
           <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$cposts->id)}}" data-target="#myModal"> View More </a>
@@ -71,14 +74,18 @@
       <?php $i=0; ?>
        @foreach($state_posts as $sposts)
       <div class="item @if($i==0)active @endif">
+
           @if($sposts->type=='image')
+          <?php $spost_img=''; if(isset($sposts->media[0])) $spost_img=$sposts->media[0]->name; ?>
+            <span>{{str_limit($sposts->message, 30)}}</span>
             <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$sposts->id)}}" data-target="#myModal">
-              {{Html::image('public/images/post/post_image/'.$sposts->value,'img',array('class'=>'img-responsive'))}}  </a>
+              {{Html::image('public/images/post/post_image/'.$spost_img,'img',array('class'=>'img-responsive'))}}  </a>
 
          @elseif($sposts->type=='video')
+         <span>{{str_limit($sposts->message, 30)}}</span>
             <video width="100%" height="150" controls><source src="public/images/post/post_video/{{$sposts->value}}" type="video/mp4"></video>  
          @else
-            <p>{{str_limit($sposts->message, 25)}}</p>
+            <p>{{str_limit($sposts->message, 210)}}</p>
          @endif
          <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$sposts->id)}}" data-target="#myModal">View More</a>
       </div>
@@ -120,19 +127,22 @@
     
       <?php $i=0; ?>
        @foreach($district_posts as $dposts)
+
       <div class="item @if($i==0)active @endif">
           @if($dposts->type=='image')
+           <span>{{str_limit($dposts->message, 30)}}</span>
+          <?php $dpost_img=''; if(isset($dposts->media[0])) $dpost_img=$dposts->media[0]->name; ?>
           <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$dposts->id)}}" data-target="#myModal">
-              {{Html::image('public/images/post/post_image/'.$dposts->value,'img',array('class'=>'img-responsive'))}}  </a>
-
+              {{Html::image('public/images/post/post_image/'.$dpost_img,'img',array('class'=>'img-responsive'))}}  </a>
          @elseif($dposts->type=='video')
+          <span>{{str_limit($dposts->message, 30)}}</span>
             <video width="100%" height="150" controls><source src="public/images/post/post_video/{{$dposts->value}}" type="video/mp4"></video>  
          @else
-            <p>{{str_limit($dposts->message, 25)}}</p>
+            <p>{{str_limit($dposts->message, 210)}}</p>
          @endif
           <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$dposts->id)}}" data-target="#myModal">View More</a>
       </div>
-      <?php  $i=$i+1; ?>
+      <?php $i=$i+1; ?>
 
        @endforeach
     

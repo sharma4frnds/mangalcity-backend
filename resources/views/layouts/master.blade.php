@@ -25,10 +25,10 @@
             </div>
              <div class="col-md-4 col-sm-4 col-xs-12">
                  <i class="fa fa-search tp-srh" aria-hidden="true"></i>
-<div class="form-group">
-  
-  {!! Form::text('search_text', null, array('placeholder' => 'Search Text','class' => 'form-control','id'=>'search_text')) !!}
-</div>
+        <div class="form-group">
+          
+          {!! Form::text('search_text', null, array('placeholder' => 'Search Text','class' => 'form-control','id'=>'search_text')) !!}
+        </div>
              </div>
             <div class="col-md-6 col-sm-6 col-xs-12">
               <div class="tagline">

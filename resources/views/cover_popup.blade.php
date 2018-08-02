@@ -11,6 +11,9 @@
       <div id="profile_image_cropp" style="width:350px"></div>
         <strong>Select Image:</strong>
         <button class="btn btn-success upload-image-result" style="display: none">Upload Image</button>
+           <div class="image_ajax_load text-center" style="display:none">
+           <p>{{Html::image('public/img/loader.gif')}} Loadinging</p>
+          </div>
         <br>
       </div>
 
@@ -68,7 +71,7 @@ $('.upload-image-result').on('click', function (ev) {
         beforeSend: function(xhr){
         xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
         cache: false,
-        async:false,
+       // async:false,
       data: {"cover_image":resp},
       success: function (data) {
          $('.image_ajax_load').hide();

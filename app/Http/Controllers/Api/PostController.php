@@ -19,13 +19,14 @@ use Carbon\Carbon;
 use Helper;
 use App\Model\Feedbacks;
 use App\Model\Activity;
+use App\Model\Media;
 
 class PostController extends Controller
 {
    public function posts(Request $request)
    {
    	 
-   	   $validator = Validator::make($request->all(), ['message'=>'max:500','image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048','video' => 'mimes:flv,mp4,mpeg,mov,avi,wmv|max:20480','audio' =>'mimes:mp3,mpga,wav']);
+   	   $validator = Validator::make($request->all(), ['message'=>'max:1500','image.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:5048','video' => 'mimes:flv,mp4,mpeg,mov,avi,wmv,3gp|max:25000','audio' =>'mimes:mp3,mpga,wav,ogg,oga,mogg,3gp,aiff,m4a,m4b,m4p|max:25000']);
 
   	 if ($validator->fails())
         {
@@ -37,7 +38,8 @@ class PostController extends Controller
         {
             return Response::json(array('success' => false,'errors' =>array('message' =>'Please enter some text,image, audio or video')));
         }
-
+          $value='';
+          $media='';
           try{
       		if(!$user = JWTAuth::toUser($request->token)) {
       			 return  json_encode(array('success'=>false,'errors'=>array('error'=>'User Not Found')));
@@ -66,14 +68,36 @@ class PostController extends Controller
           }
 
 
-        if($request->file('image'))
+        if($files=$request->file('image'))
         {
-            $imageName = time(). '.' .$request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(base_path() . '/public/images/post/post_image/', $imageName);
-            $post->type='image';	
-            $post->value=$imageName;
-            $post->save();
+
+           $i=0;  $images=array();
+          foreach($files as $file){
+           $imageName = time().$i. '.' .$file->getClientOriginalExtension();
+
+
+         //cropping
+
+          Image::make($file->getRealPath())->resize(null, 400, function ($constraint) {
+          $constraint->aspectRatio();
+          })->save('public/images/post/post_image/'.$imageName);
+
+
+          //origin file
+           $imageName_origin='full_'.$imageName;
+           $file->move(base_path() . '/public/images/post/post_image/', $imageName_origin);
+
+          //store
+          Media::create(['post_id'=> $post->id,'name'=>$imageName]);
+          $images[]=URL::to('public/images/post/post_image/'.$imageName);
+          $i++;
+          }
+
+          $media=Media::where('post_id',$post->id)->get();
+          $post->type='image';  
+          $post->save();
         }
+
 
         if($request->file('video'))
         {
@@ -94,13 +118,13 @@ class PostController extends Controller
         }
 
         $type=$post->type;
-        $value='';
+     
         $user_image=URL::to('public/images/user/'.$user->image);
 
-        if($type=='image') $value=URL::to('public/images/post/post_image/'.$post->value);
         if($type=='video') $value=URL::to('public/images/post/post_video/'.$post->value);
+        if($type=='audio') $value=URL::to('public/images/post/post_audio/'.$post->value);
       
-          $pdata=array('id'=>$post->id,'user_id'=>$post->user_id,'message'=>$post->message,'type'=>$post->type,'value'=>$value,'likes'=>$post->likes,'dislikes'=>$post->dislikes,'tag'=>1,'created_at'=>$post->created_at ,'name'=>$user->first_name.' '.$user->last_name,'image'=>$user_image);
+          $pdata=array('id'=>$post->id,'user_id'=>$post->user_id,'message'=>$post->message,'type'=>$post->type,'value'=>$value,'media'=>$media,'likes'=>$post->likes,'dislikes'=>$post->dislikes,'tag'=>1,'created_at'=>$post->created_at ,'name'=>$user->first_name.' '.$user->last_name,'image'=>$user_image);
  
         Helper::ActivityAdd($user->id,$post->id,'post'); 
         echo json_encode(array('success'=>true,'pdata'=>$pdata),200);
@@ -118,7 +142,7 @@ class PostController extends Controller
        if($location){$city=$location->home_city; $district=$location->home_district; $state=$location->home_state; }
       }
 
-    $city_posts=Post::with(['user','like' => function ($query)use ($user) {
+    $city_posts=Post::with(['user','media','like' => function ($query)use ($user) {
     $query->where('user_id', $user->id);},'comment'=>function($query) 
    {
        $query->leftJoin('users', 'users.id', '=', 'comments.user_id');
@@ -127,6 +151,7 @@ class PostController extends Controller
 
    ])->where('status',1)->where('tag',1)->where('city',$city)->orderBy('id', 'DESC')->paginate(10);;
     //->paginate(10);
+
 
   echo json_encode(array('success'=>true,'city_posts'=>$city_posts),200);
   
@@ -374,6 +399,10 @@ class PostController extends Controller
 
        $type='';
        $value='';
+       $share_message='';
+
+       $share_message=$request->share_message?$request->share_message :'';
+
       if($post->type=='image')
       {
         $file=base_path('public/images/post/post_image/'.$post->value);
@@ -448,10 +477,20 @@ class PostController extends Controller
 
             if($post->type=='image')
             {
-              $file='public/images/post/post_image/'.$post->value;
-              if(file_exists($file))
-              {
-                 @unlink($file);
+              $medias= Media::where('post_id',$post->id)->get();
+              foreach ($medias as $media) {
+                $file='public/images/post/post_image/'.$media->name;
+                if(file_exists($file))
+                {
+                   @unlink($file);
+                }
+
+                $file1='public/images/post/post_image/full_'.$media->name;
+                if(file_exists($file1))
+                {
+                   @unlink($file1);
+                }
+
               }
             }
 

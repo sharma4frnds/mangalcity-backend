@@ -16,7 +16,7 @@ class Activity extends Model
 
      public function post()
      {
-        return $this->belongsTo('App\Model\Post')->with(['user','like','comment']);
+        return $this->belongsTo('App\Model\Post')->with(['user','like','comment','media']);
 
     }
 
