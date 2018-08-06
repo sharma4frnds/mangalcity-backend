@@ -1,4 +1,5 @@
-
+<div class="sticky-myright-side">
+<div class="rg-one">
 <!-- Country -->
  <div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
 
@@ -22,7 +23,7 @@
           @if($cposts->type=='image')
           <?php $cposts_img=''; if(isset($cposts->media[0])) $cposts_img=$cposts->media[0]->name; ?>
             <span>{{str_limit($cposts->message, 30)}}</span>
-          <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$cposts->id)}}" data-target="#myModal">
+          <a class="post_view_t"  href="{{url('post_view/'.encrypt($cposts->id))}}" >
               {{Html::image('public/images/post/post_image/'.$cposts_img,'img',array('class'=>'img-responsive'))}}  </a>
 
          @elseif($cposts->type=='video')
@@ -32,7 +33,7 @@
             <p>{{str_limit($cposts->message, 210)}}</p>
          @endif
 
-          <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$cposts->id)}}" data-target="#myModal"> View More </a>
+          <a class="post_view_t"  href="{{url('post_view/'.encrypt($cposts->id))}}"> View More </a>
 
       </div>
 
@@ -78,7 +79,7 @@
           @if($sposts->type=='image')
           <?php $spost_img=''; if(isset($sposts->media[0])) $spost_img=$sposts->media[0]->name; ?>
             <span>{{str_limit($sposts->message, 30)}}</span>
-            <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$sposts->id)}}" data-target="#myModal">
+            <a class="post_view_t"  href="{{url('post_view/'.encrypt($sposts->id))}}" >
               {{Html::image('public/images/post/post_image/'.$spost_img,'img',array('class'=>'img-responsive'))}}  </a>
 
          @elseif($sposts->type=='video')
@@ -87,7 +88,7 @@
          @else
             <p>{{str_limit($sposts->message, 210)}}</p>
          @endif
-         <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$sposts->id)}}" data-target="#myModal">View More</a>
+         <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.encrypt($sposts->id))}}" >View More</a>
       </div>
       <?php  $i=$i+1; ?>
 
@@ -107,9 +108,11 @@
   </div>
 </div>
 </div>
+</div>
 <!-- side-2 -->
 <!-- side-3 -->
-<div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
+<div id="sidebar">
+<div class="col-md-3 col-sm-3 col-xs-12 bg-sld sidebar__inner">
 
 <div class="slide-three">
     <h4><a href="{{url('highlights/district')}}">District Highlights</a></h4>
@@ -132,7 +135,7 @@
           @if($dposts->type=='image')
            <span>{{str_limit($dposts->message, 30)}}</span>
           <?php $dpost_img=''; if(isset($dposts->media[0])) $dpost_img=$dposts->media[0]->name; ?>
-          <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$dposts->id)}}" data-target="#myModal">
+          <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.encrypt($dposts->id))}}" >
               {{Html::image('public/images/post/post_image/'.$dpost_img,'img',array('class'=>'img-responsive'))}}  </a>
          @elseif($dposts->type=='video')
           <span>{{str_limit($dposts->message, 30)}}</span>
@@ -140,7 +143,7 @@
          @else
             <p>{{str_limit($dposts->message, 210)}}</p>
          @endif
-          <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.$dposts->id)}}" data-target="#myModal">View More</a>
+          <a class="post_view_t" data-toggle="modal" href="{{url('post_view/'.encrypt($dposts->id))}}" >View More</a>
       </div>
       <?php $i=$i+1; ?>
 
@@ -172,7 +175,8 @@
 <img src="http://emergingncr.com/mangalcity/public/images/post/post_image/t2.jpg" class="img-responsive" alt="img">
 </div>
 </div>
-
+</div>
+</div>
 <!-- side-3 -->
 
 <!-- search -->

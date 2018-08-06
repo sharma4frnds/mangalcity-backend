@@ -23,7 +23,7 @@
             <div class="cover-pro lt-pro">
 
                 <div class="over-ic">
-                    <a data-toggle="modal" href="<?php echo e(url('/imagepopup/')); ?>" data-target="#myModal_large">
+                    <a data-toggle="modal" href="<?php echo e(url('/imagepopup/')); ?>" data-target="#myModal">
                         <i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
                 </div>
                 <?php echo e(Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))); ?>

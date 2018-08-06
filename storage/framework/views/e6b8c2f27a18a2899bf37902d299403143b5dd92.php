@@ -7,10 +7,14 @@
 
     <input type="file" id="profile_image_cropp_upload" accept="image/*">
     <hr>
-    <div id="image_selected_div">
+
+    <div id="image_selected_div" style="display:none">
       <div id="profile_image_cropp" style="width:350px"></div>
         <strong>Select Image:</strong>
         <button class="btn btn-success upload-image-result" style="display: none">Upload Image</button>
+           <div class="image_ajax_load text-center" style="display:none">
+           <p><?php echo e(Html::image('public/img/loader.gif')); ?> Loading...</p>
+          </div>
         <br>
       </div>
 
@@ -41,6 +45,7 @@ $uploadCrop = $('#profile_image_cropp').croppie({
 
 
 $('#profile_image_cropp_upload').on('change', function () { 
+  $("#image_selected_div").show();
   var reader = new FileReader();
     reader.onload = function (e) {
       $uploadCrop.croppie('bind', {
@@ -68,7 +73,7 @@ $('.upload-image-result').on('click', function (ev) {
         beforeSend: function(xhr){
         xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
         cache: false,
-        async:false,
+       // async:false,
       data: {"cover_image":resp},
       success: function (data) {
          $('.image_ajax_load').hide();

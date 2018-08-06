@@ -480,7 +480,7 @@ public function forgot_password_otp(Request $request)
 
         $user=User::find($user->id);
      
-        if($user->image !='default.default'){
+        if($user->image !='default.png'){
             $file='public/images/user/'.$user->image;
             if(file_exists($file))
             {
@@ -510,11 +510,16 @@ public function forgot_password_otp(Request $request)
         $user1 = JWTAuth::toUser($request->token);
         $user=User::find($user1->id);
 
-        $file='public/images/user/cover/'.$user->cover_image;
-        if(file_exists($file))
-        {
-           @unlink($file);
+      
+      if($user->cover_image !='default.png')
+       {
+            $file='public/images/user/cover/'.$user->cover_image;
+            if(file_exists($file))
+            {
+               @unlink($file);
+            }
         }
+
 
          $user->cover_image=$imageName;
          $user->save();

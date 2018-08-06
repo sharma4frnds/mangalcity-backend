@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
     <title>@yield('title')</title>
+    
+    <link rel="icon" href="{{ asset('public/img/fav.png') }}" type="image/x-icon">
     @yield('header_css')
   </head>
   <body style="background: #e9ebee;">
@@ -45,16 +47,15 @@
      </div>
 
 
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script type="text/javascript" src="{{ asset('public/js/bootstrap.min.js')}}"></script>
-   <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">
-   <script src="http://demo.expertphp.in/js/jquery-ui.min.js"></script>
+  {{ Html::script('public/js/jquery-ui.min.js') }}
   <script type="text/javascript" src="{{ asset('public/js/app.js')}}"></script>
   <script src="{{ asset('public/js/toastr.min.js') }}"></script>
   <link href="{{ asset('public/css/toastr.min.css') }}" rel="stylesheet">
   {{ Html::script('public/js/croppie.js') }}
   {{ Html::style('public/css/croppie.css')}}
-
+  {{ Html::style('public/css/autocomplete.css')}}
   {!! Toastr::render() !!}
 
     @yield('footer_script')

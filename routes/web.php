@@ -82,6 +82,8 @@ Route::group(['middleware' => 'auth'], function()
 
 		Route::POST('/search','SearchController@index');
 		Route::POST('/imageload','PostController@imageload');
+		
+
 	});
 });
 

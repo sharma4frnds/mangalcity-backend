@@ -52,6 +52,11 @@
                      <div class="pro1">{{Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))}}  
                     </div>  
                        <textarea name="message" id="npmessage" cols="30" rows="1" class="form-control" placeholder="Write something here..."></textarea>
+
+                       <ul> <li> 
+                            <div class="dz-message"></div>
+                           <div class="dropzone-previews" id="dropzonePreview"></div>
+                         </li></ul>
                     </div>
 
                    
@@ -209,8 +214,28 @@ function loadMoreData(page){
         });
 }
 </script>
+<script type="text/javascript">
+
+    var a = new StickySidebar('#sidebar', {
+      topSpacing: 20,
+      bottomSpacing: 20,
+      containerSelector: '.rg-one',
+      innerWrapperSelector: '.sidebar__inner'
+    });
+  </script>
+  <script type="text/javascript">
+  	$(window).scroll(function(){
+	    if ($(this).scrollTop() > 500) {
+	       $('#sidebar').addClass('newClass');
+	    } else {
+	       $('#sidebar').removeClass('newClass');
+	    }
+	});
+  </script>
+
   {{ Html::style('public/js/jquery-ui.css')}}
   {!! HTML::script('public/js/dropzone.js') !!}
+  {!! HTML::script('public/js/sticky-sidebar.js') !!}
   {!! HTML::script('/public/js/dropzone-config.js') !!}
   {!! HTML::script('/public/js/jquery.fancybox.js') !!}
 @endsection

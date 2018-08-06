@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use App\User;
 class UserController extends Controller
 {
     /**
@@ -46,7 +47,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+       $user=user::find($id);
+        return view('admin.user_view',compact('user'));
     }
 
     /**

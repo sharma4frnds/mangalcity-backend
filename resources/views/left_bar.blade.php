@@ -1,15 +1,15 @@
-<div class="col-md-4 col-sm-3 col-xs-12 ped-0">
+<div class="col-md-4 col-sm-3 col-xs-12 ped-0 media-releases-menu" id="getFixed">
       <div class="profile">
 
           <div class="pro">
           	<a href="{{url('profile/'.Auth::user()->url)}}">{{Html::image('public/images/user/'.Auth::user()->image)}}</a>
           </div> 
           <h4><a href="{{url('profile/'.Auth::user()->url)}}">{{Auth::user()->first_name}} {{Auth::user()->last_name}} </a></h4>
-         <p><a href="{{url('home')}}">Home</a></p>
-          <p><a href="{{url('activity')}}">Activity Log</a></p>
-          <p><a href="{{url('user/profile')}}">Update Profile</a></p>
-          <p><a href="{{url('user/change_password')}}">Change Password</a></p>
-          <p><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" > Logout </a>
+         <p><a href="{{url('home')}}"><i class="fa fa-home" aria-hidden="true"></i> Home</a></p>
+          <p><a href="{{url('activity')}}"><i class="fa fa-history" aria-hidden="true"></i> Activity Log</a></p>
+          <p><a href="{{url('user/profile')}}"><i class="fa fa-user" aria-hidden="true"></i> Update Profile</a></p>
+          <p><a href="{{url('user/change_password')}}"><i class="fa fa-key" aria-hidden="true"></i> Change Password</a></p>
+          <p><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();" > <i class="fa fa-sign-out" aria-hidden="true"></i> Logout </a>
           </p>
 
           <form id="frm-logout" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -38,3 +38,4 @@
 </div>
 </div>
 </div>  
+

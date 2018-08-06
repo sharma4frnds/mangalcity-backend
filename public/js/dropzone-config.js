@@ -10,15 +10,15 @@ Dropzone.options.realDropzone = {
     previewsContainer: '#dropzonePreview',
     previewTemplate: document.querySelector('#preview-template').innerHTML,
     addRemoveLinks: true,
-    dictRemoveFile: '✘',
+    dictRemoveFile: 'X',
     dictFileTooBig: 'Image is bigger than 8MB',
     //clickable: false,
-    thumbnailWidth: 40,
-    thumbnailHeight: 35,
+    thumbnailWidth: 50,
+    thumbnailHeight: 50,
     acceptedFiles: "image/*",
     clickable: "#npimage",
     capture : 'audio/*',
-
+    dictCancelUpload:'',
 
     /* accept: function(file, done) {
         var ext = (file.name).split('.')[1]; // get extension from file name
@@ -156,13 +156,10 @@ Dropzone.options.realDropzone = {
                 }
                 hdiv +='<div class="share-area">';
                     hdiv +='<ul>';
-                     hdiv +='<li ><a onclick="doLike('+data.pdata.id+',0)" id="dolike'+data.pdata.id+'" ><i class="fa fa-thumbs-o-up"></i> 0</a> <div class="content_like"><span class="tooltiptext" data-toggle="tooltip" title="Please wait.." id="clike_'+data.pdata.id+'">Like </span></div></li>';   
-                     hdiv +='<li ><a onclick="dodislikes('+data.pdata.id+',1)" id="dodislikes'+data.pdata.id+'" ><i class="fa fa-thumbs-o-down"></i> 0</a></i> <div class="content_dislike"><span title="Please wait.." id="cdislike_'+data.pdata.id+'">Dislike</span></div></li>';   
-                     hdiv +='<li><a onclick="focus_form('+data.pdata.id+')"><i class="fa fa-comment" aria-hidden="true"></i> Comment</i></a> </li>';  
-                     hdiv +='<li><a onclick="share_post_popup('+data.pdata.id+')"><i class="fa fa-share-alt" aria-hidden="true"></i> Share</a> </li>';
-                      if(data.pdata.type=='image'){
-                        hdiv +='<li><a href="'+siteUrl+'/download_image/'+data.pdata.id+'"><i class="fa fa-cloud-download" aria-hidden="true"></i>Download</a></li>';
-                      }   
+                     hdiv +='<li ><a onclick="doLike('+data.pdata.id+',0)" id="dolike'+data.pdata.id+'" ><i class="fa fa-thumbs-o-up"></i> </a> <div class="content_like" id="content_like'+data.pdata.id+'" style="display:none"><span class="tooltiptext" data-toggle="tooltip" title="Please wait.." id="clike_'+data.pdata.id+'" > </span></div></li>';   
+                     hdiv +='<li ><a onclick="dodislikes('+data.pdata.id+',1)" id="dodislikes'+data.pdata.id+'" ><i class="fa fa-thumbs-o-down"></i> </a></i> <div class="content_dislike" id="content_dislike'+data.pdata.id+'" style="display:none"><span title="Please wait.." id="cdislike_'+data.pdata.id+'" > </span></div></li>';   
+                     hdiv +='<li><a onclick="share_post_popup('+data.pdata.id+')"> <i class="fa fa-share-alt" aria-hidden="true"></i>Share</a> </li>';
+                  
                     hdiv +='</ul>';
                 hdiv +='</div>';
            

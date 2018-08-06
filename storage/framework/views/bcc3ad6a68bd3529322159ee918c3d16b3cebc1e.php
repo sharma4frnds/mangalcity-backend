@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
     <title><?php echo $__env->yieldContent('title'); ?></title>
+    
+    <link rel="icon" href="<?php echo e(asset('public/img/fav.png')); ?>" type="image/x-icon">
     <?php echo $__env->yieldContent('header_css'); ?>
   </head>
   <body style="background: #e9ebee;">
@@ -48,10 +50,10 @@
      </div>
 
 
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script type="text/javascript" src="<?php echo e(asset('public/js/bootstrap.min.js')); ?>"></script>
-   <link href="http://demo.expertphp.in/css/jquery.ui.autocomplete.css" rel="stylesheet">
-   <script src="http://demo.expertphp.in/js/jquery-ui.min.js"></script>
+  <?php echo e(Html::script('public/js/jquery-ui.min.js')); ?>
+
   <script type="text/javascript" src="<?php echo e(asset('public/js/app.js')); ?>"></script>
   <script src="<?php echo e(asset('public/js/toastr.min.js')); ?>"></script>
   <link href="<?php echo e(asset('public/css/toastr.min.css')); ?>" rel="stylesheet">
@@ -59,6 +61,7 @@
 
   <?php echo e(Html::style('public/css/croppie.css')); ?>
 
+  <?php echo e(Html::style('public/css/autocomplete.css')); ?>
 
   <?php echo Toastr::render(); ?>
 

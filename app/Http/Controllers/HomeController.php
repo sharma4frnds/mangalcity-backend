@@ -12,6 +12,7 @@ use App\Model\Home_location;
 use Auth;
 use App\Model\Post;
 use App\Model\Media;
+use Crypt;
 class HomeController extends FrontController
 {
     /**
@@ -50,12 +51,9 @@ class HomeController extends FrontController
 
     function download_image($url)
     {
-        $medias=Media::where('post_id',$url)->get();
-     
-        if($medias){
-        foreach ($medias as $media) {
-          $filepath='public/images/post/post_image/'.$media->name;
-        if(file_exists($filepath)) {
+        $filepath='public/images/post/post_image/full_'.$url;
+        if(file_exists($filepath)) 
+        {
             header('Content-Description: File Transfer');
             header('Content-Type: application/octet-stream');
             header('Content-Disposition: attachment; filename="'.basename($filepath).'"');
@@ -65,11 +63,29 @@ class HomeController extends FrontController
             header('Content-Length: ' . filesize($filepath));
             flush(); // Flush system output buffer
             readfile($filepath);
-
-            }
+            exit();
         }
 
-        }
+
+            // $medias=Media::where('post_id',$url)->get();
+            // if($medias){
+            // foreach ($medias as $media) {
+            //   $filepath='public/images/post/post_image/full_'.$media->name;
+            // if(file_exists($filepath)) {
+            //     header('Content-Description: File Transfer');
+            //     header('Content-Type: application/octet-stream');
+            //     header('Content-Disposition: attachment; filename="'.basename($filepath).'"');
+            //     header('Expires: 0');
+            //     header('Cache-Control: must-revalidate');
+            //     header('Pragma: public');
+            //     header('Content-Length: ' . filesize($filepath));
+            //     flush(); // Flush system output buffer
+            //     readfile($filepath);
+            //     exit();
+            //     }
+            // }
+
+            // }
     }
 
 

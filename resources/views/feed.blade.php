@@ -59,18 +59,19 @@
          <li><a  onclick="doLike({{$city_post->id}},0)" id="dolike{{$city_post->id}}" > 
           @if(isset($city_post->like))
                 @if($city_post->like->type==0)
-                     <i class="fa fa-thumbs-up"></i> {{$city_post->likes}} 
+                     <i class="fa fa-thumbs-up"></i> 
                     @else
-                     <i class="fa fa-thumbs-o-up"></i> {{$city_post->likes}}
+                     <i class="fa fa-thumbs-o-up"></i> 
                     @endif
-               
                 @else
-                <i class="fa fa-thumbs-o-up"></i> {{$city_post->likes}}
+                <i class="fa fa-thumbs-o-up"></i> 
                 @endif
              </a> 
-             <div class='content_like'>
-                <span class="tooltiptext" data-toggle="tooltip" title='Please wait..' id='clike_{{$city_post->id}}'>Like </span>
+         
+             <div class='content_like' id="content_like{{$city_post->id}}" @if($city_post->likes==0) style="display:none" @endif>
+                <span class="tooltiptext" data-toggle="tooltip" title='Please wait..' id='clike_{{$city_post->id}}'>@if($city_post->likes>0){{$city_post->likes}} @endif  </span>
             </div>
+       
          </li>
 
        
@@ -79,28 +80,21 @@
             <a onclick="dodislikes({{$city_post->id}},1)" id="dodislikes{{$city_post->id}}" > 
                @if(isset($city_post->like))
                     @if($city_post->like->type==1)
-                    <i class="fa fa-thumbs-down"></i> {{$city_post->dislikes}}
+                    <i class="fa fa-thumbs-down"></i> 
                     @else
-                    <i class="fa fa-thumbs-o-down"></i> {{$city_post->dislikes}}
+                    <i class="fa fa-thumbs-o-down"></i> 
                     @endif
                 @else
-                <i class="fa fa-thumbs-o-down"></i> {{$city_post->dislikes}}
+                <i class="fa fa-thumbs-o-down"></i> 
                 @endif
               </a>
-              <div class='content_dislike'>
-                <span title='Please wait..' id='cdislike_{{$city_post->id}}'>Dislike </span>
-            </div>
-         </li>
-         
-        
-          <li><a onclick="focus_form({{$city_post->id}})"> <i class="fa fa-comment" aria-hidden="true"></i> Comment</i> </a></li>   
-       
-          <li><a onclick="share_post_popup({{$city_post->id}})">  <i class="fa fa-share-alt" aria-hidden="true"></i> Share</i></a></li>
-          
-         @if($city_post->type=='image')
-           <li><a href="{{url('download_image/'.$city_post->id)}}"><i class="fa fa-cloud-download" aria-hidden="true"></i>Download</a></li>
-           @endif
 
+            <div class='content_dislike' id="content_dislike{{$city_post->id}}" @if($city_post->dislikes==0) style="display:none" @endif>
+                <span title='Please wait..' id='cdislike_{{$city_post->id}}'> @if($city_post->dislikes>0) {{$city_post->dislikes}} @endif  </span>
+            </div>
+
+         </li>
+          <li><a onclick="share_post_popup({{$city_post->id}})">   <i class="fa fa-share-alt" aria-hidden="true"></i> Share</a></li>
         </ul>
     </div>
 

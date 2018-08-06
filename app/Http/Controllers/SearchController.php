@@ -14,7 +14,7 @@ class SearchController extends Controller
 		$query=e($request->q);
 		if(!$query && $query == '') return response()->json(array(), 400);
 	
-  		$products=User::with('citydata')->where('first_name','LIKE','%'.$query.'%')->get();
+  		$products=User::with('citydata')->where('first_name','LIKE','%'.$query.'%')->where('profile','1')->where('is_admin','0')->get();
     	$data=array();
    
     	if($products){

@@ -399,20 +399,32 @@ class PostController extends Controller
 
        $type='';
        $value='';
+       $media='';
        $share_message='';
 
        $share_message=$request->share_message?$request->share_message :'';
 
       if($post->type=='image')
       {
-        $file=base_path('public/images/post/post_image/'.$post->value);
-        $ext =explode('.', $post->value);
+        $medias=Media::where('post_id',$request->post_id)->get();
+        foreach ($medias as $media) {
+        $file=base_path('public/images/post/post_image/'.$media->name);
+        $ext =explode('.', $media->name);
         $extension=end($ext);
         $renameFile=round(microtime(true) * 1000).'.'.$extension;
         $newFile=base_path('public/images/post/post_image/'.$renameFile);
         copy($file,$newFile);
+
+        $full_file=base_path('public/images/post/post_image/full_'.$media->name);
+        $newFileFull=base_path('public/images/post/post_image/full_'.$renameFile);  
+        copy($full_file,$newFileFull);
+
         $type='image';
         $value=$renameFile;
+
+          Media::create(['post_id'=> $newpost->id,'name'=>$renameFile]); 
+         }
+          $media=Media::where('post_id',$post->id)->get();
       }
 
       if($post->type=='video')
@@ -430,7 +442,6 @@ class PostController extends Controller
 
       if($post->type=='audio')
       {
-
         $file=base_path('public/images/post/post_audio/'.$post->value);
         $ext =explode('.', $post->value);
         $extension=end($ext);
@@ -441,7 +452,7 @@ class PostController extends Controller
         $value=$renameFile;
       }
       
-      $newpost=post::create(['user_id'=>$user->id,'message'=>$request->share_message,'type'=>$type,'value'=>$value,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1,'state'=>$user->state,'district'=>$user->district,'city'=>$user->city]);
+      $newpost=post::create(['user_id'=>$user->id,'message'=>$request->share_message,'type'=>$type,'value'=>$value,'media'=>$media,'likes'=>'0','dislikes'=>'0','tag'=>1,'spam'=>0, 'status' => 1,'state'=>$user->state,'district'=>$user->district,'city'=>$user->city]);
 
        Helper::ActivityAdd($user->id,$newpost->id,'share');
 

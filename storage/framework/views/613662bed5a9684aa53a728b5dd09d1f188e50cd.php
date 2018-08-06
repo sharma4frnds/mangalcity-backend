@@ -60,20 +60,19 @@
          <li><a  onclick="doLike(<?php echo e($city_post->id); ?>,0)" id="dolike<?php echo e($city_post->id); ?>" > 
           <?php if(isset($city_post->like)): ?>
                 <?php if($city_post->like->type==0): ?>
-                     <i class="fa fa-thumbs-up"></i> <?php echo e($city_post->likes); ?> 
+                     <i class="fa fa-thumbs-up"></i> 
                     <?php else: ?>
-                     <i class="fa fa-thumbs-o-up"></i> <?php echo e($city_post->likes); ?>
-
+                     <i class="fa fa-thumbs-o-up"></i> 
                     <?php endif; ?>
-               
                 <?php else: ?>
-                <i class="fa fa-thumbs-o-up"></i> <?php echo e($city_post->likes); ?>
-
+                <i class="fa fa-thumbs-o-up"></i> 
                 <?php endif; ?>
              </a> 
-             <div class='content_like'>
-                <span class="tooltiptext" data-toggle="tooltip" title='Please wait..' id='clike_<?php echo e($city_post->id); ?>'>Like </span>
+         
+             <div class='content_like' id="content_like<?php echo e($city_post->id); ?>" <?php if($city_post->likes==0): ?> style="display:none" <?php endif; ?>>
+                <span class="tooltiptext" data-toggle="tooltip" title='Please wait..' id='clike_<?php echo e($city_post->id); ?>'><?php if($city_post->likes>0): ?><?php echo e($city_post->likes); ?> <?php endif; ?>  </span>
             </div>
+       
          </li>
 
        
@@ -82,31 +81,21 @@
             <a onclick="dodislikes(<?php echo e($city_post->id); ?>,1)" id="dodislikes<?php echo e($city_post->id); ?>" > 
                <?php if(isset($city_post->like)): ?>
                     <?php if($city_post->like->type==1): ?>
-                    <i class="fa fa-thumbs-down"></i> <?php echo e($city_post->dislikes); ?>
-
+                    <i class="fa fa-thumbs-down"></i> 
                     <?php else: ?>
-                    <i class="fa fa-thumbs-o-down"></i> <?php echo e($city_post->dislikes); ?>
-
+                    <i class="fa fa-thumbs-o-down"></i> 
                     <?php endif; ?>
                 <?php else: ?>
-                <i class="fa fa-thumbs-o-down"></i> <?php echo e($city_post->dislikes); ?>
-
+                <i class="fa fa-thumbs-o-down"></i> 
                 <?php endif; ?>
               </a>
-              <div class='content_dislike'>
-                <span title='Please wait..' id='cdislike_<?php echo e($city_post->id); ?>'>Dislike </span>
-            </div>
-         </li>
-         
-        
-          <li><a onclick="focus_form(<?php echo e($city_post->id); ?>)"> <i class="fa fa-comment" aria-hidden="true"></i> Comment</i> </a></li>   
-       
-          <li><a onclick="share_post_popup(<?php echo e($city_post->id); ?>)">  <i class="fa fa-share-alt" aria-hidden="true"></i> Share</i></a></li>
-          
-         <?php if($city_post->type=='image'): ?>
-           <li><a href="<?php echo e(url('download_image/'.$city_post->id)); ?>"><i class="fa fa-cloud-download" aria-hidden="true"></i>Download</a></li>
-           <?php endif; ?>
 
+            <div class='content_dislike' id="content_dislike<?php echo e($city_post->id); ?>" <?php if($city_post->dislikes==0): ?> style="display:none" <?php endif; ?>>
+                <span title='Please wait..' id='cdislike_<?php echo e($city_post->id); ?>'> <?php if($city_post->dislikes>0): ?> <?php echo e($city_post->dislikes); ?> <?php endif; ?>  </span>
+            </div>
+
+         </li>
+          <li><a onclick="share_post_popup(<?php echo e($city_post->id); ?>)">   <i class="fa fa-share-alt" aria-hidden="true"></i> Share</a></li>
         </ul>
     </div>
 

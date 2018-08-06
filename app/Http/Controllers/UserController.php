@@ -162,7 +162,7 @@ class UserController extends Controller
 
         $user=User::find(Auth::user()->id);
 
-        if($user->image !='default.default'){
+        if($user->image !='default.png'){
             $file='public/images/user/'.$user->image;
             if(file_exists($file))
             {
@@ -195,7 +195,7 @@ class UserController extends Controller
 
         $user=User::find(Auth::user()->id);
      
-        if($user->image !='default.default'){
+        if($user->image !='default.png'){
             $file='public/images/user/'.$user->image;
             if(file_exists($file))
             {
@@ -229,39 +229,19 @@ class UserController extends Controller
 
          $user=User::find(Auth::user()->id);
 
-        $file='public/images/user/cover/'.$user->cover_image;
-        if(file_exists($file))
-        {
-           @unlink($file);
+
+       if($user->cover_image !='default.png')
+       {
+            $file='public/images/user/cover/'.$user->cover_image;
+            if(file_exists($file))
+            {
+               @unlink($file);
+            }
         }
+
 
          $user->cover_image=$imageName;
          $user->save();
-        return response()->json(['success'=>false, 'message'=>'successfully update'],200);
-
-
-        $validator = Validator::make($request->all(), ['cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:5096|dimensions:min_width=850,min_height=351']);
-        
-        if($validator->fails())
-        {
-             return response()->json(['success'=>false, 'errors'=>$validator->getMessageBag()->toArray()],422);
-        }
-
-       $imageName = time(). '.' .$request->file('cover_image')->getClientOriginalExtension();
-
-        Image::make($request->file('cover_image')->getRealPath())->fit(850, 351)->save('public/images/user/cover/'.$imageName);
-    
-        $user=User::find(Auth::user()->id);
-
-        $file='public/images/user/cover/'.$user->cover_image;
-        if(file_exists($file))
-        {
-           @unlink($file);
-        }
-
-         $user->cover_image=$imageName;
-         $user->save();
-
         return response()->json(['success'=>false, 'message'=>'successfully update'],200);
         
     }

@@ -12,7 +12,7 @@
               <div class="title_right">
                 <div class="col-md-2 col-sm-5 col-xs-12 form-group pull-right top_search">
                   <div class="input-group">
-                     <a href={{url('admin/users/create')}}> <button class="btn btn-primary" type="submit">Add User</button></a>
+                   
                     
                   </div>
                 </div>
@@ -60,8 +60,8 @@
                 <td>{{$row->mobile}} </td>
                 <td>{{$row->created_at}}</td>
                 
-                <td><a href="{{ url("admin/users/$row->id") }}">View</a> | <a href="{{ url("admin/users/$row->id/edit") }}">Edit</a> 
-               <td> {!! Form::open(array('url' => "admin/users/".$row->id,'method' => 'delete')) !!}
+                <td><a  class="btn btn-primary btn-xs" href="{{ url("admin/users/$row->id") }}">View</a> 
+                {!! Form::open(array('url' => "admin/users/".$row->id,'method' => 'delete')) !!}
                       {!!Form::submit('delete!' , array(' class'  => 'btn btn-danger btn-xs','name'=>'delete' )); !!}  
                     {!! Form::close() !!} </td>
             </tr>
@@ -74,7 +74,7 @@
               <script src="https://cdn.datatables.net/1.10.9/js/jquery.dataTables.min.js"></script>
               <!-- js -->
               <!-- css -->
-                  <link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet">
+              <link href="https://cdn.datatables.net/1.10.9/css/jquery.dataTables.min.css" rel="stylesheet">
               <!-- css -->
                 
               <script type="text/javascript" class="init"> 

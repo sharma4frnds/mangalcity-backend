@@ -59,9 +59,9 @@ class PostController extends Controller
 
   $city_name=City::where('id',Auth::user()->city)->first();
 
-  $country_posts=Post::with('media')->where('status',1)->where('tag',4)->orderBy('id','DESC')->limit(10)->get();
-  $state_posts=Post::with('media')->where('status',1)->where('tag',3)->orderBy('id','DESC')->limit(10)->get();
-  $district_posts=Post::with('media')->where('status',1)->where('tag',2)->orderBy('id','DESC')->limit(10)->get();
+  $country_posts=Post::with('media')->where('status',1)->where('tag',4)->orderBy('likes','DESC')->limit(10)->get();
+  $state_posts=Post::with('media')->where('status',1)->where('tag',3)->where('state',$state)->orderBy('likes','DESC')->limit(10)->get();
+  $district_posts=Post::with('media')->where('status',1)->where('tag',2)->where('district',$district)->orderBy('likes','DESC')->limit(10)->get();
 
   return view('post',compact('city_posts','district_posts','state_posts','country_posts','city_name'));
    }
@@ -228,19 +228,19 @@ class PostController extends Controller
     if($slug=='country')
     {
       $city_posts=Post::with(['user','like' => function ($query) {
-      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',4)->orderBy('id', 'DESC')->paginate(1);
+      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',4)->orderBy('id', 'DESC')->paginate(10);
     }
 
     if($slug=='state')
     {
          $city_posts=Post::with(['user','like' => function ($query) {
-      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',3)->orderBy('id', 'DESC')->paginate(1);
+      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',3)->orderBy('id', 'DESC')->paginate(10);
     }
 
     if($slug=='district')
     {
       $city_posts=Post::with(['user','like' => function ($query) {
-      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',2)->orderBy('id', 'DESC')->paginate(1);
+      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',2)->orderBy('id', 'DESC')->paginate(10);
     }
   
 
@@ -252,9 +252,9 @@ class PostController extends Controller
 
     $city_name=City::where('id',Auth::user()->city)->first();
 
-  $country_posts=Post::with('media')->where('status',1)->where('tag',4)->orderBy('id','DESC')->limit(10)->get();
-  $state_posts=Post::with('media')->where('status',1)->where('tag',3)->orderBy('id','DESC')->limit(10)->get();
-  $district_posts=Post::with('media')->where('status',1)->where('tag',2)->orderBy('id','DESC')->limit(10)->get();
+  $country_posts=Post::with('media')->where('status',1)->where('tag',4)->orderBy('likes','DESC')->limit(10)->get();
+  $state_posts=Post::with('media')->where('status',1)->where('tag',3)->where('state',$state)->orderBy('likes','DESC')->limit(10)->get();
+  $district_posts=Post::with('media')->where('status',1)->where('tag',2)->where('district',$district)->orderBy('likes','DESC')->limit(10)->get();
 
     return view('highlights',compact('city_posts','district_posts','state_posts','country_posts','city_name'));
 
@@ -675,6 +675,11 @@ class PostController extends Controller
         $renameFile=round(microtime(true) * 1000).'.'.$extension;
         $newFile=base_path('public/images/post/post_image/'.$renameFile);
         copy($file,$newFile);
+
+        $full_file=base_path('public/images/post/post_image/full_'.$media->name);
+        $newFileFull=base_path('public/images/post/post_image/full_'.$renameFile);  
+        copy($full_file,$newFileFull);
+
         $type='image';
         $value=$renameFile;
 
@@ -710,10 +715,23 @@ class PostController extends Controller
 
     public function post_view($id)
     {
-      $post=Post::with(['user','like' => function ($query) {
-      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('id',$id)->orderBy('id', 'DESC')->first();
+      $id=decrypt($id);
+          //set location
+      $home_location=Session::get('home_location');
+      $city=''; $district=''; $state='';
+      if($home_location){ $city=$home_location['home_city']; $district=$home_location['home_district']; $state=$home_location['home_state']; }else{ $city=Auth::user()->city; $district=Auth::user()->district; $state=Auth::user()->state;}
 
-      return view('post_view_popup',compact('post'));
+   
+       $city_posts=Post::with(['user','media','like' => function ($query) {
+        $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('id',$id)->get();
+
+
+      $country_posts=Post::with('media')->where('status',1)->where('tag',4)->orderBy('likes','DESC')->limit(10)->get();
+      $state_posts=Post::with('media')->where('status',1)->where('tag',3)->where('state',$state)->orderBy('likes','DESC')->limit(10)->get();
+      $district_posts=Post::with('media')->where('status',1)->where('tag',2)->where('district',$district)->orderBy('likes','DESC')->limit(10)->get();
+
+
+      return view('post_view',compact('city_posts','country_posts','state_posts','district_posts'));
     }
 
     public function likeuser(Request $request)
@@ -760,11 +778,13 @@ class PostController extends Controller
     $medias=Media::where('post_id',$post_id)->get();
     $data=array();
     foreach ($medias as $media) {
-    $image=URL::to('/public/images/post/post_image/full_'.$media->name);
-      $data[]=array('src'=> $image);
+      $image=URL::to('/public/images/post/post_image/full_'.$media->name);
+      $post_id="$post_id";
+      $url=URL::to('download_image/'.$media->name);
+      $href='<a href='.$url.'><i class="fa fa-cloud-download" aria-hidden="true"></i>Download</a>';
+      $data[]=array('src'=> $image,'opts'=>array('caption'=>$href));
     }
     return $data;
   }
 
 }
-

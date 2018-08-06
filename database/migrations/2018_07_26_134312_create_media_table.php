@@ -15,7 +15,7 @@ class CreateMediaTable extends Migration
     {
         Schema::create('media', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('post_id')->unsigned();;
+            $table->integer('post_id')->unsigned();
             $table->string('name');
             $table->timestamps();
             $table->foreign('post_id')->references('id')->on('posts');

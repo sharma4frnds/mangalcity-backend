@@ -10,6 +10,7 @@
 
  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
 <title>@yield('title')</title>
+<link rel="icon" href="{{ asset('public/img/fav.png') }}" type="image/x-icon">
 @yield('header_css')
 </head>
 <body>

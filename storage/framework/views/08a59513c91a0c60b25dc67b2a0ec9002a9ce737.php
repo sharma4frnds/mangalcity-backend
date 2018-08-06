@@ -20,7 +20,7 @@
               <div class="cover-pro">
                   <?php if($profile->id==Auth::user()->id): ?>
                   <div class="over-ic">
-                      <a data-toggle="modal" href="<?php echo e(url('/imagepopup/')); ?>" data-target="#myModal_large">
+                      <a data-toggle="modal" href="<?php echo e(url('/imagepopup/')); ?>" data-target="#myModal">
                           <i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
                   </div>
                   <?php endif; ?>

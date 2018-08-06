@@ -12,6 +12,7 @@
 
  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
 <title><?php echo $__env->yieldContent('title'); ?></title>
+<link rel="icon" href="<?php echo e(asset('public/img/fav.png')); ?>" type="image/x-icon">
 <?php echo $__env->yieldContent('header_css'); ?>
 </head>
 <body>

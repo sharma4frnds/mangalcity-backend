@@ -143,16 +143,25 @@ function doLike(post_id,like_type){
         data: {'post_id':post_id,'like_type':like_type},
         success:function(data){
             if(data.type==0){
-            $("#dolike"+post_id).html('<i class="fa fa-thumbs-o-up" aria-hidden="true"> ' + data.lcount);
-            toastr.success('Removed to Liked Post');
+            $("#dolike"+post_id).html('<i class="fa fa-thumbs-o-up" aria-hidden="true"> ' );
+             if(data.lcount==0){
+              $("#content_like"+post_id).hide();
+             } else{
+              $("#content_like"+post_id).show(); $("#clike_"+post_id).html(data.lcount);
+             }
             }
             else
             {
-              $("#dolike"+post_id).html('<i class="fa fa-thumbs-up"></i> ' + data.lcount);
-              toastr.success('Added to Liked Post');
+              $("#dolike"+post_id).html('<i class="fa fa-thumbs-up"></i> ');
+               if(data.lcount>0){ $("#content_like"+post_id).show(); $("#clike_"+post_id).html(data.lcount);}
             }
 
-            $("#dodislikes"+post_id).html('<i class="fa fa-thumbs-o-down" aria-hidden="true"> ' + data.dcount);
+            $("#dodislikes"+post_id).html('<i class="fa fa-thumbs-o-down" aria-hidden="true"> ' );
+              if(data.dcount==0){
+              $("#content_dislike"+post_id).hide();
+             } else{
+              $("#content_dislike"+post_id).show(); $("#cdislike_"+post_id).html(data.dcount);
+             }
         },
         error: function(data) {
           //
@@ -179,17 +188,25 @@ function dodislikes(post_id,like_type){
         {
             if(data.type==0)
             {
-                $("#dodislikes"+post_id).html('<i class="fa fa-thumbs-o-down" aria-hidden="true"> ' + data.dcount);
-                toastr.success('Removed to Dislikes Post');
+                $("#dodislikes"+post_id).html('<i class="fa fa-thumbs-o-down" aria-hidden="true"> ');
+                if(data.dcount==0){
+                $("#content_dislike"+post_id).hide();
+               } else{
+                $("#content_dislike"+post_id).show(); $("#cdislike_"+post_id).html(data.dcount);
+               }
             }
             else
             {
-              $("#dodislikes"+post_id).html('<i class="fa fa-thumbs-down"></i> ' + data.dcount);
-              toastr.success('Added to Dislikes Post');
+              $("#dodislikes"+post_id).html('<i class="fa fa-thumbs-down"></i> ' );
+               if(data.dcount>0){ $("#content_dislike"+post_id).show(); $("#cdislike_"+post_id).html(data.dcount); }
             }
 
-            $("#dolike"+post_id).html('<i class="fa fa-thumbs-o-up" aria-hidden="true"> ' + data.lcount);
-     
+            $("#dolike"+post_id).html('<i class="fa fa-thumbs-o-up" aria-hidden="true"> ');
+             if(data.lcount==0){
+              $("#content_like"+post_id).hide();
+             } else{
+              $("#content_like"+post_id).show(); $("#clike_"+post_id).html(data.lcount);
+             }
 
         },
         error: function(data) {
@@ -407,7 +424,7 @@ function sharePost(post_id){
     data:{'post_id':post_id,'share_message':share_message},
     success:function(data){
         $('#myModal').modal('hide');
-        toastr.success('successfully share your post');
+        toastr.success('Successfully shared to your post');
                     var hdiv='';
             hdiv +='<div class="col-md-12 col-sm-4 col-xs-12 box-shd top-pd-20" id="postdiv'+data.pdata.id+'">';
                 hdiv +='<div class="col-md-6">';
@@ -446,13 +463,10 @@ function sharePost(post_id){
                 }
                 hdiv +='<div class="share-area">';
                     hdiv +='<ul>';
-                     hdiv +='<li ><a onclick="doLike('+data.pdata.id+',0)" id="dolike'+data.pdata.id+'" ><i class="fa fa-thumbs-o-up"></i> 0</a> <div class="content_like"><span class="tooltiptext" data-toggle="tooltip" title="Please wait.." id="clike_'+data.pdata.id+'">Like </span></div></li>';   
-                     hdiv +='<li ><a onclick="dodislikes('+data.pdata.id+',1)" id="dodislikes'+data.pdata.id+'" ><i class="fa fa-thumbs-o-down"></i> 0</a></i> <div class="content_dislike"><span title="Please wait.." id="cdislike_'+data.pdata.id+'">Dislike</span></div></li>';
-                     hdiv +='<li><a onclick="focus_form('+data.pdata.id+')"><i class="fa fa-comment" aria-hidden="true"></i> Comment</i></a> </li>';  
+                     hdiv +='<li ><a onclick="doLike('+data.pdata.id+',0)" id="dolike'+data.pdata.id+'" ><i class="fa fa-thumbs-o-up"></i> </a> <div class="content_like" id="content_like'+data.pdata.id+'" style="display:none"><span class="tooltiptext" data-toggle="tooltip" title="Please wait.." id="clike_'+data.pdata.id+'" > </span></div></li>';   
+                     hdiv +='<li ><a onclick="dodislikes('+data.pdata.id+',1)" id="dodislikes'+data.pdata.id+'" ><i class="fa fa-thumbs-o-down"></i> </a></i> <div class="content_dislike" id="content_dislike'+data.pdata.id+'" style="display:none"><span title="Please wait.." id="cdislike_'+data.pdata.id+'" ></span></div></li>';
                      hdiv +='<li><a onclick="share_post_popup('+data.pdata.id+')"><i class="fa fa-share-alt" aria-hidden="true"></i> Share</a> </li>';
-                    if(data.pdata.type=='image'){
-                        hdiv +='<li><a href="'+siteUrl+'/download_image/'+data.pdata.id+'"><i class="fa fa-cloud-download" aria-hidden="true"></i>Download</a></li>';
-                      }      
+                    
                     hdiv +='</ul>';
                 hdiv +='</div>';
            
@@ -931,6 +945,7 @@ $( "body" ).on('click','.lightboxp', function () {
             $.fancybox.open(data, {
             helpers : { buttons : true},
             loop : false,
+            
           });
         }
     });

@@ -83,7 +83,7 @@ class CommonController extends Controller
     $query=$request->q;
     if(!$query && $query == ''){ return response()->json(['success' => false, 'data'=>array()]); }
   
-      $products=User::with('citydata')->where('first_name','LIKE','%'.$query.'%')->get();
+      $products=User::with('citydata')->where('first_name','LIKE','%'.$query.'%')->where('profile','1')->where('is_admin','0')->get();
       $data=array();
      foreach ($products as $product) {
        $image=URL::to('public/images/user/'.$product->image);
