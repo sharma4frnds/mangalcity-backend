@@ -11,6 +11,7 @@ app/storage/
 
 # Laravel 5 & Lumen specific
 public/storage
+public/images/post
 public/hot
 storage/*.key
 .env.*.php
