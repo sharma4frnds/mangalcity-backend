@@ -12,28 +12,7 @@
       <div class="row">
         <!-- left-pro -->
         <div class="col-md-9">
-        <div class="col-md-12 cv-relt">
-            <div class="cover">
-                <div class="over-ic1"><a data-toggle="modal" href="{{url('/coverpopup/')}}" data-target="#myModal_large"><i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
-                </div>
-
-                {{Html::image('public/images/user/cover/'.Auth::user()->cover_image,'img',array('class'=>'img-responsive'))}}
-            </div>
-            <div class="cover-pro lt-pro">
-
-                <div class="over-ic">
-                    <a data-toggle="modal" href="{{url('/imagepopup/')}}" data-target="#myModal">
-                        <i class=" ovr fa fa-camera" aria-hidden="true"></i></a>
-                </div>
-                {{Html::image('public/images/user/'.Auth::user()->image,'img',array('class'=>'img-responsive'))}}
-
-                
-            </div>
-            <div class="col-md-12 c-cover-pnl">
-                    <span class="cover-user-name">{{Auth::user()->first_name}} {{Auth::user()->last_name}}</span>
-                
-                </div>
-        </div>
+ 
         @include('left_bar')
         <div class="col-md-8 col-sm-6 col-xs-12">
           <!-- start activity -->

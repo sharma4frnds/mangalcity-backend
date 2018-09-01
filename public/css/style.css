@@ -105,9 +105,9 @@ body{
  .text-slide .carousel-indicators li {
      display: none;
 }
- .form-control:focus {
+/* .form-control:focus {
      border-color: #ffffff !important;
-}
+}*/
  ul.nav.nav-tabs a {
      width: 94px;
      color: #fff;
@@ -151,19 +151,7 @@ body{
  button.login-button:hover {
      background: #000000;
 }
- ul.nav.nav-tabs .two-tb a {
-     width: 106px;
-     color: #fff;
-     height: 37px;
-     -ms-transform: rotate(90deg);
-     -webkit-transform: rotate(90deg);
-     transform: rotate(90deg);
-     position: absolute;
-     left: -71px;
-     top: 134px;
-     border: none;
-     border-radius: 0px;
-}
+
  .post{
     margin-bottom: 15px;
 }
@@ -389,9 +377,9 @@ button.btn.hme.btn-warning {
  .carousel-inner>.item>a>img, .carousel-inner>.item>img {
      width: 100% !important;
 }
-.share-area li:nth-last-child(2) {
+/*.share-area li:nth-last-child(2) {
     padding-right: 0px !important;
-}
+}*/
  .carousel-inner img {
      width: 100% !important;
 }
@@ -404,8 +392,8 @@ button.btn.hme.btn-warning {
 .post-bt {
         padding: 3px 9px;
     line-height: 18px;
-    background: #0e73bb;
-    border: 1px solid #0e73bb;
+    background: #8acdfd;
+    border: 1px solid #8acdfd;
     color: #fff;
     text-decoration: none;
     text-align: center;
@@ -520,7 +508,6 @@ header.header img {
     border-radius: 20px;
     letter-spacing: 1px;
     font-family: 'roboto', sans-serif;
-    text-align: justify;
     display: block;
 }
 span.post-time span {
@@ -611,20 +598,25 @@ span.post-time span {
      text-align: center;
      background: #f0f0f0;
 }
- ul.nav.nav-tabs li a:focus {
-     background-color: #d94030;
+/* ul.nav.nav-tabs li a:focus {
+     background-color:#d94030;
     border-color: #d94030;
-}
+}*/
+/*ul.nav.nav-tabs li.two-tb a:focus {background-color: #d94030;}
 .btn-primary:hover {
     color: #fff;
     background-color: #1b96ff;
     border-color: #1b96ff;
-}
+}*/
+.nav-tabs>li.active>a {
+    background: #d94030 !important;
+    }
  .updates input.form-control {
      display: block;
      padding: 10px;
      border-radius: 0px;
      margin-bottom:10px;
+}
 }
  .tab-content.forgt .form-control{
     color: #eaeaea;
@@ -762,16 +754,16 @@ span.post-time span {
 }
 .cover-pro i {
     position: absolute;
-    left: 36px;
+    left: 4px;
     font-size: 15px;
     color: #fff;
     opacity: 0.8;
-    top: 36px;
+    top: 8px;
     background: #000;
-    width: 50px;
-    height: 50px;
+    width: 34px;
+    height: 34px;
     text-align: center;
-    line-height: 50px;
+    line-height: 34px;
     border-radius: 50px;
 }
  .cover-pro:hover .over-ic{
@@ -1013,7 +1005,7 @@ span.tm a {
      width: 106px;
      color: #fff;
      height: 37px;
-/*     background-color: #d93f31;*/
+    background-color: #0e95ff;
      -ms-transform: rotate(90deg);
      -webkit-transform: rotate(90deg);
      transform: rotate(90deg);
@@ -1026,6 +1018,8 @@ span.tm a {
  .post{
     margin-bottom: 15px;
 }
+
+
 span.pro-name.new-dt {
     width: 100%;
     display: block;
@@ -1137,7 +1131,7 @@ i.fa.fa-cloud-download {
 .profile p {
         line-height:25px;
     padding-left: 7px;
-        margin: 10px 0px 0px 0px;
+        margin: 0px 0px 10px 0px;
     margin-left: 2px;
     overflow: hidden;
     float: left;
@@ -1163,7 +1157,7 @@ i.fa.fa-cloud-download {
  .share-area li {
      float: left;
      list-style: none;
-     padding-right: 15px;
+     padding-right: 28px;
      color: #717171;
          line-height: 37px;
          cursor: pointer;
@@ -1850,13 +1844,13 @@ header.header .form-group {
     font-weight: 100;
 }
 label.error {
-   display: inline-block;
+       display: inline-block;
     max-width: 100%;
-    margin-top: 4px;
+    margin-top: -1px;
     font-weight: 500;
     position: absolute;
     font-size: 13px;
-    color: #ff1900;
+    color: #ff240c;
     right: 52px;
 }
 li.one-tb.active a {
@@ -1997,8 +1991,9 @@ ol, ul {
 }*/
 
 i#npimage, i.fa.fa-video-camera, i.fa.fa-music {
-    color: #2aa0f3;
-}
+  color: #2aa0f3;
+    font-size: 17px;
+    line-height: 40px;}
 .tagline.hm-tx {
     text-align: right;
     font-size: 22px !important;
@@ -2006,4 +2001,112 @@ i#npimage, i.fa.fa-video-camera, i.fa.fa-music {
     color: #FFEB3B;
     letter-spacing: 0px;
     font-family: 'Kalam', cursive !important;
+}
+
+/*aside.fixed {
+    position: fixed;
+}
+*/
+/*.sticky-myright-side {
+}
+.right-sidebar-relative {
+	position: relative;
+}
+.sticky-myright-side.scrolled {
+	position: fixed;
+}
+.newClass {
+	position: fixed !important;
+}*/
+.col-md-12.col-sm-12.col-xs-12.bg-sld {
+    padding: 0px;
+}
+.col-md-3.right-sidebar-relative {
+    padding: 0px;
+}
+.modal-body.user-pro button {
+    border-radius: 0px;
+    margin-bottom: 10px;
+}
+.modal-body.user-pro button:hover{background: #0875cc;}
+.modal-content {border: 6px solid #b9d8ec !important;border-radius: 0px !important;}
+.removed_profile {
+    margin-top: 10px;
+}
+.cr-viewport.cr-vp-square {
+    border: 4px solid #b9d8ec !important;
+}
+
+.share-area.ped-x li:nth-last-child(2) {
+    padding: 0;
+}
+
+.flt {
+    float: right;
+}
+.modal-footer {
+    border-top: 0px solid #e5e5e5 !important;
+}
+img.img-responsive.user_img_popup {
+    width: 100%;
+}
+
+
+/*file*/
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+    margin: 10px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+.ui-widget-content {
+    background: #fff !important;
+    color: #333 !important;
+}
+.flt .file-select-button {
+    background: #0088c5;
+    padding: 0 10px;
+    display: inline-block;
+    height: 40px;
+    color: #fff;
+    line-height: 40px;
+        
+}
+.removed_profile.pos {
+    margin-top: 10px;
+    position: relative;
+    left: 47px;
+    top: 6px;
+}
+input[type=file] {
+    position: absolute;
+    top: 25px;
+    opacity: 0;
+}
+/*.flt {
+    display: block;
+    border: 2px solid #dce4ec;
+    color: #34495e;
+    cursor: pointer;
+    height: 40px;
+    line-height: 40px;
+    text-align: left;
+    background: #FFFFFF;
+    overflow: hidden;
+    position: relative;
+}*/
+.flt .file-select-name {
+    line-height: 40px;
+    display: inline-block;
+    padding: 0 10px;
 }

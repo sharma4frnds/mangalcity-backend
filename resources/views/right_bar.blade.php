@@ -1,63 +1,64 @@
+<div class="col-md-3 right-sidebar-relative">
 <div class="sticky-myright-side">
+
+<!-- side-2 -->
 <div class="rg-one">
-<!-- Country -->
- <div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
+ <div class="col-md-12 col-sm-12 col-xs-12 bg-sld">
 
-<div class="slide-three">
-  <div id="myCarousel2" class="carousel slide" data-ride="carousel">
-    
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1" class=""></li>
-      <li data-target="#myCarousel" data-slide-to="2" class=""></li>
-    </ol>
+  <div class="slide-three1">
+    <div id="myCarousel2" class="carousel slide" data-ride="carousel">
+      
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1" class=""></li>
+        <li data-target="#myCarousel" data-slide-to="2" class=""></li></ol>
 
-    <!-- Wrapper for slides -->
-    <h4><a href="{{url('highlights/country')}}" >Country Highlights</a></h4>
-    <div class="carousel-inner">
-     
-      <?php $i=0; ?>
-       @foreach($country_posts as $cposts)
-      <div class="item @if($i==0)active @endif">
-          @if($cposts->type=='image')
-          <?php $cposts_img=''; if(isset($cposts->media[0])) $cposts_img=$cposts->media[0]->name; ?>
+      <!-- Wrapper for slides -->
+      <h4><a href="{{url('highlights/country')}}" >Country Highlights</a></h4>
+
+      <div class="carousel-inner">
+       
+        <?php $i=0; ?>
+         @foreach($country_posts as $cposts)
+        <div class="item @if($i==0)active @endif">
+            @if($cposts->type=='image')
+            <?php $cposts_img=''; if(isset($cposts->media[0])) $cposts_img=$cposts->media[0]->name; ?>
+              <span>{{str_limit($cposts->message, 30)}}</span>
+            <a class="post_view_t"  href="{{url('post_view/'.encrypt($cposts->id))}}" >
+                {{Html::image('public/images/post/post_image/'.$cposts_img,'img',array('class'=>'img-responsive'))}}  </a>
+
+           @elseif($cposts->type=='video')
             <span>{{str_limit($cposts->message, 30)}}</span>
-          <a class="post_view_t"  href="{{url('post_view/'.encrypt($cposts->id))}}" >
-              {{Html::image('public/images/post/post_image/'.$cposts_img,'img',array('class'=>'img-responsive'))}}  </a>
+              <video width="100%" height="150" controls><source src="public/images/post/post_video/{{$cposts->value}}" type="video/mp4"></video>  
+           @else
+              <p>{{str_limit($cposts->message, 210)}}</p>
+           @endif
 
-         @elseif($cposts->type=='video')
-          <span>{{str_limit($cposts->message, 30)}}</span>
-            <video width="100%" height="150" controls><source src="public/images/post/post_video/{{$cposts->value}}" type="video/mp4"></video>  
-         @else
-            <p>{{str_limit($cposts->message, 210)}}</p>
-         @endif
-
-          <a class="post_view_t"  href="{{url('post_view/'.encrypt($cposts->id))}}"> View More </a>
-
-      </div>
-
-      <?php  $i=$i+1; ?>
-
-       @endforeach
+            <a class="post_view_t"  href="{{url('post_view/'.encrypt($cposts->id))}}" > View More </a>
 
 
+        </div>
+
+        <?php  $i=$i+1; ?>
+
+         @endforeach</div>
+
+      <!-- Left and right controls -->
+      <a class="left carousel-control" href="#myCarousel2" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel2" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+      </a>
     </div>
-
-    <!-- Left and right controls -->
-    <a class="left carousel-control" href="#myCarousel2" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel2" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right"></span>
-      <span class="sr-only">Next</span>
-    </a>
   </div>
-</div>
-  </div>
+ 
+ </div>
 
-<div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
+<div class="col-md-12 col-sm-12 col-xs-12 bg-sld">
 
 <div class="slide-three">
   <h4><a href="{{url('highlights/state')}}">State Highlights</a></h4>
@@ -67,8 +68,7 @@
     <ol class="carousel-indicators">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
       <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
+      <li data-target="#myCarousel" data-slide-to="2"></li></ol>
     
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
@@ -92,9 +92,7 @@
       </div>
       <?php  $i=$i+1; ?>
 
-       @endforeach
-
-    </div>
+       @endforeach</div>
 
     <!-- Left and right controls -->
     <a class="left carousel-control" href="#myCarousel3" data-slide="prev">
@@ -105,25 +103,26 @@
       <span class="glyphicon glyphicon-chevron-right"></span>
       <span class="sr-only">Next</span>
     </a>
-  </div>
+  </div></div>
 </div>
-</div>
+
 </div>
 <!-- side-2 -->
+
+
 <!-- side-3 -->
 <div id="sidebar">
-<div class="col-md-3 col-sm-3 col-xs-12 bg-sld sidebar__inner">
+<div class="col-md-12 col-sm-12 col-xs-12 bg-sld sidebar__inner">
 
 <div class="slide-three">
-    <h4><a href="{{url('highlights/district')}}">District Highlights</a></h4>
+  <h4><a href="{{url('highlights/district')}}">District Highlights</a></h4>
   <div id="myCarousel" class="carousel slide" data-ride="carousel">
   
     <!-- Indicators -->
     <ol class="carousel-indicators">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
       <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
+      <li data-target="#myCarousel" data-slide-to="2"></li></ol>
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
@@ -147,10 +146,7 @@
       </div>
       <?php $i=$i+1; ?>
 
-       @endforeach
-    
-  
-    </div>
+       @endforeach</div>
 
     <!-- Left and right controls -->
     <a class="left carousel-control" href="#myCarousel" data-slide="prev">
@@ -167,17 +163,47 @@
 
 
 </div>
-<div class="col-md-3 col-sm-3 col-xs-12 bg-sld">
-    <div class="t-post">
-<img src="http://emergingncr.com/mangalcity/public/images/post/post_image/t1.jpg" class="img-responsive" alt="img">
-</div>
+<div class="col-md-12 col-sm-12 col-xs-12 bg-sld">
+
 <div class="t-post">
-<img src="http://emergingncr.com/mangalcity/public/images/post/post_image/t2.jpg" class="img-responsive" alt="img">
+<img src="{{url('public/img/t1.jpg')}}" class="img-responsive" alt="img">
 </div>
+
+<div class="t-post">
+<img src="{{url('public/img/t2.jpg')}}" class="img-responsive" alt="img">
 </div>
+
 </div>
 </div>
 <!-- side-3 -->
+
+
+</div>
+</div>
+<!-- side-3 -->
+<!-- <script type="text/javascript">
+  $stick = $('aside');
+$foot = $('footer');
+margin = 20;
+offtop = $stick.offset().top - margin;
+offbtm = $foot.offset().top - ( margin*2 + $stick.height() );
+
+$(window).scroll(function () {
+  scrtop = $(window).scrollTop();
+  if (scrtop > offtop && $stick.hasClass('rg-one')) {
+    $stick.removeClass('rg-one').addClass('fixed').css('top', margin);
+  }
+  if (offtop > scrtop && $stick.hasClass('fixed')) {
+    $stick.removeClass('fixed').addClass('rg-one').css('top', 'auto');
+  }
+  if (scrtop > offbtm && $stick.hasClass('fixed')) {
+    $stick.removeClass('fixed').addClass('bottom').css('top', offbtm+margin);
+  }
+  if (offbtm > scrtop && $stick.hasClass('bottom')) {
+    $stick.removeClass('bottom').addClass('fixed').css('top', margin);
+  }
+});
+</script> -->
 
 <!-- search -->
 

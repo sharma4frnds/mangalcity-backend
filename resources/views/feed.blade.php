@@ -31,11 +31,11 @@
 
       @if($city_post->type=='image')
       <?php   $imgCount= count($city_post->media);?>
-      <div class="lightboxp image-layout-@if($imgCount>5)5 @else{{$imgCount}}@endif"  data-id="{{$city_post->id}}" >
+      <div class=" image-layout-@if($imgCount>5)5 @else{{$imgCount}}@endif"   >
         <?php $im=1; $imid=''; $spim=''; ?>
         @foreach ($city_post->media as $media)
            @if($im==5 && $imgCount>5  ) <?php $imid='moreImgDef'; $rim=$imgCount-5; $spim="<span>$rim+</span>";?> @endif
-            <div class="post-img2" id="{{$imid}}" style="background-image: url({{url('public/images/post/post_image/'.$media->name)}});">{!! $spim !!}</div>
+            <div class="post-img2 lightboxp" id="{{$imid}}" style="background-image: url({{url('public/images/post/post_image/'.$media->name)}});" data-mage="{{$media->name}}" data-id="{{$city_post->id}}">{!! $spim !!}</div>
         @if($im==5) @break @endif
         <?php $im=$im+1;?>
         @endforeach

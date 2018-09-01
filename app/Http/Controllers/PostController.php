@@ -234,13 +234,13 @@ class PostController extends Controller
     if($slug=='state')
     {
          $city_posts=Post::with(['user','like' => function ($query) {
-      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',3)->orderBy('id', 'DESC')->paginate(10);
+      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',3)->where('state',$state)->orderBy('id', 'DESC')->paginate(10);
     }
 
     if($slug=='district')
     {
       $city_posts=Post::with(['user','like' => function ($query) {
-      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',2)->orderBy('id', 'DESC')->paginate(10);
+      $query->where('user_id', Auth::user()->id);}])->where('status',1)->where('tag',2)->where('district',$district)->orderBy('id', 'DESC')->paginate(10);
     }
   
 
@@ -777,13 +777,28 @@ class PostController extends Controller
     if(!$post_id && $post_id == '') return response()->json(array(), 400);
     $medias=Media::where('post_id',$post_id)->get();
     $data=array();
-    foreach ($medias as $media) {
-      $image=URL::to('/public/images/post/post_image/full_'.$media->name);
+    $imageName=$request->imageName;
+
+    if(!empty($imageName))
+    {
+      $image=URL::to('/public/images/post/post_image/full_'.$imageName);
       $post_id="$post_id";
-      $url=URL::to('download_image/'.$media->name);
+      $url=URL::to('download_image/'.$imageName);
       $href='<a href='.$url.'><i class="fa fa-cloud-download" aria-hidden="true"></i>Download</a>';
       $data[]=array('src'=> $image,'opts'=>array('caption'=>$href));
     }
+
+    foreach ($medias as $media) {
+      if($imageName !=$media->name)
+      {
+        $image=URL::to('/public/images/post/post_image/full_'.$media->name);
+        $post_id="$post_id";
+        $url=URL::to('download_image/'.$media->name);
+        $href='<a href='.$url.'><i class="fa fa-cloud-download" aria-hidden="true"></i>Download</a>';
+        $data[]=array('src'=> $image,'opts'=>array('caption'=>$href));
+      }
+    }
+    
     return $data;
   }
 

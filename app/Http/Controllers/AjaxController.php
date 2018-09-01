@@ -12,10 +12,14 @@ class AjaxController extends Controller
    public function getDistict(Request $request)
    {
         $result = [];
+        $result[]=array('id'=>'0','name'=>'Select District','state_id'=>'0');
         if (strlen($request->id) > 0) {
             $districts=District::where('state_id',$request->id)->get();
             if (!is_null($districts)) {
-                $result = $districts;
+              foreach ($districts as $district) {
+                 $result[]=array('id'=>$district->id,'name'=>$district->name,'state_id'=>$district->state_id);
+              }
+               // $result = $districts;
             }
         }
         return response()->json($result, 200, [], JSON_UNESCAPED_UNICODE);

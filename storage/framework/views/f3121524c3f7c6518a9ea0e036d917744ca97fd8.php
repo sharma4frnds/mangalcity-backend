@@ -11,6 +11,7 @@
 
 
  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+ <link href="https://fonts.googleapis.com/css?family=Kalam:300,400,700" rel="stylesheet">
 <title><?php echo $__env->yieldContent('title'); ?></title>
 <link rel="icon" href="<?php echo e(asset('public/img/fav.png')); ?>" type="image/x-icon">
 <?php echo $__env->yieldContent('header_css'); ?>
@@ -24,7 +25,7 @@
               <a href="<?php echo e(url('/')); ?>"><?php echo e(Html::image('public/img/logo.png','logo')); ?></a>
             </div>
             <div class="col-md-10 col-sm-10 col-xs-12">
-              <div class="tagline">
+              <div class="tagline hm-txt">
 			       एक ऐसा नेटवर्क जो आपको आपके गाँव के साथ जोड़ता है
               </div>
             </div>

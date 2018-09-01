@@ -12,7 +12,9 @@
 
     <script type="text/javascript" src="<?php echo e(asset('public/js/jquery-1.9.1.min.js')); ?>"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Kalam:300,400,700" rel="stylesheet">
     <title><?php echo $__env->yieldContent('title'); ?></title>
     
     <link rel="icon" href="<?php echo e(asset('public/img/fav.png')); ?>" type="image/x-icon">
@@ -31,12 +33,12 @@
                  <i class="fa fa-search tp-srh" aria-hidden="true"></i>
         <div class="form-group">
           
-          <?php echo Form::text('search_text', null, array('placeholder' => 'Search Text','class' => 'form-control','id'=>'search_text')); ?>
+          <?php echo Form::text('search_text', null, array('placeholder' => 'Search Here','class' => 'form-control','id'=>'search_text')); ?>
 
         </div>
              </div>
             <div class="col-md-6 col-sm-6 col-xs-12">
-              <div class="tagline">
+              <div class="tagline hm-tx">
                 एक ऐसा नेटवर्क जो आपको आपके गाँव के साथ जोड़ता है
               </div>
             </div>

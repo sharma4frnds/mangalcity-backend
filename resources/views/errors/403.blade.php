@@ -5,7 +5,10 @@
 <section class="think-pnl post-pnl">
 <div class="container">
   <div class="row">
-  	<h1 class="error-number">403</h1>
+  	<div class="text-center text-center">
+  		<h1 class="error-number">403</h1>
+  		<h4>The requested page is temporary unavailable. Please return to <a href="{{url('home')}}">Home</a></h4>
+  	</div>
   </div>
 
 </section>

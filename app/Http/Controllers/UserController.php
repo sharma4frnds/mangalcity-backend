@@ -93,7 +93,7 @@ class UserController extends Controller
             {
 
                 $city_name=City::where('id',$location->home_city)->first();
-                Session::put('clocation',array('home_city'=>$city_name->name,'current_city'=>$cCity_name->name,'current_location'=>'default','no_of_location'=>2));
+                Session::put('clocation',array('home_city'=>$city_name->name,'current_city'=>$cCity_name->name,'current_location'=>'default','no_of_location'=>2,'set_location'=>$cCity_name->name));
                 Session::save();
                 
                   if(Session::has('home_location')){
@@ -102,7 +102,7 @@ class UserController extends Controller
                 }
             }else
             {
-                Session::put('clocation',array('home_city'=>'','current_city'=>$cCity_name->name,'current_location'=>'default','no_of_location'=>1));
+                Session::put('clocation',array('home_city'=>'','current_city'=>$cCity_name->name,'current_location'=>'default','no_of_location'=>1,'set_location'=>$cCity_name->name));
                 Session::save();
             }
 
@@ -257,11 +257,47 @@ class UserController extends Controller
     
     }
 
- public function imagepopup_demo()
+    public function show_imagepopup()
     {
-        return view('imagepopup_demo');
+        return view('show_imagepopup');
     }
 
+
+
+    public function removed_cover_image()
+    {
+          $user=User::find(Auth::user()->id);
+     
+         if($user->cover_image !='default.png'){
+            $file='public/images/user/'.$user->cover_image;
+            if(file_exists($file))
+            {
+                @unlink($file);
+            }
+         }
+
+         $user->cover_image='default.png';
+         $user->save();
+
+        return response()->json(['success'=>'success'],200);
+    }
     
+
+    //remove image
+    public function removed_profile_image(){
+        $user=User::find(Auth::user()->id);
+         if($user->image !='default.png'){
+            $file='public/images/user/'.$user->image;
+            if(file_exists($file))
+            {
+                @unlink($file);
+            }
+         }
+
+         $user->image='default.png';
+         $user->save();
+
+        return response()->json(['success'=>'success'],200);
+    }
 
 }

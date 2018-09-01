@@ -62,14 +62,14 @@
                             <div class="login-group">
                               <div class="form-group">
                                 <label for="lg_username" class="sr-only">Mobile</label>
-                                <input type="text" class="form-control" id="lg_username" name="mobile" placeholder="Mobile Number" >
+                                <input type="text" class="form-control" id="lg_username" autocomplete="off" name="mobile" placeholder="Mobile Number" >
                                <?php if($errors->has('mobile')): ?>
                                   <span class="help-block"> <strong><?php echo e($errors->first('mobile')); ?></strong> </span>
                                   <?php endif; ?>
                               </div>
                               <div class="form-group">
                                 <label for="lg_password" class="sr-only">Password</label>
-                                <input type="password" class="form-control" id="lg_password" name="password" placeholder="Password">
+                                <input type="password" autocomplete="off" class="form-control" id="lg_password" name="password" placeholder="Password">
                                  <?php if($errors->has('password')): ?> <span class="help-block"> <strong><?php echo e($errors->first('password')); ?></strong></span> <?php endif; ?>
                               </div>
                              
@@ -108,29 +108,29 @@
                           <div class="main-login-form">
                             <div class="login-group">
                               <div class="form-group">
-                                <input type="text" class="form-control required" id="rg_firstname" name="first_name" placeholder="First Name" >
+                                <input type="text" class="form-control required" autocomplete="off" id="rg_firstname" name="first_name" placeholder="First Name" >
                                    <span class="help-block"><strong id="register-errors-first_name"> </strong></span>
                               </div>
 
                                 <div class="form-group">
-                                <input type="text" class="form-control required" id="rg_lastname" name="last_name" placeholder="Last name">
+                                <input type="text" class="form-control required" autocomplete="off" id="rg_lastname" name="last_name" placeholder="Last name">
                                    <span class="help-block"><strong id="register-errors-last_name"> </strong></span>
                               </div>
 
                               <div class="form-group">
-                                <input type="text" class="form-control required mobile" id="rg_mobile" name="mobile" placeholder="Mobile No" >
+                                <input type="text" class="form-control required mobile" autocomplete="off" id="rg_mobile" name="mobile" placeholder="Mobile No" >
                                 <span class="help-block"><strong id="register-errors-mobile"> </strong></span>
                               </div>
                               <div class="form-group">
-                                <input type="text" class="form-control" id="rg_email" name="email" placeholder="Email id">
+                                <input type="text" class="form-control" id="rg_email" autocomplete="off" name="email" placeholder="Email id">
                                 <span class="help-block"><strong id="register-errors-email"> </strong></span>
                               </div>
                               <div class="form-group">
-                                <input type="password" class="form-control required" id="rg_password" name="password" placeholder="Password">
+                                <input type="password" class="form-control required" autocomplete="off" id="rg_password" name="password" placeholder="Password">
                                 <span class="help-block"><strong id="register-errors-password"> </strong></span>
                               </div>
                               <div class="form-group">
-                                <input type="password" class="form-control required" id="rg_cpassword" name="password_confirmation" placeholder="Confirm Password">
+                                <input type="password" class="form-control required" autocomplete="off" id="rg_cpassword" name="password_confirmation" placeholder="Confirm Password">
                                 <span class="help-block"><strong id="register-errors-password_confirmation"> </strong></span>
                               </div>
                               <span class="tm"><input type="checkbox" checked="checked" required="" name="agree"> <a  data-toggle="modal" data-target="#myModal">I agree to the terms and conditions</a></span>

@@ -934,11 +934,12 @@ function showMoreComment(element){
  */
 $( "body" ).on('click','.lightboxp', function () {
    var post_id = $(this).attr("data-id");
+   var imageName = $(this).attr("data-mage");
     $.ajax({
         type: 'POST',
          beforeSend: function(xhr){
         xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
-        data:{'post_id':post_id},
+        data:{'post_id':post_id,'imageName':imageName},
         url: siteUrl+'/imageload',
         dataType: 'json',
         success: function (data) {

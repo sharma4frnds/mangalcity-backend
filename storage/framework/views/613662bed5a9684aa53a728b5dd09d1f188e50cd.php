@@ -32,11 +32,11 @@
 
       <?php if($city_post->type=='image'): ?>
       <?php   $imgCount= count($city_post->media);?>
-      <div class="lightboxp image-layout-<?php if($imgCount>5): ?>5 <?php else: ?><?php echo e($imgCount); ?><?php endif; ?>"  data-id="<?php echo e($city_post->id); ?>" >
+      <div class=" image-layout-<?php if($imgCount>5): ?>5 <?php else: ?><?php echo e($imgCount); ?><?php endif; ?>"   >
         <?php $im=1; $imid=''; $spim=''; ?>
         <?php $__currentLoopData = $city_post->media; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $media): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
            <?php if($im==5 && $imgCount>5  ): ?> <?php $imid='moreImgDef'; $rim=$imgCount-5; $spim="<span>$rim+</span>";?> <?php endif; ?>
-            <div class="post-img2" id="<?php echo e($imid); ?>" style="background-image: url(<?php echo e(url('public/images/post/post_image/'.$media->name)); ?>);"><?php echo $spim; ?></div>
+            <div class="post-img2 lightboxp" id="<?php echo e($imid); ?>" style="background-image: url(<?php echo e(url('public/images/post/post_image/'.$media->name)); ?>);" data-mage="<?php echo e($media->name); ?>" data-id="<?php echo e($city_post->id); ?>"><?php echo $spim; ?></div>
         <?php if($im==5): ?> <?php break; ?> <?php endif; ?>
         <?php $im=$im+1;?>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

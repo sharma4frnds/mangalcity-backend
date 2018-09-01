@@ -13,10 +13,18 @@
         <div id="profile_image_cropp" style="width:350px"></div>
         </div>
         <div class="col-md-6" style="padding-top:30px;">
-        <strong>Select Image:</strong>
-        <br/>
+        <?php if(Auth::user()->image !='default.png'): ?>
+        <div class="removed_profile"> 
+          <button class="btn btn-primary" id="removed_profile_pic">Removed Cover Picture</button> 
+            <div class="image_ajax_load1 text-center" style="display:none">
+               <p><?php echo e(Html::image('public/img/loader.gif')); ?> Loading...</p>
+            </div>
+        </div>
+        <?php endif; ?>
         <input type="file" id="profile_image_cropp_upload" accept="image/*">
         <br/>
+
+
         <button class="btn btn-success upload-image-result" style="display:none">Upload Image</button>
          <div class="image_ajax_load text-center" style="display:none">
            <p><?php echo e(Html::image('public/img/loader.gif')); ?> Loading...</p>
@@ -61,6 +69,8 @@ $('#profile_image_cropp_upload').on('change', function () {
         url: e.target.result
       }).then(function(){
         $(".upload-image-result").show();
+        $(".cr-slider-wrap").append('<b>Image Zoom</b>');
+
         console.log('bind complete');
       });
       
@@ -90,6 +100,25 @@ $('.upload-image-result').on('click', function (ev) {
       }
     });
   });
+});
+
+
+$("#removed_profile_pic").click(function(){
+  var con=confirm("Are you sure you want to remove your Cover Photo?")
+  if(con){
+     $('.image_ajax_load1').show();
+    $.ajax({
+      url: "<?php echo e(url('user/removed_profile_image')); ?>",
+      type: "POST",
+      beforeSend: function(xhr){
+        xhr.setRequestHeader('X-CSRF-TOKEN', $('meta[name=csrf-token]').attr("content"));},
+        cache: false,
+      success:function(){
+         toastr.success('Successfully removed cover photo.');
+         location.reload();
+      }
+    });
+  }
 });
 
 

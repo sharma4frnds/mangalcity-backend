@@ -52,11 +52,16 @@ Route::group(['middleware' => 'auth'], function()
 	{
 		Route::get('/user','UserController@index');
 		Route::get('/imagepopup','UserController@imagepopup');
+		Route::get('/show_imagepopup','UserController@show_imagepopup');
+
 		Route::get('/coverpopup','UserController@coverpopup');
 		Route::GET('/user/change_password','UserController@get_change_password');
 		Route::POST('/user/change_password','UserController@change_password');
 		Route::POST('/user/change_image','UserController@uploadImagechanges');
 		Route::POST('/user/change_cover_image','UserController@change_cover_image');
+		Route::POST('/user/removed_cover_image','UserController@removed_cover_image');
+		Route::POST('/user/removed_profile_image','UserController@removed_profile_image');
+		
 		Route::get('/home','PostController@feeds');
 		Route::POST('/post','PostController@posts');
 		Route::GET('/post_view/{url}','PostController@post_view');
